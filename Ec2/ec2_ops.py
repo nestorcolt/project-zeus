@@ -43,10 +43,10 @@ def start_instance_handle():
     # Dry run succeeded, run start_instances without dry run
     try:
         ec2.start_instances(InstanceIds=instance_ids, DryRun=False)
-        message = f"Instance stopped: {instance_ids}"
+        message = f"Instance started: {instance_ids}"
 
     except Exception as e:
-        message = f"Error stopping EC2 Instance\nReason: {e}"
+        message = f"Error starting EC2 Instance\nReason: {e}"
         status_code = 403
 
     # to track on cloud watch
