@@ -1,6 +1,6 @@
 from botocore.exceptions import ClientError
+from constants import constants
 from modules import logger
-from Ec2 import constants
 import boto3
 import json
 
@@ -63,6 +63,4 @@ def create_instance_handle():
         }),
     }
 
-
 ##############################################################################################
-create_instance_handle()

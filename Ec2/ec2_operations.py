@@ -1,9 +1,13 @@
-from Ec2 import constants
-import pprint
+from botocore.exceptions import ClientError
+from constants import constants
+from modules import logger
 import boto3
 import json
 
 INSTANCE_ID = "i-0a497d3cc7a58b2a8"
+
+LOGGER = logger.Logger(__name__)
+log = LOGGER.logger
 
 
 ##############################################################################################
@@ -50,7 +54,7 @@ def start_instance_handle():
         status_code = 403
 
     # to track on cloud watch
-    print(message)
+    log.info(message)
 
     return {
         "statusCode": status_code,
@@ -77,7 +81,7 @@ def stop_instance_handle():
         status_code = 403
 
     # to track on cloud watch
-    print(message)
+    log.info(message)
 
     return {
         "statusCode": status_code,
@@ -104,7 +108,7 @@ def delete_instance_handle():
         status_code = 403
 
     # to track on cloud watch
-    print(message)
+    log.info(message)
 
     return {
         "statusCode": status_code,
