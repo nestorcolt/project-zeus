@@ -1,7 +1,11 @@
 from botocore.exceptions import ClientError
+from modules import logger
 from Ec2 import constants
 import boto3
 import json
+
+LOGGER = logger.Logger(__name__)
+log = LOGGER.logger
 
 
 ##############################################################################################
@@ -45,12 +49,12 @@ def create_instance_handle():
 
         message = f"Instance created: {instance[0]}"
 
-    except Exception as e:
-        message = f"Error creating EC2 Instance\nReason: {e}"
+    except ClientError as e:
+        message = f"Error creating EC2 Instance\nReason: {e.response}"
         status_code = 403
 
     # to track on cloud watch
-    print(message)
+    log.warning(message)
 
     return {
         "statusCode": status_code,

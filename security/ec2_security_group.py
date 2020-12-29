@@ -1,6 +1,12 @@
 from botocore.exceptions import ClientError
+from modules import logger
 import boto3
 
+LOGGER = logger.Logger(__name__)
+log = LOGGER.logger
+
+
+##############################################################################################
 
 def get_security_groups(ids=None):
     ec2 = boto3.client('ec2')
@@ -11,10 +17,10 @@ def get_security_groups(ids=None):
 
     try:
         response = ec2.describe_security_groups(GroupIds=ids)
-        print(response)
+        log.info(response)
 
     except ClientError as e:
-        print(e)
+        log.exception(e)
 
     return response
 
@@ -33,7 +39,7 @@ def create_security_group(group_name="Group Name", description="Description", vp
 
         security_group_id = response['GroupId']
         ec2.create_tags(Resources=[security_group_id], Tags=[{'Key': 'Name', 'Value': group_name}])
-        print('Security Group Created %s in vpc %s.' % (security_group_id, vpc_id))
+        log.info('Security Group Created %s in vpc %s.' % (security_group_id, vpc_id))
 
         data = ec2.authorize_security_group_ingress(
             GroupId=security_group_id,
@@ -48,10 +54,11 @@ def create_security_group(group_name="Group Name", description="Description", vp
                  'ToPort': 22,
                  'IpRanges': [{'CidrIp': '0.0.0.0/0'}]}
             ])
-        print('Ingress Successfully Set %s' % data)
+
+        log.info('Ingress Successfully Set %s' % data)
 
     except ClientError as e:
-        print(e)
+        log.exception(e)
 
 
 def delete_security_group(group_id):
@@ -60,11 +67,10 @@ def delete_security_group(group_id):
 
     # Delete security group
     try:
-        response = ec2.delete_security_group(GroupId=group_id)
-        print('Security Group Deleted')
-    except ClientError as e:
-        print(e)
+        ec2.delete_security_group(GroupId=group_id)
+        log.info('Security Group Deleted')
 
+    except ClientError as e:
+        log.exception(e)
 
 ##############################################################################################
-create_security_group()
