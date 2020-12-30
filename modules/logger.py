@@ -16,7 +16,7 @@ class Logger:
         self.file_handler = None
 
     def set_formatter(self, formatter_string=None):
-        format_ = "%(asctime)s:%(name)s:%(message)s"
+        format_ = "%(name)s: %(message)s"
         format_ = formatter_string if formatter_string else format_
         return logging.Formatter(format_)
 

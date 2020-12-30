@@ -26,6 +26,8 @@ def create_launch_template():
         LaunchTemplateName=constants.LAUNCH_TEMPLATE_NAME,
         VersionDescription=constants.LAUNCH_TEMPLATE_VERSION,
         LaunchTemplateData={
+            'InstanceType': constants.INSTANCE_TYPE,
+            'KeyName': constants.KEY_PAIR_NAME,
             'EbsOptimized': True,
             'ImageId': constants.AMI_ID,
             'Monitoring': {
