@@ -9,8 +9,7 @@ importlib.reload(ec2_security_group)
 importlib.reload(constants)
 
 
-# TODO Create waiters for infrastructure booting
-
+# TODO make validations before creation
 ##############################################################################################
 
 def ec2_bootstrap():
@@ -23,16 +22,13 @@ def ec2_bootstrap():
     waiter = client.get_waiter('security_group_exists')
 
     try:
-        # init launch template
+        # wait for security group to be created before continue
         waiter.wait(WaiterConfig={'Delay': 30, 'MaxAttempts': 10})
 
-        # create template
+        # create launch template
         worker_launch_template.create_launch_template()
 
     except Exception as e:
         print(e)
 
-
 ##############################################################################################
-
-ec2_bootstrap()
