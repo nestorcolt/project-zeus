@@ -9,26 +9,41 @@ importlib.reload(ec2_security_group)
 importlib.reload(constants)
 
 
-# TODO make validations before creation
 ##############################################################################################
 
 def ec2_bootstrap():
+    """
+
+    Initialize the Ec2 stage configuration
+
+    """
+    # instance a ec2 client
     client = boto3.client('ec2')
 
-    # init security group
-    ec2_security_group.create_security_group(group_name=constants.WORKER_SECURITY_GROUP_NAME)
+    # Security group validator
+    security_groups = client.describe_security_groups()["SecurityGroups"]
+    sg_exist = [group for group in security_groups if group["GroupName"] == constants.WORKER_SECURITY_GROUP_NAME]
 
-    # set a waiter to wait for the security group to be crated
-    waiter = client.get_waiter('security_group_exists')
+    # Template validator
+    launch_templates = client.describe_launch_templates()["LaunchTemplates"]
+    config_exist = [tmp for tmp in launch_templates if tmp["LaunchTemplateName"] == constants.LAUNCH_TEMPLATE_NAME]
 
-    try:
-        # wait for security group to be created before continue
-        waiter.wait(WaiterConfig={'Delay': 30, 'MaxAttempts': 10})
+    if not sg_exist:
+        # init security group
+        ec2_security_group.create_security_group(group_name=constants.WORKER_SECURITY_GROUP_NAME)
 
-        # create launch template
-        worker_launch_template.create_launch_template()
+    if not config_exist:
+        # set a waiter to wait for the security group to be crated
+        waiter = client.get_waiter('security_group_exists')
 
-    except Exception as e:
-        print(e)
+        try:
+            # wait for security group to be created before continue
+            waiter.wait(WaiterConfig={'Delay': 30, 'MaxAttempts': 10})
+
+            # create launch template
+            worker_launch_template.create_launch_template()
+
+        except Exception as e:
+            print(e)
 
 ##############################################################################################
