@@ -22,12 +22,87 @@ def network_bootstrap():
     # instance a ec2 client
     client = boto3.client('ec2')
 
-    # create_vpc()
-    # create_subnet("vpc-0d42e68f7c8028e3d")
-    # create_internet_gateway()
-    # attach_internet_gateway("vpc-0d42e68f7c8028e3d","igw-0ad477537824bb0fa")
-    # create_route_table(constants.ROUTE_TABLE_NAME, "vpc-0d42e68f7c8028e3d")
-    # rt_create_routes("rtb-0efaf0fbf8a585d38", "igw-0ad477537824bb0fa")
-    # rt_associate_with_subnet("rtb-0efaf0fbf8a585d38", "subnet-0a83e9343dbb45225")
+    # VPC validator
+    vpcs = client.describe_vpcs()["Vpcs"]
+    vpc_exist = [vpc for vpc in vpcs if vpc["Tags"][0]["Value"] == constants.VPC_NAME]
+
+    if not vpc_exist:
+        vpc_exist = network_manager.create_vpc(name=constants.VPC_NAME,
+                                               cidr_block=constants.VPC_CIDR_BLOCK)
+
+    vpc_id = vpc_exist[0]["VpcId"]
+
+    # subnet validator
+    subnets = client.describe_subnets()["Subnets"]
+    subnet_exist = False
+
+    for subnet in subnets:
+        tags = subnet.get("Tags")
+
+        if not tags:
+            continue
+
+        if tags[0]["Value"] == constants.SUBNET_NAME:
+            subnet_exist = subnet
+            break
+
+    if not subnet_exist:
+        network_manager.create_subnet(name=constants.SUBNET_NAME,
+                                      vpc_id=vpc_id,
+                                      cidr_block=constants.SUBNET_CIDR_BLOCK,
+                                      zone=constants.ZONE_US_EAST1)
+
+    subnet_id = subnet_exist["SubnetId"]
+
+    # Internet gateway validator
+    gateways = client.describe_internet_gateways()["InternetGateways"]
+    gateway_exist = False
+
+    for gate in gateways:
+        tags = gate.get("Tags")
+
+        if not tags:
+            continue
+
+        if tags[0]["Value"] == constants.INTERNET_GATEWAY_NAME:
+            gateway_exist = gate
+            break
+
+    if not gateway_exist:
+        gateway_exist = network_manager.create_internet_gateway(constants.INTERNET_GATEWAY_NAME)
+
+    gateway_id = gateway_exist["InternetGatewayId"]
+
+    if not gateway_exist["Attachments"]:
+        network_manager.attach_internet_gateway(vpc_id=vpc_id,
+                                                gateway_id=gateway_id)
+
+    # Route Table Validator
+    route_tables = client.describe_route_tables()["RouteTables"]
+    table_exist = False
+
+    for table in route_tables:
+        tags = table.get("Tags")
+
+        if not tags:
+            continue
+
+        if tags[0]["Value"] == constants.ROUTE_TABLE_NAME:
+            table_exist = table
+            break
+
+    if not table_exist:
+        table_exist = network_manager.create_route_table(constants.ROUTE_TABLE_NAME, vpc_id)
+
+    table_id = table_exist["RouteTableId"]
+
+    # Create Routes
+    network_manager.rt_create_routes(rt_id=table_id,
+                                     gateway_id=gateway_id)
+    # subnet association
+    network_manager.rt_associate_with_subnet(table_id, subnet_id)
+
 
 ##############################################################################################
+
+network_bootstrap()

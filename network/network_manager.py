@@ -7,21 +7,21 @@ importlib.reload(constants)
 
 ##############################################################################################
 
-def create_vpc():
+def create_vpc(name, cidr_block, tenancy="default"):
     client = boto3.client("ec2")
     response = None
 
     try:
         response = client.create_vpc(
-            CidrBlock=constants.VPC_CIDR_BLOCK,
-            InstanceTenancy='default',
+            CidrBlock=cidr_block,
+            InstanceTenancy=tenancy,
             TagSpecifications=[
                 {
                     'ResourceType': 'vpc',
                     'Tags': [
                         {
                             'Key': 'Name',
-                            'Value': constants.VPC_NAME
+                            'Value': name
                         },
                     ]
                 },
@@ -37,7 +37,7 @@ def create_vpc():
     return response
 
 
-def create_subnet(vpc_id):
+def create_subnet(name, vpc_id, cidr_block, zone):
     client = boto3.client("ec2")
     response = None
 
@@ -49,13 +49,13 @@ def create_subnet(vpc_id):
                     'Tags': [
                         {
                             'Key': 'Name',
-                            'Value': constants.SUBNET_NAME
+                            'Value': name
                         },
                     ]
                 },
             ],
-            AvailabilityZone=constants.ZONE_US_EAST1,
-            CidrBlock=constants.SUBNET_CIDR_BLOCK,
+            AvailabilityZone=zone,
+            CidrBlock=cidr_block,
             VpcId=vpc_id,
             DryRun=False
         )
@@ -68,7 +68,7 @@ def create_subnet(vpc_id):
     return response
 
 
-def create_internet_gateway():
+def create_internet_gateway(name):
     client = boto3.client("ec2")
     response = None
 
@@ -80,7 +80,7 @@ def create_internet_gateway():
                     'Tags': [
                         {
                             'Key': 'Name',
-                            'Value': constants.INTERNET_GATEWAY_NAME,
+                            'Value': name,
                         },
                     ]
                 },
@@ -149,7 +149,6 @@ def rt_associate_with_subnet(rt_id, subnet_id):
         SubnetId=subnet_id,
     )
     return route_table_association
-
 
 ##############################################################################################
 
