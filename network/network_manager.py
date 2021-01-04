@@ -159,4 +159,4 @@ def rt_associate_with_subnet(rt_id, subnet_id):
 # attach_internet_gateway("vpc-0d42e68f7c8028e3d","igw-0ad477537824bb0fa")
 # create_route_table(constants.ROUTE_TABLE_NAME, "vpc-0d42e68f7c8028e3d")
 # rt_create_routes("rtb-0efaf0fbf8a585d38", "igw-0ad477537824bb0fa")
-rt_associate_with_subnet("rtb-0efaf0fbf8a585d38", "subnet-0a83e9343dbb45225")
+# rt_associate_with_subnet("rtb-0efaf0fbf8a585d38", "subnet-0a83e9343dbb45225")
