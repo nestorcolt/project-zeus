@@ -206,6 +206,18 @@ def route_table_exist(name):
 def rt_create_routes(rt_id, gateway_id, cidr_route="0.0.0.0/0"):
     ec2 = boto3.resource('ec2')
     route_table = ec2.RouteTable(rt_id)
+
+    for table in route_table.routes_attribute:
+        block = table.get("DestinationCidrBlock")
+        gateway = table.get("GatewayId")
+
+        if block == cidr_route and gateway == gateway_id:
+            return
+
+        elif block == cidr_route and gateway != gateway_id:
+            ec2.delete_route(DestinationCidrBlock=cidr_route, RouteTableId=rt_id)
+            return
+
     route_table.create_route(DestinationCidrBlock=cidr_route, GatewayId=gateway_id)
 
 

@@ -4,9 +4,9 @@ from botocore.waiter import WaiterModel
 import boto3
 
 
-def internet_gateway_waiter(delay=5, attempts=1):
-    client = boto3.client('ec2')
+def internet_gateway_waiter(gateway_id, delay=10, attempts=2):
     waiter_name = "internet_gateway_available"
+    client = boto3.client('ec2')
 
     waiter_config = {
         "version": 2,
@@ -17,10 +17,10 @@ def internet_gateway_waiter(delay=5, attempts=1):
                 "maxAttempts": attempts,
                 "acceptors": [
                     {
-                        "expected": "available",
-                        "matcher": "pathAll",
+                        "expected": gateway_id,
+                        "matcher": "pathAny",
                         "state": "success",
-                        "argument": "InternetGateway[].State"
+                        "argument": f"InternetGateways[].InternetGatewayId"
                     }
                 ]
             }
@@ -31,10 +31,8 @@ def internet_gateway_waiter(delay=5, attempts=1):
     custom_waiter = create_waiter_with_client(waiter_name=waiter_name,
                                               waiter_model=waiter_model,
                                               client=client)
-
     try:
         custom_waiter.wait()
-        print("Success!!!")
 
     except WaiterError as e:
         print(e)

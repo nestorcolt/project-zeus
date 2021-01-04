@@ -2,7 +2,7 @@ from security import ec2_security_group
 from Ec2 import worker_launch_template
 from network import network_manager
 from constants import constants
-from waiters import iwa_waiter
+from waiters import igw_waiter
 import importlib
 import boto3
 import pprint
@@ -11,7 +11,7 @@ importlib.reload(worker_launch_template)
 importlib.reload(ec2_security_group)
 importlib.reload(constants)
 importlib.reload(network_manager)
-importlib.reload(iwa_waiter)
+importlib.reload(igw_waiter)
 
 
 ##############################################################################################
@@ -27,7 +27,7 @@ def network_bootstrap():
 
     # VPC validator
     vpc_exist = network_manager.vpc_exist_check(constants.VPC_NAME)
-    vpc_waiter = client.get_waiter('security_group_exists')
+    vpc_waiter = client.get_waiter('vpc_available')
 
     if not vpc_exist:
         vpc_exist = network_manager.create_vpc(name=constants.VPC_NAME,
@@ -53,12 +53,14 @@ def network_bootstrap():
 
     # Internet gateway validator
     gateway_exist = network_manager.gateway_exist_check(constants.INTERNET_GATEWAY_NAME)
-    iwa_waiter.internet_gateway_waiter()
 
     if not gateway_exist:
-        gateway_exist = network_manager.create_internet_gateway(constants.INTERNET_GATEWAY_NAME)
+        gateway_exist = network_manager.create_internet_gateway(constants.INTERNET_GATEWAY_NAME)["InternetGateway"]
 
+    # wait for process to be created
     gateway_id = gateway_exist["InternetGatewayId"]
+    igw_waiter.internet_gateway_waiter(gateway_id)
+
     network_manager.attach_internet_gateway(vpc_id=vpc_id,
                                             gateway_id=gateway_id)
 
