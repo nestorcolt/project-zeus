@@ -37,6 +37,13 @@ def create_vpc(name, cidr_block, tenancy="default"):
     return response
 
 
+def vpc_exist_check(name):
+    client = boto3.client('ec2')
+    vpcs = client.describe_vpcs()["Vpcs"]
+    vpc_exist = [vpc for vpc in vpcs if vpc["Tags"][0]["Value"] == name]
+    return vpc_exist
+
+
 def create_subnet(name, vpc_id, cidr_block, zone):
     client = boto3.client("ec2")
     response = None
@@ -68,6 +75,24 @@ def create_subnet(name, vpc_id, cidr_block, zone):
     return response
 
 
+def subnet_exist_check(name):
+    client = boto3.client("ec2")
+    subnets = client.describe_subnets()["Subnets"]
+    subnet_exist = False
+
+    for subnet in subnets:
+        tags = subnet.get("Tags")
+
+        if not tags:
+            continue
+
+        if tags[0]["Value"] == name:
+            subnet_exist = subnet
+            break
+
+    return subnet_exist
+
+
 def create_internet_gateway(name):
     client = boto3.client("ec2")
     response = None
@@ -94,6 +119,24 @@ def create_internet_gateway(name):
         print(e)
 
     return response
+
+
+def gateway_exist_check(name):
+    client = boto3.client("ec2")
+    gateways = client.describe_internet_gateways()["InternetGateways"]
+    gateway_exist = False
+
+    for gate in gateways:
+        tags = gate.get("Tags")
+
+        if not tags:
+            continue
+
+        if tags[0]["Value"] == name:
+            gateway_exist = gate
+            break
+
+    return gateway_exist
 
 
 def attach_internet_gateway(vpc_id, gateway_id):
@@ -135,6 +178,24 @@ def create_route_table(name, vpc_id):
     return response
 
 
+def route_table_exist(name):
+    client = boto3.client("ec2")
+    route_tables = client.describe_route_tables()["RouteTables"]
+    table_exist = False
+
+    for table in route_tables:
+        tags = table.get("Tags")
+
+        if not tags:
+            continue
+
+        if tags[0]["Value"] == name:
+            table_exist = table
+            break
+
+    return table_exist
+
+
 def rt_create_routes(rt_id, gateway_id, cidr_route="0.0.0.0/0"):
     ec2 = boto3.resource('ec2')
     route_table = ec2.RouteTable(rt_id)
@@ -151,11 +212,3 @@ def rt_associate_with_subnet(rt_id, subnet_id):
     return route_table_association
 
 ##############################################################################################
-
-# create_vpc()
-# create_subnet("vpc-0d42e68f7c8028e3d")
-# create_internet_gateway()
-# attach_internet_gateway("vpc-0d42e68f7c8028e3d","igw-0ad477537824bb0fa")
-# create_route_table(constants.ROUTE_TABLE_NAME, "vpc-0d42e68f7c8028e3d")
-# rt_create_routes("rtb-0efaf0fbf8a585d38", "igw-0ad477537824bb0fa")
-# rt_associate_with_subnet("rtb-0efaf0fbf8a585d38", "subnet-0a83e9343dbb45225")

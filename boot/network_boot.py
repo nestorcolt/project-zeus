@@ -23,8 +23,7 @@ def network_bootstrap():
     client = boto3.client('ec2')
 
     # VPC validator
-    vpcs = client.describe_vpcs()["Vpcs"]
-    vpc_exist = [vpc for vpc in vpcs if vpc["Tags"][0]["Value"] == constants.VPC_NAME]
+    vpc_exist = network_manager.vpc_exist_check(constants.VPC_NAME)
 
     if not vpc_exist:
         vpc_exist = network_manager.create_vpc(name=constants.VPC_NAME,
@@ -33,18 +32,7 @@ def network_bootstrap():
     vpc_id = vpc_exist[0]["VpcId"]
 
     # subnet validator
-    subnets = client.describe_subnets()["Subnets"]
-    subnet_exist = False
-
-    for subnet in subnets:
-        tags = subnet.get("Tags")
-
-        if not tags:
-            continue
-
-        if tags[0]["Value"] == constants.SUBNET_NAME:
-            subnet_exist = subnet
-            break
+    subnet_exist = network_manager.subnet_exist_check(constants.SUBNET_NAME)
 
     if not subnet_exist:
         network_manager.create_subnet(name=constants.SUBNET_NAME,
@@ -55,18 +43,7 @@ def network_bootstrap():
     subnet_id = subnet_exist["SubnetId"]
 
     # Internet gateway validator
-    gateways = client.describe_internet_gateways()["InternetGateways"]
-    gateway_exist = False
-
-    for gate in gateways:
-        tags = gate.get("Tags")
-
-        if not tags:
-            continue
-
-        if tags[0]["Value"] == constants.INTERNET_GATEWAY_NAME:
-            gateway_exist = gate
-            break
+    gateway_exist = network_manager.gateway_exist_check(constants.INTERNET_GATEWAY_NAME)
 
     if not gateway_exist:
         gateway_exist = network_manager.create_internet_gateway(constants.INTERNET_GATEWAY_NAME)
@@ -78,18 +55,7 @@ def network_bootstrap():
                                                 gateway_id=gateway_id)
 
     # Route Table Validator
-    route_tables = client.describe_route_tables()["RouteTables"]
-    table_exist = False
-
-    for table in route_tables:
-        tags = table.get("Tags")
-
-        if not tags:
-            continue
-
-        if tags[0]["Value"] == constants.ROUTE_TABLE_NAME:
-            table_exist = table
-            break
+    table_exist = network_manager.route_table_exist(constants.ROUTE_TABLE_NAME)
 
     if not table_exist:
         table_exist = network_manager.create_route_table(constants.ROUTE_TABLE_NAME, vpc_id)
