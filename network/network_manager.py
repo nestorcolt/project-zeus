@@ -141,6 +141,13 @@ def gateway_exist_check(name):
 
 def attach_internet_gateway(vpc_id, gateway_id):
     client = boto3.client("ec2")
+    resource = boto3.resource('ec2')
+    iga = resource.InternetGateway(gateway_id)
+    attachment = [itm for itm in iga.attachments if itm["VpcId"] == vpc_id]
+
+    if attachment:
+        return
+
     response = client.attach_internet_gateway(
         DryRun=False,
         InternetGatewayId=gateway_id,

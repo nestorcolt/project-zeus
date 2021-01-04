@@ -2,6 +2,7 @@ from security import ec2_security_group
 from Ec2 import worker_launch_template
 from network import network_manager
 from constants import constants
+from waiters import iwa_waiter
 import importlib
 import boto3
 import pprint
@@ -10,6 +11,7 @@ importlib.reload(worker_launch_template)
 importlib.reload(ec2_security_group)
 importlib.reload(constants)
 importlib.reload(network_manager)
+importlib.reload(iwa_waiter)
 
 
 ##############################################################################################
@@ -51,17 +53,14 @@ def network_bootstrap():
 
     # Internet gateway validator
     gateway_exist = network_manager.gateway_exist_check(constants.INTERNET_GATEWAY_NAME)
-    # iga_waiter = client.get_waiter('internet_gateway_available')
-    pprint.pprint(client.waiter_names)
+    iwa_waiter.internet_gateway_waiter()
 
     if not gateway_exist:
         gateway_exist = network_manager.create_internet_gateway(constants.INTERNET_GATEWAY_NAME)
 
     gateway_id = gateway_exist["InternetGatewayId"]
-
-    if not gateway_exist["Attachments"]:
-        network_manager.attach_internet_gateway(vpc_id=vpc_id,
-                                                gateway_id=gateway_id)
+    network_manager.attach_internet_gateway(vpc_id=vpc_id,
+                                            gateway_id=gateway_id)
 
     # Route Table Validator
     table_exist = network_manager.route_table_exist(constants.ROUTE_TABLE_NAME)
