@@ -3,6 +3,7 @@ from Ec2 import worker_launch_template
 from network import network_manager
 from constants import constants
 from waiters import igw_waiter
+from time import sleep
 import importlib
 import boto3
 import pprint
@@ -31,21 +32,21 @@ def network_bootstrap():
 
     if not vpc_exist:
         vpc_exist = network_manager.create_vpc(name=constants.VPC_NAME,
-                                               cidr_block=constants.VPC_CIDR_BLOCK)
+                                               cidr_block=constants.VPC_CIDR_BLOCK)["Vpc"]
         # wait until is created
         vpc_waiter.wait(WaiterConfig={'Delay': 30, 'MaxAttempts': 10})
 
-    vpc_id = vpc_exist[0]["VpcId"]
+    vpc_id = vpc_exist["VpcId"]
 
     # subnet validator
     subnet_exist = network_manager.subnet_exist_check(constants.SUBNET_NAME)
     subnet_waiter = client.get_waiter('subnet_available')
 
     if not subnet_exist:
-        network_manager.create_subnet(name=constants.SUBNET_NAME,
-                                      vpc_id=vpc_id,
-                                      cidr_block=constants.SUBNET_CIDR_BLOCK,
-                                      zone=constants.ZONE_US_EAST1)
+        subnet_exist = network_manager.create_subnet(name=constants.SUBNET_NAME,
+                                                     vpc_id=vpc_id,
+                                                     cidr_block=constants.SUBNET_CIDR_BLOCK,
+                                                     zone=constants.ZONE_US_EAST1)["Subnet"]
         # wait until is created
         subnet_waiter.wait(WaiterConfig={'Delay': 30, 'MaxAttempts': 10})
 
@@ -68,7 +69,7 @@ def network_bootstrap():
     table_exist = network_manager.route_table_exist(constants.ROUTE_TABLE_NAME)
 
     if not table_exist:
-        table_exist = network_manager.create_route_table(constants.ROUTE_TABLE_NAME, vpc_id)
+        table_exist = network_manager.create_route_table(constants.ROUTE_TABLE_NAME, vpc_id)["RouteTable"]
 
     table_id = table_exist["RouteTableId"]
 
@@ -77,6 +78,9 @@ def network_bootstrap():
                                      gateway_id=gateway_id)
     # subnet association
     network_manager.rt_associate_with_subnet(table_id, subnet_id)
+
+    # wait 5 seconds
+    # sleep(5)
 
 
 ##############################################################################################

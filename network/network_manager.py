@@ -41,7 +41,9 @@ def vpc_exist_check(name):
     client = boto3.client('ec2')
     vpcs = client.describe_vpcs()["Vpcs"]
     vpc_exist = [vpc for vpc in vpcs if vpc["Tags"][0]["Value"] == name]
-    return vpc_exist
+
+    if vpc_exist:
+        return vpc_exist[0]
 
 
 def create_subnet(name, vpc_id, cidr_block, zone):
