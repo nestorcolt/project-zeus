@@ -6,7 +6,6 @@ from waiters import igw_waiter
 from time import sleep
 import importlib
 import boto3
-import pprint
 
 importlib.reload(worker_launch_template)
 importlib.reload(ec2_security_group)
@@ -79,8 +78,10 @@ def network_bootstrap():
     # subnet association
     network_manager.rt_associate_with_subnet(table_id, subnet_id)
 
-    # wait 5 seconds
-    # sleep(5)
+    # wait a few seconds
+    sleep(5)
+
+    return vpc_id
 
 
 ##############################################################################################

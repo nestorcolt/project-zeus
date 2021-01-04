@@ -11,7 +11,7 @@ importlib.reload(constants)
 
 ##############################################################################################
 
-def ec2_bootstrap():
+def ec2_bootstrap(network_id=None):
     """
 
     Initialize the Ec2 stage configuration
@@ -30,7 +30,7 @@ def ec2_bootstrap():
 
     if not sg_exist:
         # init security group
-        ec2_security_group.create_security_group(group_name=constants.WORKER_SECURITY_GROUP_NAME)
+        ec2_security_group.create_security_group(group_name=constants.WORKER_SECURITY_GROUP_NAME, vpc_id=network_id)
 
     if not config_exist:
         # set a waiter to wait for the security group to be crated
