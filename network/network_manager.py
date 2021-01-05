@@ -4,8 +4,13 @@ import boto3
 
 importlib.reload(constants)
 
-
 ##############################################################################################
+"""
+
+VPC
+
+"""
+
 
 def create_vpc(name, cidr_block, tenancy="default"):
     client = boto3.client("ec2")
@@ -44,6 +49,29 @@ def vpc_exist_check(name):
 
     if vpc_exist:
         return vpc_exist[0]
+
+
+def remove_vpcs(vpc_list):
+    # Remove route tables
+    client = boto3.client('ec2')
+    ec2 = boto3.resource('ec2')
+
+    vpcs = client.describe_vpcs(Filters=[{"Name": "tag:Name", "Values": vpc_list}])
+
+    for vpc in vpcs["Vpcs"]:
+        vpc_id = vpc["VpcId"]
+        vpc_object = ec2.Vpc(vpc_id)
+        # vpc_object.delete()
+
+    print(f"Vpc's Removed: {vpc_list}")
+
+
+##############################################################################################
+"""
+
+Subnet
+
+"""
 
 
 def create_subnet(name, vpc_id, cidr_block, zone):
@@ -93,6 +121,29 @@ def subnet_exist_check(name):
             break
 
     return subnet_exist
+
+
+def remove_subnets(subnet_list):
+    # Remove route tables
+    client = boto3.client('ec2')
+    ec2 = boto3.resource('ec2')
+
+    subnets = client.describe_subnets(Filters=[{"Name": "tag:Name", "Values": subnet_list}])
+
+    for subnet in subnets["Subnets"]:
+        subnet_id = subnet["SubnetId"]
+        subnet_object = ec2.Subnet(subnet_id)
+        subnet_object.delete()
+
+    print(f"Subnets Removed: {subnet_list}")
+
+
+##############################################################################################
+"""
+
+Internet gateway
+
+"""
 
 
 def create_internet_gateway(name):
@@ -156,6 +207,35 @@ def attach_internet_gateway(vpc_id, gateway_id):
         VpcId=vpc_id
     )
     return response
+
+
+def remove_internet_gateways(gate_away_names):
+    # Remove route tables
+    client = boto3.client('ec2')
+    ec2 = boto3.resource('ec2')
+
+    gates = client.describe_internet_gateways(Filters=[{"Name": "tag:Name", "Values": gate_away_names}])
+
+    for gate in gates["InternetGateways"]:
+        gate_id = gate["InternetGatewayId"]
+        gateway = ec2.InternetGateway(gate_id)
+        attachments = gateway.attachments
+
+        if attachments:
+            _id = attachments[0].get("VpcId")
+            gateway.detach_from_vpc(VpcId=_id)
+
+        gateway.delete()
+
+    print(f"Internet Gateways Removed: {gate_away_names}")
+
+
+##############################################################################################
+"""
+
+    Route tables
+
+"""
 
 
 def create_route_table(name, vpc_id):
@@ -231,5 +311,26 @@ def rt_associate_with_subnet(rt_id, subnet_id):
         SubnetId=subnet_id,
     )
     return route_table_association
+
+
+def remove_route_tables(table_list):
+    # Remove route tables
+    client = boto3.client('ec2')
+    ec2 = boto3.resource('ec2')
+
+    tables = client.describe_route_tables(Filters=[{"Name": "tag:Name", "Values": table_list}])
+
+    for table in tables["RouteTables"]:
+        table_id = table["RouteTableId"]
+        route_table = ec2.RouteTable(table_id)
+
+        associations = route_table.associations
+
+        for aso in associations:
+            aso.delete()
+
+        route_table.delete()
+
+    print(f"Route Tables Removed: {table_list}")
 
 ##############################################################################################

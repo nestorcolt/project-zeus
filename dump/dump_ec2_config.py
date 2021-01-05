@@ -1,3 +1,5 @@
+from security import ec2_security_group
+from constants import constants
 import boto3
 
 
@@ -5,22 +7,19 @@ import boto3
 # Ec2 area
 
 def dump_ec2_config():
+    """
+    dump the ec2 configuration
+    :return:
+    """
     client = boto3.client('ec2')
-    security_groups = client.describe_security_groups()["SecurityGroups"]
 
-    for group in security_groups:
-        name = group["GroupName"]
-        try:
-            client.delete_security_group(GroupName=name)
-        except Exception as e:
-            print(e)
-
-    launch_templates = client.describe_launch_templates()["LaunchTemplates"]
+    # remove security groups
+    ec2_security_group.delete_security_group([constants.WORKER_SECURITY_GROUP_NAME])
+    launch_templates = [constants.LAUNCH_TEMPLATE_NAME]
 
     for template in launch_templates:
-        name = template["LaunchTemplateName"]
         try:
-            client.delete_launch_template(LaunchTemplateName=name)
+            client.delete_launch_template(LaunchTemplateName=template)
         except Exception as e:
             print(e)
 

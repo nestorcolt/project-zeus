@@ -61,16 +61,26 @@ def create_security_group(group_name="Group Name", description="Description", vp
         log.exception(e)
 
 
-def delete_security_group(group_id):
-    # Create EC2 client
-    ec2 = boto3.client('ec2')
+def delete_security_group(my_groups):
+    client = boto3.client('ec2')
+    ec2 = boto3.resource('ec2')
 
-    # Delete security group
-    try:
-        ec2.delete_security_group(GroupId=group_id)
-        log.info('Security Group Deleted')
+    security_groups = client.describe_security_groups()["SecurityGroups"]
 
-    except ClientError as e:
-        log.exception(e)
+    for group in security_groups:
+        name = group["GroupName"]
+
+        if name not in my_groups:
+            continue
+
+        group_id = group["GroupId"]
+        sg = ec2.SecurityGroup(group_id)
+
+        try:
+            sg.delete()
+            log.info('Security Group Deleted')
+
+        except Exception as e:
+            print(e)
 
 ##############################################################################################
