@@ -20,6 +20,7 @@ def dump_ec2_config():
     for template in launch_templates:
         try:
             client.delete_launch_template(LaunchTemplateName=template)
+            print(f"Launch template removed: {template}")
         except Exception as e:
             print(e)
 
