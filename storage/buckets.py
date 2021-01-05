@@ -36,6 +36,4 @@ def delete_bucket(name):
 def configure_software_bucket():
     create_bucket(name=constants.SEARCH_ENGINE_BUCKET_NAME)
 
-
 ##############################################################################################
-configure_software_bucket()
