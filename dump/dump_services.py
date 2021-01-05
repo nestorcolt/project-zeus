@@ -1,4 +1,6 @@
 from dump import dump_ec2_config, dump_network_config
+from constants import constants
+from storage import buckets
 import importlib
 
 importlib.reload(dump_ec2_config)
@@ -16,6 +18,12 @@ def dump_infrastructure():
 
     # Dump network
     dump_network_config.dump_network_config()
+
+    # Remove buckets
+    my_buckets = [constants.SEARCH_ENGINE_BUCKET_NAME]
+
+    for itm in my_buckets:
+        buckets.delete_bucket(itm)
 
 
 ##############################################################################################

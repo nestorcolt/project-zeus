@@ -25,3 +25,6 @@ SUBNET_NAME = "BIS-Subnet"
 SUBNET_CIDR_BLOCK = "10.0.1.0/24"
 INTERNET_GATEWAY_NAME = "BIS-Int-Gateway"
 ROUTE_TABLE_NAME = "BIS-Route-Table"
+
+# Buckets
+SEARCH_ENGINE_BUCKET_NAME = "search-engine-bucket"
