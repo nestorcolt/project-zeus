@@ -1,10 +1,10 @@
 from security import ec2_security_group
-from Ec2 import worker_launch_template
+from Ec2 import launch_templates_manager
 from constants import constants
 import importlib
 import boto3
 
-importlib.reload(worker_launch_template)
+importlib.reload(launch_templates_manager)
 importlib.reload(ec2_security_group)
 importlib.reload(constants)
 
@@ -41,7 +41,7 @@ def ec2_bootstrap(network_id=None):
             waiter.wait(WaiterConfig={'Delay': 30, 'MaxAttempts': 10})
 
             # create launch template
-            worker_launch_template.create_launch_template()
+            launch_templates_manager.create_worker_launch_template()
 
         except Exception as e:
             print(e)

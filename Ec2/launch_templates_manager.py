@@ -5,7 +5,7 @@ import base64
 import os
 
 
-def create_launch_template():
+def create_worker_launch_template():
     current_frame = inspect.getfile(inspect.currentframe())
     current_directory = os.path.dirname(current_frame)
     bash_file = os.path.join(current_directory, "Ec2_config.sh")
@@ -55,5 +55,26 @@ def create_launch_template():
 
     # log
     print(response)
+
+
+def remove_launch_templates(launch_templates_to_delete):
+    client = boto3.client('ec2')
+    launch_templates = client.describe_launch_templates()["LaunchTemplates"]
+
+    if not launch_templates:
+        return
+
+    for template in launch_templates:
+        template_name = template["LaunchTemplateName"]
+
+        if template_name not in launch_templates_to_delete:
+            continue
+
+        try:
+            client.delete_launch_template(LaunchTemplateName=template)
+            print(f"Launch template removed: {template}")
+
+        except Exception as e:
+            print(e)
 
 ##############################################################################################

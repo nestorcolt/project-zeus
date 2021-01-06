@@ -1,5 +1,5 @@
 from security import ec2_security_group
-from Ec2 import worker_launch_template
+from Ec2 import launch_templates_manager
 from network import network_manager
 from constants import constants
 from waiters import igw_waiter
@@ -7,7 +7,7 @@ from time import sleep
 import importlib
 import boto3
 
-importlib.reload(worker_launch_template)
+importlib.reload(launch_templates_manager)
 importlib.reload(ec2_security_group)
 importlib.reload(constants)
 importlib.reload(network_manager)
