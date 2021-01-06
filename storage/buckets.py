@@ -55,4 +55,11 @@ def configure_software_bucket():
     create_bucket(name=constants.SEARCH_ENGINE_BUCKET_NAME)
     print("S3 buckets created!")
 
+
+def dump_buckets_config(buckets_to_dump):
+    for itm in buckets_to_dump:
+        delete_bucket(itm)
+
+    print(f"S3 buckets removed: {buckets_to_dump}")
+
 ##############################################################################################

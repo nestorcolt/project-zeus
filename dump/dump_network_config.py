@@ -31,4 +31,6 @@ def dump_network_config():
     network_manager.remove_vpcs([constants.VPC_NAME])
     time.sleep(threshold)
 
+    print(f"VPC configuration removed!")
+
 ##############################################################################################

@@ -19,5 +19,6 @@ def dump_ec2_config():
     # Remove launch templates
     launch_templates_to_delete = [constants.LAUNCH_TEMPLATE_NAME]
     launch_templates_manager.remove_launch_templates(launch_templates_to_delete)
+    print(f"Ec2 configuration removed!")
 
 ##############################################################################################

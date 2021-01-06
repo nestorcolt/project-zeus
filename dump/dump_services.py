@@ -23,11 +23,7 @@ def dump_infrastructure():
 
     # Remove buckets
     my_buckets = [constants.SEARCH_ENGINE_BUCKET_NAME]
-
-    for itm in my_buckets:
-        buckets.delete_bucket(itm)
-
-    print(f"Buckets Removed: {my_buckets}")
+    buckets.dump_buckets_config(my_buckets)
 
     # Remove SNS topics
     sns_dump_config.dump_sns_config()
