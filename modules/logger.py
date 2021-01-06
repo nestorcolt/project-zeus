@@ -32,7 +32,7 @@ class Logger:
             file_path = os.path.join(constants.ROOT_DIRECTORY, "logs", constants.LOG_FILE_NAME)
 
         if not file_format:
-            file_format = "%(name)s: %(date)s: %(message)s"
+            file_format = "%(name)s: %(date)s: %(message)s:"
 
         self.file_handler = logging.FileHandler(file_path)
         self.file_handler.setLevel(logging_level)
