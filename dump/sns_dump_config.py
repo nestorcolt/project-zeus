@@ -16,4 +16,4 @@ def dump_sns_config():
     for topic in topic_names:
         sns_manager.delete_topic(topic)
 
-    print("SNS configuration dumped")
+    print(f"SNS Topics Removed: {topic_names}")

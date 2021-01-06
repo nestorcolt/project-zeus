@@ -27,6 +27,8 @@ def dump_infrastructure():
     for itm in my_buckets:
         buckets.delete_bucket(itm)
 
+    print(f"Buckets Removed: {my_buckets}")
+
     # Remove SNS topics
     sns_dump_config.dump_sns_config()
 
