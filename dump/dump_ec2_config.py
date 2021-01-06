@@ -12,13 +12,15 @@ def dump_ec2_config():
     dump the ec2 configuration
     :return:
     """
-    client = boto3.client('ec2')
 
     # Remove security groups
-    # ec2_security_group.delete_security_group([constants.WORKER_SECURITY_GROUP_NAME])
+    ec2_security_group.delete_security_group([constants.WORKER_SECURITY_GROUP_NAME])
 
     # Remove launch templates
     launch_templates_to_delete = [constants.LAUNCH_TEMPLATE_NAME]
     launch_templates_manager.remove_launch_templates(launch_templates_to_delete)
 
+
 ##############################################################################################
+
+dump_ec2_config()

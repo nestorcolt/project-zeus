@@ -71,8 +71,8 @@ def remove_launch_templates(launch_templates_to_delete):
             continue
 
         try:
-            client.delete_launch_template(LaunchTemplateName=template)
-            print(f"Launch template removed: {template}")
+            client.delete_launch_template(LaunchTemplateName=template_name)
+            print(f"Launch template removed: {template_name}")
 
         except Exception as e:
             print(e)
