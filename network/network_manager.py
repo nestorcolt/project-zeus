@@ -1,8 +1,12 @@
 from constants import constants
+from modules import logger
 import importlib
 import boto3
 
 importlib.reload(constants)
+
+LOGGER = logger.Logger(__name__)
+log = LOGGER.logger
 
 ##############################################################################################
 """
@@ -34,10 +38,10 @@ def create_vpc(name, cidr_block, tenancy="default"):
         )
 
         # result
-        print(response)
+        log.debug(response)
 
     except Exception as e:
-        print(e)
+        log.exception(e)
 
     return response
 
@@ -61,9 +65,9 @@ def remove_vpcs(vpc_list):
     for vpc in vpcs["Vpcs"]:
         vpc_id = vpc["VpcId"]
         vpc_object = ec2.Vpc(vpc_id)
-        # vpc_object.delete()
+        vpc_object.delete()
 
-    print(f"Vpc's Removed: {vpc_list}")
+    log.info(f"Vpc's Removed: {vpc_list}")
 
 
 ##############################################################################################
@@ -97,10 +101,10 @@ def create_subnet(name, vpc_id, cidr_block, zone):
             DryRun=False
         )
         # result
-        print(response)
+        log.debug(response)
 
     except Exception as e:
-        print(e)
+        log.exception(e)
 
     return response
 
@@ -135,7 +139,7 @@ def remove_subnets(subnet_list):
         subnet_object = ec2.Subnet(subnet_id)
         subnet_object.delete()
 
-    print(f"Subnets Removed: {subnet_list}")
+    log.info(f"Subnets Removed: {subnet_list}")
 
 
 ##############################################################################################
@@ -166,10 +170,10 @@ def create_internet_gateway(name):
             DryRun=False
         )
         # result
-        print(response)
+        log.debug(response)
 
     except Exception as e:
-        print(e)
+        log.warning(e)
 
     return response
 
@@ -227,7 +231,7 @@ def remove_internet_gateways(gate_away_names):
 
         gateway.delete()
 
-    print(f"Internet Gateways Removed: {gate_away_names}")
+    log.info(f"Internet Gateways Removed: {gate_away_names}")
 
 
 ##############################################################################################
@@ -259,10 +263,10 @@ def create_route_table(name, vpc_id):
             ]
         )
         # result
-        print(response)
+        log.debug(response)
 
     except Exception as e:
-        print(e)
+        log.exception(e)
 
     return response
 
@@ -331,6 +335,6 @@ def remove_route_tables(table_list):
 
         route_table.delete()
 
-    print(f"Route Tables Removed: {table_list}")
+    log.info(f"Route Tables Removed: {table_list}")
 
 ##############################################################################################

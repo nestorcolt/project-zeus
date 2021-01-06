@@ -51,7 +51,7 @@ def delete_bucket(name):
 
 
 def configure_software_bucket():
-    print("************************\nSNS\n************************")
+    print("************************\nS3\n************************")
     create_bucket(name=constants.SEARCH_ENGINE_BUCKET_NAME)
     print("S3 buckets created!")
 
