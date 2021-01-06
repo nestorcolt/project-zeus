@@ -1,4 +1,4 @@
-from boot import ec2_boot, network_boot
+from boot import ec2_boot, network_boot, sns_boot
 from storage import buckets
 import importlib
 
@@ -17,6 +17,9 @@ def bootstrap():
 
     # Create S3 search engine bucket
     buckets.configure_software_bucket()
+
+    # Create SNS topics
+    sns_boot.sns_boostrap()
 
     # End
     print("\nBootstrap process finished.")
