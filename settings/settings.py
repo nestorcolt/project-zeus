@@ -7,5 +7,5 @@ import logging
 
 ##############################################################################################
 
-DEBUG_LEVEL = logging.WARNING
+DEBUG_LEVEL = logging.DEBUG
 VERSION = 1.0

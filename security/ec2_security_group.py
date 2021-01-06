@@ -2,7 +2,7 @@ from botocore.exceptions import ClientError
 from modules import logger
 import boto3
 
-LOGGER = logger.Logger(__name__)
+LOGGER = logger.Logger("Ec2 Security")
 log = LOGGER.logger
 
 

@@ -5,7 +5,7 @@ import boto3
 
 importlib.reload(constants)
 
-LOGGER = logger.Logger(__name__)
+LOGGER = logger.Logger("Virtual Private Cloud")
 log = LOGGER.logger
 
 ##############################################################################################

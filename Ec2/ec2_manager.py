@@ -6,7 +6,7 @@ import json
 
 INSTANCE_ID = "i-0a497d3cc7a58b2a8"
 
-LOGGER = logger.Logger(__name__)
+LOGGER = logger.Logger("Ec2")
 log = LOGGER.logger
 
 

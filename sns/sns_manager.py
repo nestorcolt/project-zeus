@@ -1,7 +1,7 @@
 from modules import logger
 import boto3
 
-LOGGER = logger.Logger(__name__)
+LOGGER = logger.Logger("SNS")
 log = LOGGER.logger
 
 
