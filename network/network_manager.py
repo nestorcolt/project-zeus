@@ -6,7 +6,7 @@ import boto3
 importlib.reload(constants)
 
 LOGGER = logger.Logger("Virtual Private Cloud")
-LOGGER.set_stream_handle()
+LOGGER.set_file_handle()
 log = LOGGER.logger
 
 ##############################################################################################

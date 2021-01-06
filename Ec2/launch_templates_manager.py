@@ -6,7 +6,7 @@ import boto3
 import os
 
 LOGGER = logger.Logger("Launch Template Configuration")
-LOGGER.set_stream_handle()
+LOGGER.set_file_handle()
 log = LOGGER.logger
 
 

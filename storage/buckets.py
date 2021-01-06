@@ -3,7 +3,7 @@ from modules import logger
 import boto3
 
 LOGGER = logger.Logger("S3")
-LOGGER.set_stream_handle()
+LOGGER.set_file_handle()
 log = LOGGER.logger
 
 

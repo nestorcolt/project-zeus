@@ -7,7 +7,7 @@ import json
 INSTANCE_ID = "i-0a497d3cc7a58b2a8"
 
 LOGGER = logger.Logger("Ec2")
-LOGGER.set_stream_handle()
+LOGGER.set_file_handle()
 log = LOGGER.logger
 
 

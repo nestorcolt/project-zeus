@@ -4,6 +4,8 @@ from botocore.waiter import WaiterModel
 import boto3
 
 
+##############################################################################################
+
 def internet_gateway_waiter(gateway_id, delay=10, attempts=2):
     waiter_name = "internet_gateway_available"
     client = boto3.client('ec2')
@@ -36,3 +38,5 @@ def internet_gateway_waiter(gateway_id, delay=10, attempts=2):
 
     except WaiterError as e:
         print(e)
+
+##############################################################################################
