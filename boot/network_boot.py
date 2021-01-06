@@ -17,6 +17,7 @@ importlib.reload(igw_waiter)
 LOGGER = logger.Logger(__name__)
 log = LOGGER.logger
 
+
 ##############################################################################################
 
 def network_bootstrap():

@@ -7,7 +7,10 @@ importlib.reload(sns_manager)
 importlib.reload(constants)
 
 
+##############################################################################################
+
 def sns_boostrap():
+    print("************************\nSNS\n************************")
     # Create sns to start the user search engine instance
     sns_manager.create_topic(name=constants.START_SE_SNS_NAME)
 
@@ -21,3 +24,5 @@ def sns_boostrap():
     sns_manager.create_topic(name=constants.ACCEPTED_BLOCK_SNS_NAME)
 
     print(f"SNS topics Created!")
+
+##############################################################################################

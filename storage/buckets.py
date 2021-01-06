@@ -1,5 +1,9 @@
 from constants import constants
+from modules import logger
 import boto3
+
+LOGGER = logger.Logger(__name__)
+log = LOGGER.logger
 
 
 def create_bucket(name, zone='eu-west-1'):
@@ -14,10 +18,10 @@ def create_bucket(name, zone='eu-west-1'):
             },
         )
 
-        print(response)
+        log.debug(response)
 
     except Exception as e:
-        print(e)
+        log.exception(e)
 
 
 def get_bucket_by_name(name):
@@ -40,13 +44,15 @@ def delete_bucket(name):
         response = client.delete_bucket(
             Bucket=name,
         )
-        print(response)
+        log.debug(response)
 
     except Exception as e:
-        print(e)
+        log.exception(e)
 
 
 def configure_software_bucket():
+    print("************************\nSNS\n************************")
     create_bucket(name=constants.SEARCH_ENGINE_BUCKET_NAME)
+    print("S3 Buckets created!")
 
 ##############################################################################################

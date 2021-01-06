@@ -51,6 +51,6 @@ def ec2_bootstrap(network_id=None):
             print("Launch Templates Created")
 
         except Exception as e:
-            log.debug(e)
+            log.exception(e)
 
 ##############################################################################################

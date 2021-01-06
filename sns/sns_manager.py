@@ -1,5 +1,11 @@
+from modules import logger
 import boto3
 
+LOGGER = logger.Logger(__name__)
+log = LOGGER.logger
+
+
+##############################################################################################
 
 def get_topic_by_name(topic_name):
     client = boto3.client('sns')
@@ -25,10 +31,10 @@ def create_topic(name):
             ]
         )
 
-        print(response)
+        log.debug(response)
 
     except Exception as e:
-        print(e)
+        log.exception(e)
 
 
 def delete_topic(name):
@@ -43,10 +49,10 @@ def delete_topic(name):
             TopicArn=topic[0]["TopicArn"]
         )
 
-        print(response)
+        log.debug(response)
 
     except Exception as e:
-        print(e)
+        log.exception(e)
 
 
 def create_subscription(name, protocol, endpoint_id):
@@ -54,7 +60,7 @@ def create_subscription(name, protocol, endpoint_id):
     topic = get_topic_by_name(name)
 
     if not topic:
-        print("No topic found to add subscription")
+        log.debug("No topic found to add subscription")
         return
 
     response = None
@@ -66,10 +72,10 @@ def create_subscription(name, protocol, endpoint_id):
             Endpoint=endpoint_id,
             ReturnSubscriptionArn=True
         )
-        print(response)
+        log.debug(response)
 
     except Exception as e:
-        print(e)
+        log.exception(e)
 
     return response
 
@@ -87,3 +93,5 @@ def delete_subscriptions(endpoint_id=None):
                 client.unsubscribe(SubscriptionArn=arn)
         else:
             client.unsubscribe(SubscriptionArn=arn)
+
+##############################################################################################

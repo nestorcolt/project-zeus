@@ -1,9 +1,15 @@
 from constants import constants
-import boto3
+from modules import logger
 import inspect
 import base64
+import boto3
 import os
 
+LOGGER = logger.Logger(__name__)
+log = LOGGER.logger
+
+
+##############################################################################################
 
 def create_worker_launch_template():
     current_frame = inspect.getfile(inspect.currentframe())
@@ -54,7 +60,7 @@ def create_worker_launch_template():
     )
 
     # log
-    print(response)
+    log.debug(response)
 
 
 def remove_launch_templates(launch_templates_to_delete):
@@ -72,9 +78,9 @@ def remove_launch_templates(launch_templates_to_delete):
 
         try:
             client.delete_launch_template(LaunchTemplateName=template_name)
-            print(f"Launch template removed: {template_name}")
+            log.debug(f"Launch template removed: {template_name}")
 
         except Exception as e:
-            print(e)
+            log.exception(e)
 
 ##############################################################################################
