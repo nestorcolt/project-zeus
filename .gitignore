@@ -115,4 +115,5 @@ venv.bak/
 # PyCharm
 .idea
 
-.logs/
+# Local logs
+logs/bis_logs.txt
