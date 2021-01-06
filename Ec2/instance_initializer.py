@@ -11,6 +11,7 @@ log = LOGGER.logger
 ##############################################################################################
 
 def create_instance_handle():
+    # TODO THIS NEEDS TO VE REFACTORED
     # client to create the resource Ec2
     client = boto3.resource('ec2')
     user_id = "4918"

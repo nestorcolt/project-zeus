@@ -1,12 +1,16 @@
 from security import ec2_security_group
 from Ec2 import launch_templates_manager
 from constants import constants
+from modules import logger
 import importlib
 import boto3
 
 importlib.reload(launch_templates_manager)
 importlib.reload(ec2_security_group)
 importlib.reload(constants)
+
+LOGGER = logger.Logger(__name__)
+log = LOGGER.logger
 
 
 ##############################################################################################
@@ -17,6 +21,7 @@ def ec2_bootstrap(network_id=None):
     Initialize the Ec2 stage configuration
 
     """
+    print("************************\nEc2\n************************")
     # instance a ec2 client
     client = boto3.client('ec2')
 
@@ -31,6 +36,7 @@ def ec2_bootstrap(network_id=None):
     if not sg_exist:
         # init security group
         ec2_security_group.create_security_group(group_name=constants.WORKER_SECURITY_GROUP_NAME, vpc_id=network_id)
+        print("Security Groups Created")
 
     if not config_exist:
         # set a waiter to wait for the security group to be crated
@@ -42,8 +48,9 @@ def ec2_bootstrap(network_id=None):
 
             # create launch template
             launch_templates_manager.create_worker_launch_template()
+            print("Launch Templates Created")
 
         except Exception as e:
-            print(e)
+            log.debug(e)
 
 ##############################################################################################

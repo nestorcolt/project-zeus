@@ -3,6 +3,7 @@ from Ec2 import launch_templates_manager
 from network import network_manager
 from constants import constants
 from waiters import igw_waiter
+from modules import logger
 from time import sleep
 import importlib
 import boto3
@@ -13,6 +14,8 @@ importlib.reload(constants)
 importlib.reload(network_manager)
 importlib.reload(igw_waiter)
 
+LOGGER = logger.Logger(__name__)
+log = LOGGER.logger
 
 ##############################################################################################
 
@@ -22,6 +25,7 @@ def network_bootstrap():
     Initialize the network configuration
 
     """
+    print("************************\nVPC\n************************")
     # instance a ec2 client
     client = boto3.client('ec2')
 
@@ -83,7 +87,4 @@ def network_bootstrap():
 
     return vpc_id
 
-
 ##############################################################################################
-
-network_bootstrap()

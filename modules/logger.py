@@ -9,6 +9,7 @@ class Logger:
         self.logger.setLevel(logging.DEBUG)
 
         self.format = self.set_formatter()
+        self.file_format = self.format
         self.stream_handler = self.set_stream_handle()
         self.logger.addHandler(self.stream_handler)
 
@@ -20,10 +21,11 @@ class Logger:
         format_ = formatter_string if formatter_string else format_
         return logging.Formatter(format_)
 
-    def set_file_handle(self, file_path, logging_level):
+    def set_file_handle(self, file_path, logging_level, file_format):
         self.file_handler = logging.FileHandler(file_path)
         self.file_handler.setLevel(logging_level)
-        self.file_handler.setFormatter(self.format)
+        self.file_format = file_format
+        self.file_handler.setFormatter(file_format)
         return self.file_handler
 
     def set_stream_handle(self):

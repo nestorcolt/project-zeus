@@ -3,6 +3,15 @@
     Constants
 
 """
+
+import inspect
+import os
+
+# Global vars
+CURRENT_FRAME = inspect.getfile(inspect.currentframe())
+ROOT_DIRECTORY = os.path.dirname(os.path.dirname(CURRENT_FRAME))
+VERSION = "1.0.2"
+
 # Zones
 ZONE_US_EAST1 = "us-east-1b"
 
