@@ -3,8 +3,11 @@ from modules import logger
 import boto3
 
 LOGGER = logger.Logger("S3")
+LOGGER.set_stream_handle()
 log = LOGGER.logger
 
+
+##############################################################################################
 
 def create_bucket(name, zone='eu-west-1'):
     client = boto3.client("s3")

@@ -4,7 +4,8 @@ from modules import logger
 import boto3
 import json
 
-LOGGER = logger.Logger(__name__)
+LOGGER = logger.Logger("Instance Creation")
+LOGGER.set_stream_handle()
 log = LOGGER.logger
 
 

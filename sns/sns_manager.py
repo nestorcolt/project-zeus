@@ -2,6 +2,7 @@ from modules import logger
 import boto3
 
 LOGGER = logger.Logger("SNS")
+LOGGER.set_stream_handle()
 log = LOGGER.logger
 
 

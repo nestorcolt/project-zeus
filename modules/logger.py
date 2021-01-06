@@ -1,5 +1,7 @@
+from constants import constants
 from settings import settings
 import logging
+import os
 
 
 ##############################################################################################
@@ -20,11 +22,18 @@ class Logger:
         self.file_handler = None
 
     def set_formatter(self, formatter_string=None):
-        format_ = "%(name)s: %(message)s"
+        format_ = "%(name)s: | %(message)s"
         format_ = formatter_string if formatter_string else format_
         return logging.Formatter(format_)
 
-    def set_file_handle(self, file_path, logging_level, file_format):
+    def set_file_handle(self, logging_level=logging.DEBUG, file_format=None, file_path=None):
+
+        if not file_path:
+            file_path = os.path.join(constants.ROOT_DIRECTORY, "logs", constants.LOG_FILE_NAME)
+
+        if not file_format:
+            file_format = "%(name)s: | %(date)s: | %(message)s"
+
         self.file_handler = logging.FileHandler(file_path)
         self.file_handler.setLevel(logging_level)
         self.file_format = file_format
