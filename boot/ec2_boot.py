@@ -2,14 +2,10 @@ from security import ec2_security_group
 from Ec2 import launch_templates_manager
 from constants import constants
 from modules import logger
-import importlib
 import boto3
 
-importlib.reload(launch_templates_manager)
-importlib.reload(ec2_security_group)
-importlib.reload(constants)
-
-LOGGER = logger.Logger(__name__)
+LOGGER = logger.Logger("Ec2 Boot")
+LOGGER.set_file_handle()
 log = LOGGER.logger
 
 

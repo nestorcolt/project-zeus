@@ -1,11 +1,6 @@
 from dump import dump_ec2_config, dump_network_config, sns_dump_config
 from constants import constants
 from storage import buckets
-import importlib
-
-importlib.reload(dump_network_config)
-importlib.reload(dump_ec2_config)
-importlib.reload(sns_dump_config)
 
 
 ##############################################################################################

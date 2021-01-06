@@ -1,9 +1,5 @@
 from boot import ec2_boot, network_boot, sns_boot
 from storage import buckets
-import importlib
-
-importlib.reload(ec2_boot)
-importlib.reload(network_boot)
 
 
 ##############################################################################################

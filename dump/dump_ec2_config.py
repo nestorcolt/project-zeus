@@ -1,7 +1,6 @@
 from security import ec2_security_group
 from Ec2 import launch_templates_manager
 from constants import constants
-import boto3
 
 
 ##############################################################################################

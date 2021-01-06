@@ -22,7 +22,7 @@ class Logger:
         self.file_handler = None
 
     def set_formatter(self, formatter_string=None):
-        format_ = "%(name)s: | %(message)s"
+        format_ = "%(name)s: %(message)s"
         format_ = formatter_string if formatter_string else format_
         return logging.Formatter(format_)
 
@@ -32,13 +32,13 @@ class Logger:
             file_path = os.path.join(constants.ROOT_DIRECTORY, "logs", constants.LOG_FILE_NAME)
 
         if not file_format:
-            file_format = "%(name)s: | %(date)s: | %(message)s"
+            file_format = "%(name)s: %(date)s: %(message)s"
 
         self.file_handler = logging.FileHandler(file_path)
         self.file_handler.setLevel(logging_level)
         self.file_format = file_format
         self.file_handler.setFormatter(file_format)
-        return self.file_handler
+        self.logger.addHandler(self.file_handler)
 
     def set_stream_handle(self):
         stream_handler = logging.StreamHandler()

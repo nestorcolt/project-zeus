@@ -1,9 +1,6 @@
-from constants import constants
 from modules import logger
-import importlib
 import boto3
 
-importlib.reload(constants)
 
 LOGGER = logger.Logger("Virtual Private Cloud")
 LOGGER.set_file_handle()

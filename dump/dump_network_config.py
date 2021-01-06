@@ -1,9 +1,6 @@
 from network import network_manager
 from constants import constants
-import importlib
 import time
-
-importlib.reload(network_manager)
 
 
 ##############################################################################################

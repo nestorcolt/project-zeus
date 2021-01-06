@@ -1,5 +1,3 @@
-from botocore.exceptions import ClientError
-from constants import constants
 from modules import logger
 import boto3
 import json

@@ -1,10 +1,5 @@
 from constants import constants
 from sns import sns_manager
-import importlib
-import boto3
-
-importlib.reload(sns_manager)
-importlib.reload(constants)
 
 
 ##############################################################################################

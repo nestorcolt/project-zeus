@@ -1,9 +1,5 @@
 from constants import constants
 from sns import sns_manager
-import importlib
-
-importlib.reload(sns_manager)
-importlib.reload(constants)
 
 
 ##############################################################################################
