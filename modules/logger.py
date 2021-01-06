@@ -14,7 +14,6 @@ class Logger:
         self.logger.setLevel(settings.DEBUG_LEVEL)
 
         self.format = self.set_formatter()
-        self.file_format = self.format
         self.stream_handler = self.set_stream_handle()
         self.logger.addHandler(self.stream_handler)
 
@@ -22,9 +21,9 @@ class Logger:
         self.file_handler = None
 
     def set_formatter(self, formatter_string=None):
-        format_ = "%(name)s: %(message)s"
+        format_ = "%(name)s | %(message)s"
         format_ = formatter_string if formatter_string else format_
-        return logging.Formatter(format_)
+        return logging.Formatter(format_, "%Y-%m-%d %H:%M:%S")
 
     def set_file_handle(self, logging_level=logging.DEBUG, file_format=None, file_path=None):
 
@@ -32,12 +31,11 @@ class Logger:
             file_path = os.path.join(constants.ROOT_DIRECTORY, "logs", constants.LOG_FILE_NAME)
 
         if not file_format:
-            file_format = "%(name)s: %(date)s: %(message)s:"
+            file_format = "%(name)s | %(asctime)s | %(message)s:"
 
         self.file_handler = logging.FileHandler(file_path)
         self.file_handler.setLevel(logging_level)
-        self.file_format = file_format
-        self.file_handler.setFormatter(file_format)
+        self.file_handler.setFormatter(self.set_formatter(file_format))
         self.logger.addHandler(self.file_handler)
 
     def set_stream_handle(self):
