@@ -54,7 +54,7 @@ def start_instance_handle():
         status_code = 403
 
     # to track on cloud watch
-    log.info(message)
+    log.warning(message)
 
     return {
         "statusCode": status_code,
@@ -81,7 +81,7 @@ def stop_instance_handle():
         status_code = 403
 
     # to track on cloud watch
-    log.info(message)
+    log.warning(message)
 
     return {
         "statusCode": status_code,
@@ -108,7 +108,7 @@ def delete_instance_handle():
         status_code = 403
 
     # to track on cloud watch
-    log.info(message)
+    log.warning(message)
 
     return {
         "statusCode": status_code,

@@ -54,7 +54,7 @@ def create_security_group(group_name="Group Name", description="Description", vp
                  'IpRanges': [{'CidrIp': '0.0.0.0/0'}]}
             ])
 
-        print('Ingress Successfully Set %s' % data)
+        log.info('Ingress Successfully Set %s' % data)
 
     except ClientError as e:
         log.exception(e)
@@ -77,9 +77,9 @@ def delete_security_group(my_groups):
 
         try:
             sg.delete()
-            print('Security Group Deleted')
+            log.info('Security Group Deleted')
 
         except Exception as e:
-            print(e)
+            log.exception(e)
 
 ##############################################################################################

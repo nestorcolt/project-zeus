@@ -3,6 +3,9 @@
     Main settings project file
 
 """
+import logging
 
-DEBUG = True
+##############################################################################################
+
+DEBUG_LEVEL = logging.WARNING
 VERSION = 1.0
