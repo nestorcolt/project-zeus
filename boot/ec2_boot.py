@@ -36,7 +36,7 @@ def ec2_bootstrap(network_id=None):
     if not sg_exist:
         # init security group
         ec2_security_group.create_security_group(group_name=constants.WORKER_SECURITY_GROUP_NAME, vpc_id=network_id)
-        print("Security Groups Created")
+        print("Security groups created!")
 
     if not config_exist:
         # set a waiter to wait for the security group to be crated
@@ -48,7 +48,7 @@ def ec2_bootstrap(network_id=None):
 
             # create launch template
             launch_templates_manager.create_worker_launch_template()
-            print("Launch Templates Created")
+            print("Launch templates created!")
 
         except Exception as e:
             log.exception(e)

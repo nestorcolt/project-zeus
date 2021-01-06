@@ -23,6 +23,6 @@ def sns_boostrap():
     # Create sns to send a message when a block has been accepted
     sns_manager.create_topic(name=constants.ACCEPTED_BLOCK_SNS_NAME)
 
-    print(f"SNS topics Created!")
+    print(f"SNS topics created!")
 
 ##############################################################################################
