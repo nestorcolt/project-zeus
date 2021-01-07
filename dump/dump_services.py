@@ -1,4 +1,4 @@
-from dump import dump_ec2_config, dump_network_config, sns_dump_config
+from dump import dump_ec2_config, dump_network_config, dump_sns_config
 from constants import constants
 from storage import buckets
 
@@ -21,7 +21,7 @@ def dump_infrastructure():
     buckets.dump_buckets_config(my_buckets)
 
     # Remove SNS topics
-    sns_dump_config.dump_sns_config()
+    dump_sns_config.dump_sns_config()
 
 
 ##############################################################################################
