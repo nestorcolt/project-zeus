@@ -99,23 +99,22 @@ def delete_subscriptions(endpoint_id=None):
 
 
 def sns_to_sqs_policy(topic_arn, queue_arn):
-    policy_document = """{{
-      "Statement":[
-        {{
-          "Sid":"MyPolicy",
-          "Effect":"Allow",
-          "Principal" : {{"AWS" : "*"}},
-          "Action":"SQS:SendMessage",
-          "Resource": "{}",
-          "Condition":{{
-            "ArnEquals":{{
-              "aws:SourceArn": "{}"
-            }}
-          }}
-        }}
-      ]
-    }}""".format(queue_arn, topic_arn)
-
+    policy_document = \
+        {
+            "Statement": [{
+                "Effect": "Allow",
+                "Principal": {"AWS": "*"},
+                "Action": [
+                    "SQS:SendMessage"
+                ],
+                "Resource": queue_arn,
+                "Condition": {
+                    "ArnEquals": {
+                        "aws:SourceArn": topic_arn
+                    }
+                }
+            }]
+        }
     return policy_document
 
 
@@ -126,7 +125,7 @@ def allow_sns_to_write_to_sqs(topic_arn, queue_arn, queue_url):
     response = client.set_queue_attributes(
         QueueUrl=queue_url,
         Attributes={
-            'Policy': policy_json
+            'Policy': json.dumps(policy_json)
         }
     )
     log.debug(response)
@@ -162,7 +161,4 @@ def set_dead_letter_queue(queue_name, topic_name):
                               queue_arn=dead_letter_queue_arn,
                               queue_url=q_url)
 
-
 ##############################################################################################
-
-set_dead_letter_queue("SE-DEAD-LETTER-QUEUE", "SE-START-SERVICE")
