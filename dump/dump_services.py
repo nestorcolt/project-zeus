@@ -1,4 +1,4 @@
-from dump import dump_ec2_config, dump_network_config, dump_sns_config
+from dump import dump_ec2_config, dump_network_config, dump_sns_config, dump_sqs_config
 from constants import constants
 from storage import buckets
 
@@ -22,6 +22,9 @@ def dump_infrastructure():
 
     # Remove SNS topics
     dump_sns_config.dump_sns_config()
+
+    # dump all Queues
+    dump_sqs_config.dump_sqs_config()
 
 
 ##############################################################################################
