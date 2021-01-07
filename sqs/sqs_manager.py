@@ -9,11 +9,24 @@ log = LOGGER.logger
 ##############################################################################################
 
 def get_queue_by_name(name):
-    client = boto3.client('sqs')
-    queues = client.list_queues(QueueNamePrefix=name)
-    urls = queues.get("QueueUrls", None)
-    return urls
+    """
+    Return the queue object
+    :param name:
+    :return:
+    """
+    sqs = boto3.resource('sqs')
+    queue = sqs.get_queue_by_name(QueueName=name)
+    return queue
 
+
+def get_queue_urls(name):
+    client = boto3.client('sqs')
+    response = client.get_queue_url(
+        QueueName=name,
+    )
+    return response
+
+print(get_queue_by_name("SE-DEAD-LETTER-QUEUEs"))
 
 def create_queue(name):
     client = boto3.client('sqs')
@@ -28,13 +41,13 @@ def create_queue(name):
 
 def remove_queue(name):
     client = boto3.client('sqs')
-    queue_url = get_queue_by_name(name)
+    queue_url = get_queue_urls(name)
 
     if not queue_url:
         return
 
     try:
-        response = client.delete_queue(QueueUrl=queue_url[0])
+        response = client.delete_queue(QueueUrl=queue_url["QueueUrls"][0])
         log.debug(response)
 
     except Exception as e:
