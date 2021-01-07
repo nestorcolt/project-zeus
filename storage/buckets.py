@@ -24,7 +24,7 @@ def create_bucket(name, zone='eu-west-1'):
         log.debug(response)
 
     except Exception as e:
-        log.exception(e)
+        log.warning(e)
 
 
 def get_bucket_by_name(name):

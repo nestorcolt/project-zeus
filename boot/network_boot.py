@@ -76,7 +76,7 @@ def network_bootstrap():
     network_manager.rt_associate_with_subnet(table_id, subnet_id)
 
     # wait a few seconds
-    sleep(2)
+    sleep(5)
 
     print("Network configuration created!")
     return vpc_id
