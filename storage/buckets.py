@@ -57,9 +57,6 @@ def configure_software_bucket():
     print("S3 buckets created!")
 
 
-configure_software_bucket()
-
-
 def dump_buckets_config(buckets_to_dump):
     for itm in buckets_to_dump:
         try:
