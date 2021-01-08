@@ -155,9 +155,10 @@ def set_dead_letter_queue(queue_name, topic_name):
     )
 
     q_url = sqs_manager.get_queue_urls(queue_name)
+    topic_arn = get_topic_by_name(topic_name)["TopicArn"]
 
     # allow queue to receive msg from sns
-    allow_sns_to_write_to_sqs(topic_arn=response,
+    allow_sns_to_write_to_sqs(topic_arn=topic_arn,
                               queue_arn=dead_letter_queue_arn,
                               queue_url=q_url)
 

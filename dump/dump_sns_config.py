@@ -15,4 +15,7 @@ def dump_sns_config():
 
     print(f"SNS topics removed: {topic_names}")
 
+
 ##############################################################################################
+
+dump_sns_config()
