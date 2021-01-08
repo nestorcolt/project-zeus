@@ -14,14 +14,17 @@ def get_queue_by_name(name):
     :param name:
     :return:
     """
-    sqs = boto3.resource('sqs')
     client = boto3.client('sqs')
-    queues = client.list_queues(QueueNamePrefix=name)
-    urls = queues.get("QueueUrls", None)
+    queues = client.list_queues().get("QueueUrls", None)
 
-    if urls:
-        queue = sqs.get_queue_by_name(QueueName=name)
-        return queue
+    if queues is None:
+        return
+
+    for q_url in queues:
+        if q_url.endswith(name):
+            sqs = boto3.resource('sqs')
+            queue = sqs.Queue(q_url)
+            return queue
 
 
 def get_queue_urls(name):
