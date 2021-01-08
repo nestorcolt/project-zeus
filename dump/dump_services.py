@@ -16,10 +16,6 @@ def dump_infrastructure():
     # Dump network
     dump_network_config.dump_network_config()
 
-    # Remove buckets
-    my_buckets = [constants.SEARCH_ENGINE_BUCKET_NAME]
-    buckets.dump_buckets_config(my_buckets)
-
     # Remove SNS topics
     dump_sns_config.dump_sns_config()
 

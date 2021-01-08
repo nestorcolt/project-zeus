@@ -9,16 +9,13 @@ log = LOGGER.logger
 
 ##############################################################################################
 
-def create_bucket(name, zone='eu-west-1'):
+def create_bucket(name, zone='us-east-1'):
     client = boto3.client("s3")
 
     try:
         response = client.create_bucket(
             ACL='private',
             Bucket=name,
-            CreateBucketConfiguration={
-                'LocationConstraint': zone,
-            },
         )
 
         log.debug(response)
@@ -56,12 +53,19 @@ def delete_bucket(name):
 def configure_software_bucket():
     print("************************\nS3\n************************")
     create_bucket(name=constants.SEARCH_ENGINE_BUCKET_NAME)
+    create_bucket(name=constants.LAMBDA_BUCKET_NAME)
     print("S3 buckets created!")
+
+
+configure_software_bucket()
 
 
 def dump_buckets_config(buckets_to_dump):
     for itm in buckets_to_dump:
-        delete_bucket(itm)
+        try:
+            delete_bucket(itm)
+        except Exception as e:
+            log.warning(e)
 
     print(f"S3 buckets removed: {buckets_to_dump}")
 
