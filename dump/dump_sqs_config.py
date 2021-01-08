@@ -15,7 +15,4 @@ def dump_sqs_config():
 
     print(f"SQS service removed: {queues_names}")
 
-
 ##############################################################################################
-
-dump_sqs_config()

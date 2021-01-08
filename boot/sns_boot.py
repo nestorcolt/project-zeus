@@ -27,6 +27,4 @@ def sns_boostrap():
                                       topic_name=constants.ACCEPTED_BLOCK_SNS_NAME)
     print(f"SNS topics created!")
 
-
 ##############################################################################################
-sns_boostrap()

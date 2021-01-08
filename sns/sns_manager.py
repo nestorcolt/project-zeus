@@ -83,19 +83,26 @@ def create_subscription(name, protocol, endpoint_id):
     return response
 
 
-def delete_subscriptions(endpoint_id=None):
+def get_subscription_by_name(name):
     client = boto3.client('sns')
     subscriptions = client.list_subscriptions()
+    subscription = [itm for itm in subscriptions if name in itm["SubscriptionArn"].split(":")]
 
-    for sub in subscriptions["Subscriptions"]:
-        arn = sub["SubscriptionArn"]
+    if subscription:
+        return {name: subscription[0]}
 
-        if endpoint_id:
-            endpoint_arn = sub["Endpoint"]
-            if endpoint_arn == endpoint_id:
-                client.unsubscribe(SubscriptionArn=arn)
-        else:
-            client.unsubscribe(SubscriptionArn=arn)
+
+def delete_subscriptions(subscriptions_to_delete):
+    resource = boto3.resource('sns')
+    subscriptions = list(resource.subscriptions.all())
+
+    for itm in subscriptions:
+        endpoint = itm.attributes["Endpoint"]
+        endpoint_name = endpoint.split(":")[-1]
+
+        if endpoint_name in subscriptions_to_delete:
+            itm.delete()
+            log.info(f"Endpoint deleted {endpoint}")
 
 
 def sns_to_sqs_policy(topic_arn, queue_arn):
@@ -155,7 +162,7 @@ def set_dead_letter_queue(queue_name, topic_name):
     )
 
     q_url = sqs_manager.get_queue_urls(queue_name)
-    topic_arn = get_topic_by_name(topic_name)["TopicArn"]
+    topic_arn = get_topic_by_name(topic_name)[0]["TopicArn"]
 
     # allow queue to receive msg from sns
     allow_sns_to_write_to_sqs(topic_arn=topic_arn,
