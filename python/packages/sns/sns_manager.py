@@ -4,7 +4,6 @@ import boto3
 import json
 
 LOGGER = logger.Logger("SNS")
-LOGGER.set_file_handle()
 log = LOGGER.logger
 
 

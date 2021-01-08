@@ -3,7 +3,6 @@ import boto3
 
 
 LOGGER = logger.Logger("Virtual Private Cloud")
-LOGGER.set_file_handle()
 log = LOGGER.logger
 
 ##############################################################################################

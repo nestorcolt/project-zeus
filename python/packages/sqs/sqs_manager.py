@@ -2,7 +2,6 @@ from packages import logger
 import boto3
 
 LOGGER = logger.Logger("SQS")
-LOGGER.set_file_handle()
 log = LOGGER.logger
 
 

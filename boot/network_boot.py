@@ -6,7 +6,6 @@ from time import sleep
 import boto3
 
 LOGGER = logger.Logger("Network Boot")
-LOGGER.set_file_handle()
 log = LOGGER.logger
 
 

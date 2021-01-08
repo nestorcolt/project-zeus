@@ -5,7 +5,6 @@ import boto3
 import json
 
 LOGGER = logger.Logger("Instance Creation")
-LOGGER.set_file_handle()
 log = LOGGER.logger
 
 
