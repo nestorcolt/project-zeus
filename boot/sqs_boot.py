@@ -1,5 +1,5 @@
-from constants import constants
-from sqs import sqs_manager
+from packages.constants import constants
+from packages.sqs import sqs_manager
 
 
 ##############################################################################################

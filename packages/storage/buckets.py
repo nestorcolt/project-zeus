@@ -1,5 +1,5 @@
-from constants import constants
-from modules import logger
+from packages.constants import constants
+from packages import logger
 import boto3
 
 LOGGER = logger.Logger("S3")

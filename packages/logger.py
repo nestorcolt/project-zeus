@@ -1,5 +1,5 @@
-from constants import constants
-from settings import settings
+from packages.constants import constants
+from packages.settings import settings
 import logging
 import os
 

@@ -1,4 +1,4 @@
-from modules import logger
+from packages import logger
 import boto3
 import json
 

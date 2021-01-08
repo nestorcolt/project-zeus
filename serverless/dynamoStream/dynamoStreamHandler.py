@@ -1,4 +1,4 @@
-from constants import constants
+from packages.constants import constants
 
 
 def lambda_handler(event, context):

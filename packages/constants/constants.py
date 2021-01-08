@@ -9,7 +9,7 @@ import os
 
 # Global vars
 CURRENT_FRAME = inspect.getfile(inspect.currentframe())
-ROOT_DIRECTORY = os.path.dirname(os.path.dirname(CURRENT_FRAME))
+ROOT_DIRECTORY = os.path.dirname(os.path.dirname(os.path.dirname(CURRENT_FRAME)))
 VERSION = "1.0.2"
 
 # Logs

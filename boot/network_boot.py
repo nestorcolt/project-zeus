@@ -1,7 +1,7 @@
-from network import network_manager
-from constants import constants
-from waiters import igw_waiter
-from modules import logger
+from packages.network import network_manager
+from packages.constants import constants
+from packages.waiters import igw_waiter
+from packages import logger
 from time import sleep
 import boto3
 

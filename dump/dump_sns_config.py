@@ -1,5 +1,5 @@
-from constants import constants
-from sns import sns_manager
+from packages.constants import constants
+from packages.sns import sns_manager
 
 
 ##############################################################################################

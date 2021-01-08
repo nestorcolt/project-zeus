@@ -1,5 +1,5 @@
 from boot import ec2_boot, network_boot, sns_boot, sqs_boot
-from storage import buckets
+from packages.storage import buckets
 
 
 ##############################################################################################
