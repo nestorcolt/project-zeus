@@ -168,4 +168,17 @@ def set_dead_letter_queue(queue_name, topic_name):
                               queue_arn=dead_letter_queue_arn,
                               queue_url=q_url)
 
+
+def sns_publish_to_topic(topic_arn, message, subject=True):
+    client = boto3.client('sns')
+
+    try:
+        client.publish(
+            TopicArn=topic_arn,
+            Message=message,
+            Subject=subject,
+        )
+    except Exception as e:
+        log.error(e)
+
 ##############################################################################################
