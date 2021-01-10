@@ -169,7 +169,7 @@ def set_dead_letter_queue(queue_name, topic_name):
                               queue_url=q_url)
 
 
-def sns_publish_to_topic(topic_arn, message, subject=True):
+def sns_publish_to_topic(topic_arn, message, subject=""):
     client = boto3.client('sns')
 
     try:
