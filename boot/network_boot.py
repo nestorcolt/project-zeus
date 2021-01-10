@@ -1,7 +1,7 @@
-from packages.network import network_manager
-from packages.constants import constants
-from packages.waiters import igw_waiter
-from packages import logger
+from Cloud.packages.network import network_manager
+from Cloud.packages.constants import constants
+from Cloud.packages.waiters import igw_waiter
+from Cloud.packages import logger
 from time import sleep
 import boto3
 

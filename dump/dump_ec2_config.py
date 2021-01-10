@@ -1,6 +1,6 @@
-from packages.security import ec2_security_group
-from packages.Ec2 import launch_templates_manager
-from packages.constants import constants
+from Cloud.packages.security import ec2_security_group
+from Cloud.packages.Ec2 import launch_templates_manager
+from Cloud.packages.constants import constants
 
 
 ##############################################################################################

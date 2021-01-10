@@ -1,7 +1,7 @@
-from packages.security import ec2_security_group
-from packages.Ec2 import launch_templates_manager
-from packages.constants import constants
-from packages import logger
+from Cloud.packages.security import ec2_security_group
+from Cloud.packages.Ec2 import launch_templates_manager
+from Cloud.packages.constants import constants
+from Cloud.packages import logger
 import boto3
 
 LOGGER = logger.Logger("Ec2 Boot")

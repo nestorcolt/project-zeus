@@ -1,4 +1,4 @@
-from packages import logger
+from Cloud.packages import logger
 import boto3
 import json
 

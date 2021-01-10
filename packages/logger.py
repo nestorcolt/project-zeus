@@ -1,5 +1,5 @@
-from packages.constants import constants
-from packages.settings import settings
+from Cloud.packages.constants import constants
+from Cloud.packages.settings import settings
 import logging
 import os
 

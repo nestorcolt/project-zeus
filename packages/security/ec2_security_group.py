@@ -1,5 +1,5 @@
 from botocore.exceptions import ClientError
-from packages import logger
+from Cloud.packages import logger
 import boto3
 
 LOGGER = logger.Logger("Ec2 Security")

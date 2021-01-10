@@ -1,5 +1,5 @@
-from packages.sqs import sqs_manager
-from packages import logger
+from Cloud.packages.sqs import sqs_manager
+from Cloud.packages import logger
 import boto3
 import json
 

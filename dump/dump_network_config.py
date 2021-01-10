@@ -1,5 +1,5 @@
-from packages.network import network_manager
-from packages.constants import constants
+from Cloud.packages.network import network_manager
+from Cloud.packages.constants import constants
 import time
 
 
