@@ -26,7 +26,8 @@ def ec2_bootstrap(network_id=None):
 
     # Template validator
     launch_templates = client.describe_launch_templates()["LaunchTemplates"]
-    config_exist = [tmp for tmp in launch_templates if tmp["LaunchTemplateName"] == constants.WORKER_LAUNCH_TEMPLATE_NAME]
+    config_exist = [tmp for tmp in launch_templates if
+                    tmp["LaunchTemplateName"] == constants.WORKER_LAUNCH_TEMPLATE_NAME]
 
     if not sg_exist:
         # init security group

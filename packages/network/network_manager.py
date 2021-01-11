@@ -1,7 +1,6 @@
 from Cloud.packages import logger
 import boto3
 
-
 LOGGER = logger.Logger("Virtual Private Cloud")
 log = LOGGER.logger
 
@@ -99,6 +98,12 @@ def create_subnet(name, vpc_id, cidr_block, zone):
         )
         # result
         log.debug(response)
+
+        client.modify_subnet_attribute(
+            SubnetId=response["Subnet"]["SubnetId"],
+            MapPublicIpOnLaunch={
+                'Value': True
+            })
 
     except Exception as e:
         log.exception(e)

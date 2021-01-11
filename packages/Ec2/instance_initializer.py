@@ -4,6 +4,7 @@ from Cloud.packages.network import network_manager
 from botocore.exceptions import ClientError
 from Cloud.packages import logger
 import boto3
+from packages.constants import constants
 
 LOGGER = logger.Logger("Instance Creation")
 log = LOGGER.logger
@@ -83,3 +84,8 @@ def create_instance_handle_from_template(user_id, template_name, security_group_
     return instance
 
 ##############################################################################################
+create_instance_handle_from_template("2222",
+                                     constants.WORKER_LAUNCH_TEMPLATE_NAME,
+                                     constants.WORKER_SECURITY_GROUP_NAME,
+                                     constants.SUBNET_NAME)
+
