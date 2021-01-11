@@ -29,7 +29,7 @@ def create_worker_launch_template():
 
     response = client.create_launch_template(
         DryRun=False,
-        LaunchTemplateName=constants.LAUNCH_TEMPLATE_NAME,
+        LaunchTemplateName=constants.WORKER_LAUNCH_TEMPLATE_NAME,
         VersionDescription=constants.LAUNCH_TEMPLATE_VERSION,
         LaunchTemplateData={
             'InstanceType': constants.INSTANCE_TYPE,
@@ -52,7 +52,7 @@ def create_worker_launch_template():
                 'Tags': [
                     {
                         'Key': 'Name',
-                        'Value': constants.LAUNCH_TEMPLATE_NAME
+                        'Value': constants.WORKER_LAUNCH_TEMPLATE_NAME
                     },
                 ]
             },
@@ -82,5 +82,21 @@ def remove_launch_templates(launch_templates_to_delete):
 
         except Exception as e:
             log.exception(e)
+
+
+def get_worker_launch_template(name):
+    client = boto3.client('ec2')
+    launch_templates = client.describe_launch_templates()["LaunchTemplates"]
+
+    if not launch_templates:
+        return
+
+    for template in launch_templates:
+        template_name = template["LaunchTemplateName"]
+
+        if template_name != name:
+            continue
+
+        return template
 
 ##############################################################################################

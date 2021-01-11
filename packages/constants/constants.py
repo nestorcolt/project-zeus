@@ -22,9 +22,8 @@ ZONE_US_EAST1 = "us-east-1b"
 
 # Launch Template Ec2
 AMI_ID = "ami-0550151dfa2d7ecc3"
-LAUNCH_TEMPLATE_NAME = "Worker-Template"
+WORKER_LAUNCH_TEMPLATE_NAME = "Worker-Template"
 KEY_PAIR_NAME = "worker-pem-file"
-LAUNCH_TEMPLATE_VERSION = "1"
 INSTANCE_TYPE = "t3a.micro"
 
 # Security Groups Ec2

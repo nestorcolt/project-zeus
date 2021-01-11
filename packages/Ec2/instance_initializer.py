@@ -1,5 +1,6 @@
-from botocore.exceptions import ClientError
+from Cloud.packages.Ec2 import launch_templates_manager
 from Cloud.packages.constants import constants
+from botocore.exceptions import ClientError
 from Cloud.packages import logger
 import boto3
 import json
@@ -10,14 +11,17 @@ log = LOGGER.logger
 
 ##############################################################################################
 
-def create_instance_handle():
-    # TODO THIS NEEDS TO VE REFACTORED
+def create_instance_handle_from_template(user_id, template_name):
     # client to create the resource Ec2
     client = boto3.resource('ec2')
-    user_id = "4918"
+
+    template = launch_templates_manager.get_worker_launch_template(name=constants.WORKER_LAUNCH_TEMPLATE_NAME)
+
+    if not template:
+        log.error("No valid launch template found. Operation aborted!")
+        return
 
     # response data
-    status_code = 200
     instance = []
 
     try:
@@ -43,8 +47,8 @@ def create_instance_handle():
                 },
             ],
             LaunchTemplate={
-                'LaunchTemplateId': constants.LAUNCH_TEMPLATE_ID,
-                'Version': constants.LAUNCH_TEMPLATE_VERSION
+                'LaunchTemplateId': template["LaunchTemplateId"],
+                'Version': str(template["LatestVersionNumber"])
             }
         )
 
@@ -56,12 +60,8 @@ def create_instance_handle():
 
     # to track on cloud watch
     log.warning(message)
+    return instance
 
-    return {
-        "statusCode": status_code,
-        "body": json.dumps({
-            "message": message,
-        }),
-    }
 
 ##############################################################################################
+create_instance_handle_from_template("4110", constants.WORKER_LAUNCH_TEMPLATE_NAME)
