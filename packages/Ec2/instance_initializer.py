@@ -40,54 +40,52 @@ def create_instance_handle_from_template(user_id, template_name, security_group_
 
     # response data
     instance_name = f'User-{user_id}'
-    instance = None
 
     # the state of the instance, will return a dictionary with the instance if exists
-    instance = ec2_manager.get_instance_by_tag(instance_name)  # None = Instance doesn't not exist
+    instance = ec2_manager.get_instance_by_tag(value=instance_name)  # None = Instance doesn't not exist
 
-    if instance is not None:
+    if instance is None:
+        try:
+            instance = client.run_instances(
+                MaxCount=1,
+                MinCount=1,
+                SubnetId=subnet["SubnetId"],
+                SecurityGroupIds=[
+                    security_group["GroupId"],
+                ],
+                Monitoring={'Enabled': True},
+                DisableApiTermination=False,
+                InstanceInitiatedShutdownBehavior='stop',
+                TagSpecifications=[
+                    {
+                        'ResourceType': 'instance',
+                        'Tags': [
+                            {
+                                'Key': 'client',
+                                'Value': user_id
+                            },
+                            {
+                                'Key': 'Name',
+                                'Value': instance_name
+                            },
+                        ]
+                    },
+                ],
+                LaunchTemplate={
+                    'LaunchTemplateId': template["LaunchTemplateId"],
+                    'Version': str(template["LatestVersionNumber"])
+                }
+            )
+
+            log.info(f"Instance created: {instance}")
+
+        except ClientError as e:
+            log.error(f"Error creating EC2 Instance\nReason: {e.response}")
+
+    else:
         log.warning(f"An Ec2 instance with the name {instance_name} already exist. Operation skipped")
-        return instance
-
-    try:
-        instance = client.run_instances(
-            MaxCount=1,
-            MinCount=1,
-            SubnetId=subnet["SubnetId"],
-            SecurityGroupIds=[
-                security_group["GroupId"],
-            ],
-            Monitoring={'Enabled': True},
-            DisableApiTermination=False,
-            InstanceInitiatedShutdownBehavior='stop',
-            TagSpecifications=[
-                {
-                    'ResourceType': 'instance',
-                    'Tags': [
-                        {
-                            'Key': 'client',
-                            'Value': user_id
-                        },
-                        {
-                            'Key': 'Name',
-                            'Value': instance_name
-                        },
-                    ]
-                },
-            ],
-            LaunchTemplate={
-                'LaunchTemplateId': template["LaunchTemplateId"],
-                'Version': str(template["LatestVersionNumber"])
-            }
-        )
-
-        message = f"Instance created: {instance}"
-
-    except ClientError as e:
-        message = f"Error creating EC2 Instance\nReason: {e.response}"
 
     # to track on cloud watch
-    log.warning(message)
     return instance
 
 ##############################################################################################
