@@ -1,7 +1,6 @@
 from Cloud.packages.Ec2 import launch_templates_manager
-from Cloud.packages.network import network_manager
 from Cloud.packages.security import ec2_security_group
-from Cloud.packages.constants import constants
+from Cloud.packages.network import network_manager
 from botocore.exceptions import ClientError
 from Cloud.packages import logger
 import boto3
@@ -13,6 +12,13 @@ log = LOGGER.logger
 ##############################################################################################
 
 def create_instance_handle_from_template(user_id, template_name, security_group_name, subnet_name):
+    """
+    Creates an Ec2 instance with the given parameters parsed on the function.
+
+    This instance will have the name User-user_id to match this with the user using the server
+
+    """
+
     # client to create the resource Ec2
     client = boto3.client('ec2')
 
@@ -76,10 +82,4 @@ def create_instance_handle_from_template(user_id, template_name, security_group_
     log.warning(message)
     return instance
 
-
 ##############################################################################################
-
-create_instance_handle_from_template("4110",
-                                     constants.WORKER_LAUNCH_TEMPLATE_NAME,
-                                     constants.WORKER_SECURITY_GROUP_NAME,
-                                     constants.SUBNET_NAME)
