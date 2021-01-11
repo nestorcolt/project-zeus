@@ -8,6 +8,20 @@ log = LOGGER.logger
 
 ##############################################################################################
 
+
+def get_security_group_by_name(name):
+    ec2 = boto3.client('ec2')
+
+    try:
+        response = ec2.describe_security_groups()
+        for itm in response["SecurityGroups"]:
+            if itm["GroupName"] == name:
+                return itm
+
+    except ClientError as e:
+        log.exception(e)
+
+
 def get_security_groups(ids=None):
     ec2 = boto3.client('ec2')
     response = []

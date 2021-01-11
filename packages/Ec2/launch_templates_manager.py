@@ -42,9 +42,6 @@ def create_worker_launch_template():
             'DisableApiTermination': False,
             'InstanceInitiatedShutdownBehavior': 'stop',
             'UserData': encoded_script,
-            'SecurityGroups': [
-                constants.WORKER_SECURITY_GROUP_NAME,
-            ],
         },
         TagSpecifications=[
             {
