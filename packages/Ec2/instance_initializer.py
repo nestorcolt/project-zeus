@@ -42,10 +42,10 @@ def create_instance_handle_from_template(user_id, template_name, security_group_
     instance_name = f'User-{user_id}'
     instance = None
 
-    # the state of the instance, will return a list with running if the instance is running or [] if is stopped
-    state = ec2_manager.check_instance_state(instance_name)  # None = Instance doesn't not exist
+    # the state of the instance, will return a dictionary with the instance if exists
+    instance = ec2_manager.get_instance_by_tag(instance_name)  # None = Instance doesn't not exist
 
-    if state is not None:
+    if instance is not None:
         log.warning(f"An Ec2 instance with the name {instance_name} already exist. Operation skipped")
         return instance
 

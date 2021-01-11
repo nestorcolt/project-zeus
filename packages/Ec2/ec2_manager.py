@@ -14,8 +14,12 @@ def get_all_instances():
 
 
 def get_instance_by_tag(key="Name", value="0000", add_tags=None):
+    """
+
+    """
     if add_tags is None:
         add_tags = {}
+
     ec2 = boto3.client('ec2')
 
     custom_filter = [
@@ -29,44 +33,42 @@ def get_instance_by_tag(key="Name", value="0000", add_tags=None):
         custom_filter = add_tags
 
     response = ec2.describe_instances(Filters=custom_filter)
-    return response
+    result_instance = None
+
+    for reservation in response["Reservations"]:
+        instances = reservation["Instances"]
+
+        for instance in instances:
+            state = instance['State']['Name']
+
+            if state == "terminated":
+                continue
+
+            # will match if is running or stopped
+            result_instance = instance
+            break
+
+    return result_instance
 
 
 def check_instance_state(name):
-    instances = get_instance_by_tag(value=name)["Reservations"]
-    statuses = []
+    instance = get_instance_by_tag(value=name)
 
-    if not instances:
+    if not instance:
         return None
 
-    client = boto3.client('ec2')
-
-    for itm in instances:
-        ami = itm["Instances"][0]
-        instance_id = ami["InstanceId"]
-        response = client.describe_instance_status(InstanceIds=[instance_id])['InstanceStatuses']
-
-        if not response:
-            statuses.append("inactive")
-            continue
-
-        status = response[0]['InstanceState']['Name']
-
-        if status == "running":
-            statuses.append("active")
-
-    return statuses
+    state = instance['State']['Name']
+    return state
 
 
 def start_instance_handle(name):
     ec2 = boto3.client('ec2')
-    instance = get_instance_by_tag(value=name)["Reservations"]
+    instance = get_instance_by_tag(value=name)
 
     if not instance:
         return
 
-    ami = instance[0]["Instances"][0]
-    instance_id = ami["InstanceId"]
+    instance_id = instance["InstanceId"]
 
     try:
         ec2.start_instances(InstanceIds=[instance_id], DryRun=False)
@@ -82,13 +84,12 @@ def start_instance_handle(name):
 def stop_instance_handle(name):
     # client to create the resource Ec2
     client = boto3.resource('ec2')
-    instance = get_instance_by_tag(value=name)["Reservations"]
+    instance = get_instance_by_tag(value=name)
 
     if not instance:
         return
 
-    ami = instance[0]["Instances"][0]
-    instance_id = ami["InstanceId"]
+    instance_id = instance["InstanceId"]
 
     try:
         client.instances.filter(InstanceIds=[instance_id]).stop()
@@ -104,13 +105,12 @@ def stop_instance_handle(name):
 def delete_instance_handle(name):
     # client to create the resource Ec2
     client = boto3.resource('ec2')
-    instance = get_instance_by_tag(value=name)["Reservations"]
+    instance = get_instance_by_tag(value=name)
 
     if not instance:
         return
 
-    ami = instance[0]["Instances"][0]
-    instance_id = ami["InstanceId"]
+    instance_id = instance["InstanceId"]
 
     try:
         client.instances.filter(InstanceIds=[instance_id]).terminate()
