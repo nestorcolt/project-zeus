@@ -122,4 +122,25 @@ def delete_instance_handle(name):
     # to track on cloud watch
     log.warning(message)
 
+
+def reboot_instance_handle(name):
+    # client to create the resource Ec2
+    client = boto3.client('ec2')
+    instance = get_instance_by_tag(value=name)
+
+    if not instance:
+        return
+
+    instance_id = instance["InstanceId"]
+
+    try:
+        client.reboot_instances(InstanceIds=[instance_id])
+        message = f"Instance rebooted: {instance_id}"
+
+    except Exception as e:
+        message = f"Error rebooting EC2 Instance\nReason: {e}"
+
+    # to track on cloud watch
+    log.warning(message)
+
 ##############################################################################################
