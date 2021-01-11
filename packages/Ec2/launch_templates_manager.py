@@ -30,7 +30,7 @@ def create_worker_launch_template():
     response = client.create_launch_template(
         DryRun=False,
         LaunchTemplateName=constants.WORKER_LAUNCH_TEMPLATE_NAME,
-        VersionDescription=constants.LAUNCH_TEMPLATE_VERSION,
+        VersionDescription="1",
         LaunchTemplateData={
             'InstanceType': constants.INSTANCE_TYPE,
             'KeyName': constants.KEY_PAIR_NAME,
