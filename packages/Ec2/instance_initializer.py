@@ -1,4 +1,4 @@
-from Cloud.packages.Ec2 import launch_templates_manager
+from Cloud.packages.Ec2 import launch_templates_manager, ec2_manager
 from Cloud.packages.security import ec2_security_group
 from Cloud.packages.network import network_manager
 from botocore.exceptions import ClientError
@@ -39,7 +39,15 @@ def create_instance_handle_from_template(user_id, template_name, security_group_
         return
 
     # response data
+    instance_name = f'User-{user_id}'
     instance = None
+
+    # the state of the instance, will return a list with running if the instance is running or [] if is stopped
+    state = ec2_manager.check_instance_state(instance_name)  # None = Instance doesn't not exist
+
+    if state is not None:
+        log.warning(f"An Ec2 instance with the name {instance_name} already exist. Operation skipped")
+        return instance
 
     try:
         instance = client.run_instances(
@@ -62,7 +70,7 @@ def create_instance_handle_from_template(user_id, template_name, security_group_
                         },
                         {
                             'Key': 'Name',
-                            'Value': f'User-{user_id}'
+                            'Value': instance_name
                         },
                     ]
                 },
