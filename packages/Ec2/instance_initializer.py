@@ -4,7 +4,6 @@ from Cloud.packages.network import network_manager
 from botocore.exceptions import ClientError
 from Cloud.packages import logger
 import boto3
-from packages.constants import constants
 
 LOGGER = logger.Logger("Instance Creation")
 log = LOGGER.logger
