@@ -23,6 +23,7 @@ def ec2_bootstrap(network_id=None):
     # Security group validator
     security_groups = client.describe_security_groups()["SecurityGroups"]
     sg_exist = [group for group in security_groups if group["GroupName"] == constants.WORKER_SECURITY_GROUP_NAME]
+    web_sg_exist = [group for group in security_groups if group["GroupName"] == constants.WEB_SECURITY_GROUP_NAME]
 
     # Template validator
     launch_templates = client.describe_launch_templates()["LaunchTemplates"]
@@ -32,7 +33,12 @@ def ec2_bootstrap(network_id=None):
     if not sg_exist:
         # init security group
         ec2_security_group.create_security_group(group_name=constants.WORKER_SECURITY_GROUP_NAME, vpc_id=network_id)
-        print("Security groups created!")
+        print("Worker Security group created!")
+
+    if not web_sg_exist:
+        # init security group
+        ec2_security_group.create_security_group(group_name=constants.WEB_SECURITY_GROUP_NAME, vpc_id=network_id)
+        print("Web Security group created!")
 
     if not config_exist:
         # set a waiter to wait for the security group to be crated

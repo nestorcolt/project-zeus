@@ -84,8 +84,3 @@ def create_instance_handle_from_template(user_id, template_name, security_group_
     return instance
 
 ##############################################################################################
-create_instance_handle_from_template("2222",
-                                     constants.WORKER_LAUNCH_TEMPLATE_NAME,
-                                     constants.WORKER_SECURITY_GROUP_NAME,
-                                     constants.SUBNET_NAME)
-
