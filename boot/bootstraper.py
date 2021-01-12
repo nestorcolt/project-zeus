@@ -1,10 +1,14 @@
-from boot import ec2_boot, network_boot, sns_boot, sqs_boot
+from Cloud.boot import ec2_boot, network_boot, sns_boot, sqs_boot, iam_boot
 from Cloud.packages.storage import buckets
 
 
 ##############################################################################################
 
 def bootstrap():
+    # Init network configuration
+    iam_boot.iam_boostrap()
+    print("##############################################################################################")
+
     # Init network configuration
     vpc_id = network_boot.network_bootstrap()
     print("##############################################################################################")

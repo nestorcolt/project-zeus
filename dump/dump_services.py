@@ -1,4 +1,4 @@
-from dump import dump_ec2_config, dump_network_config, dump_sns_config, dump_sqs_config
+from Cloud.dump import dump_ec2_config, dump_network_config, dump_sns_config, dump_sqs_config
 
 
 ##############################################################################################

@@ -46,7 +46,8 @@ def create_instance_handle_from_template(user_id, template_name, security_group_
 
     if instance is None:
         try:
-            instance = client.run_instances(
+            instance = client.create_instances(
+                IamInstanceProfile={},
                 MaxCount=1,
                 MinCount=1,
                 SubnetId=subnet["SubnetId"],
