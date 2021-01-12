@@ -1,4 +1,3 @@
-from Cloud.packages.iam import policies
 from Cloud.packages import logger
 import boto3
 import json
@@ -49,8 +48,25 @@ def attach_role_policy(role_name, policy_arn):
         log.error(e)
 
 
-def get_policy_arn(name):
-    pass
+def get_policy(name, attached=False, scope='AWS'):
+    client = boto3.client('iam')
+    response = client.list_policies(
+        Scope=scope,
+        OnlyAttached=attached,
+        MaxItems=123
+    )
+
+    for policy in response["Policies"]:
+        if policy["PolicyName"] == name:
+            return policy
 
 
-get_policy_arn("")
+def get_role(name):
+    client = boto3.client('iam')
+    response = client.list_roles(
+        MaxItems=123
+    )
+
+    for role in response["Roles"]:
+        if role["RoleName"] == name:
+            return role
