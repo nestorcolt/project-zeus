@@ -70,3 +70,28 @@ def get_role(name):
     for role in response["Roles"]:
         if role["RoleName"] == name:
             return role
+
+
+def create_instance_profile(name):
+    client = boto3.client('iam')
+
+    try:
+        response = client.create_instance_profile(
+            InstanceProfileName=name,
+        )
+        log.info(response)
+    except Exception as e:
+        log.error(e)
+
+
+def attach_role_to_instance_profile(role_name, profile_name):
+    client = boto3.client('iam')
+
+    try:
+        response = client.add_role_to_instance_profile(
+            InstanceProfileName=profile_name,
+            RoleName=role_name
+        )
+        log.info(response)
+    except Exception as e:
+        log.error(e)

@@ -1,6 +1,7 @@
 from Cloud.packages.Ec2 import launch_templates_manager, ec2_manager
 from Cloud.packages.security import ec2_security_group
 from Cloud.packages.network import network_manager
+from Cloud.packages.constants import constants
 from botocore.exceptions import ClientError
 from Cloud.packages import logger
 import boto3
@@ -11,7 +12,7 @@ log = LOGGER.logger
 
 ##############################################################################################
 
-def create_instance_handle_from_template(user_id, template_name, security_group_name, subnet_name):
+def create_instance_handle_from_template(user_id, template_name, security_group_name, subnet_name, instance_profile=""):
     """
     Creates an Ec2 instance with the given parameters parsed on the function.
 
@@ -20,7 +21,7 @@ def create_instance_handle_from_template(user_id, template_name, security_group_
     """
 
     # client to create the resource Ec2
-    client = boto3.client('ec2')
+    client = boto3.resource('ec2')
 
     template = launch_templates_manager.get_worker_launch_template(template_name)
     security_group = ec2_security_group.get_security_group_by_name(security_group_name)
@@ -40,6 +41,7 @@ def create_instance_handle_from_template(user_id, template_name, security_group_
 
     # response data
     instance_name = f'User-{user_id}'
+    instance_profile_name = instance_profile if instance_profile else constants.EC2_WORKER_IAM_INSTANCE_PROFILE
 
     # the state of the instance, will return a dictionary with the instance if exists
     instance = ec2_manager.get_instance_by_tag(value=instance_name)  # None = Instance doesn't not exist
@@ -47,7 +49,7 @@ def create_instance_handle_from_template(user_id, template_name, security_group_
     if instance is None:
         try:
             instance = client.create_instances(
-                IamInstanceProfile={},
+                IamInstanceProfile={"Name": instance_profile_name},
                 MaxCount=1,
                 MinCount=1,
                 SubnetId=subnet["SubnetId"],

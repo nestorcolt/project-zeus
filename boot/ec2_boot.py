@@ -3,6 +3,7 @@ from Cloud.packages.Ec2 import launch_templates_manager
 from Cloud.packages.constants import constants
 from Cloud.packages import logger
 import boto3
+import time
 
 LOGGER = logger.Logger("Ec2 Boot")
 log = LOGGER.logger
@@ -33,12 +34,10 @@ def ec2_bootstrap(network_id=None):
     if not sg_exist:
         # init security group
         ec2_security_group.create_security_group(group_name=constants.WORKER_SECURITY_GROUP_NAME, vpc_id=network_id)
-        print("Worker Security group created!")
 
     if not web_sg_exist:
         # init security group
         ec2_security_group.create_security_group(group_name=constants.WEB_SECURITY_GROUP_NAME, vpc_id=network_id)
-        print("Web Security group created!")
 
     if not config_exist:
         # set a waiter to wait for the security group to be crated
@@ -50,9 +49,10 @@ def ec2_bootstrap(network_id=None):
 
             # create launch template
             launch_templates_manager.create_worker_launch_template()
-            print("Launch templates created!")
 
         except Exception as e:
             log.exception(e)
 
+    time.sleep(2)
+    print(f"Ec2 configuration created!")
 ##############################################################################################
