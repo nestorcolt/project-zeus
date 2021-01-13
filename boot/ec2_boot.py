@@ -43,7 +43,7 @@ def ec2_bootstrap(network_id=None):
         # Remove launch templates
         launch_templates_to_delete = [constants.WORKER_LAUNCH_TEMPLATE_NAME]
         launch_templates_manager.remove_launch_templates(launch_templates_to_delete)
-        time.sleep(10)
+        time.sleep(5)
 
     # set a waiter to wait for the security group to be crated
     waiter = client.get_waiter('security_group_exists')

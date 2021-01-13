@@ -35,7 +35,6 @@ def create_worker_launch_template():
             'InstanceType': constants.INSTANCE_TYPE,
             'KeyName': constants.KEY_PAIR_NAME,
             'EbsOptimized': True,
-            'ImageId': constants.AMI_ID,
             'Monitoring': {
                 'Enabled': True
             },

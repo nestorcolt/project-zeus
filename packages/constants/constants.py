@@ -5,7 +5,11 @@
 """
 
 import inspect
+import boto3
 import os
+
+# Account
+ACCOUNT_ID = boto3.client('sts').get_caller_identity().get('Account')
 
 # Global vars
 CURRENT_FRAME = inspect.getfile(inspect.currentframe())
@@ -22,6 +26,7 @@ ZONE_US_EAST1 = "us-east-1b"
 
 # Launch Template Ec2
 AMI_ID = "ami-06d46e936b077fb88"
+AMI_NAME = "ami-worker"
 WORKER_LAUNCH_TEMPLATE_NAME = "Worker-Template"
 KEY_PAIR_NAME = "worker-pem-file"
 INSTANCE_TYPE = "t3a.micro"

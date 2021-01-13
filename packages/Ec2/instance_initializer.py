@@ -45,10 +45,22 @@ def create_instance_handle_from_template(user_id, template_name, security_group_
 
     # the state of the instance, will return a dictionary with the instance if exists
     instance = ec2_manager.get_instance_by_tag(value=instance_name)  # None = Instance doesn't not exist
+    image_iterator = list(client.images.filter(Owners=[constants.ACCOUNT_ID]))
+
+    if not image_iterator:
+        return
+
+    # get the worker image
+    worker_image_id = None
+
+    for image in image_iterator:
+        if image.name.startswith(constants.AMI_NAME):
+            worker_image_id = image.image_id
 
     if instance is None:
         try:
             instance = client.create_instances(
+                ImageId=worker_image_id,
                 IamInstanceProfile={"Name": instance_profile_name},
                 MaxCount=1,
                 MinCount=1,
@@ -91,4 +103,11 @@ def create_instance_handle_from_template(user_id, template_name, security_group_
     # to track on cloud watch
     return instance
 
+
 ##############################################################################################
+# For test
+if __name__ == '__main__':
+    create_instance_handle_from_template("0000",
+                                         constants.WORKER_LAUNCH_TEMPLATE_NAME,
+                                         constants.WORKER_SECURITY_GROUP_NAME,
+                                         constants.SUBNET_NAME)
