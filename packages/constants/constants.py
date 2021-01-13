@@ -21,7 +21,7 @@ LOG_FILE_NAME = "bis_logs.txt"
 ZONE_US_EAST1 = "us-east-1b"
 
 # Launch Template Ec2
-AMI_ID = "ami-0550151dfa2d7ecc3"
+AMI_ID = "ami-06d46e936b077fb88"
 WORKER_LAUNCH_TEMPLATE_NAME = "Worker-Template"
 KEY_PAIR_NAME = "worker-pem-file"
 INSTANCE_TYPE = "t3a.micro"

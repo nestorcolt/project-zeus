@@ -8,4 +8,4 @@ echo "ubuntu:3996931" | sudo chpasswd
 
 # make updates
 sudo apt-get update
-sudo unattended-upgrade -y
+sudo unattended-upgrade
