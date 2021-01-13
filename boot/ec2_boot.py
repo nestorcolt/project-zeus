@@ -28,7 +28,7 @@ def ec2_bootstrap(network_id=None):
 
     # Template validator
     launch_templates = client.describe_launch_templates()["LaunchTemplates"]
-    config_exist = [tmp for tmp in launch_templates if
+    launch_config_exist = [tmp for tmp in launch_templates if
                     tmp["LaunchTemplateName"] == constants.WORKER_LAUNCH_TEMPLATE_NAME]
 
     if not sg_exist:
@@ -39,20 +39,30 @@ def ec2_bootstrap(network_id=None):
         # init security group
         ec2_security_group.create_security_group(group_name=constants.WEB_SECURITY_GROUP_NAME, vpc_id=network_id)
 
-    if not config_exist:
-        # set a waiter to wait for the security group to be crated
-        waiter = client.get_waiter('security_group_exists')
+    if launch_config_exist:
+        # Remove launch templates
+        launch_templates_to_delete = [constants.WORKER_LAUNCH_TEMPLATE_NAME]
+        launch_templates_manager.remove_launch_templates(launch_templates_to_delete)
+        time.sleep(10)
 
-        try:
-            # wait for security group to be created before continue
-            waiter.wait(WaiterConfig={'Delay': 30, 'MaxAttempts': 10})
+    # set a waiter to wait for the security group to be crated
+    waiter = client.get_waiter('security_group_exists')
 
-            # create launch template
-            launch_templates_manager.create_worker_launch_template()
+    try:
+        # wait for security group to be created before continue
+        waiter.wait(WaiterConfig={'Delay': 30, 'MaxAttempts': 10})
 
-        except Exception as e:
-            log.exception(e)
+        # create launch template
+        launch_templates_manager.create_worker_launch_template()
+
+    except Exception as e:
+        log.exception(e)
 
     time.sleep(2)
     print(f"Ec2 configuration created!")
+
+
 ##############################################################################################
+
+if __name__ == '__main__':
+    ec2_bootstrap()
