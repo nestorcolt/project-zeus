@@ -9,10 +9,10 @@ def dump_infrastructure():
     to its default previous to code bootloader
     """
     # Dump the Ec2 service configuration
-    dump_ec2_config.dump_ec2_config()
+    # dump_ec2_config.dump_ec2_config()
 
     # Dump network
-    dump_network_config.dump_network_config()
+    # dump_network_config.dump_network_config()
 
     # Remove SNS topics
     dump_sns_config.dump_sns_config()

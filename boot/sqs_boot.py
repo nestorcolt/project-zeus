@@ -16,12 +16,6 @@ def sqs_boostrap():
     # Create sqs to work as a dead letter queue for the captured blocks processing
     sqs_manager.create_queue(name=constants.BLOCK_CAPTURED_DEAD_LETTER_QUEUE)
 
-    # dead letter queue for the sleep of an instance when the SE have reached max attempts
-    sqs_manager.create_queue(name=constants.INSTANCE_SLEEP_DEAD_LETTER_QUEUE)
-
-    # awake the instance dead letter queue
-    sqs_manager.create_queue(name=constants.INSTANCE_AWAKE_DEAD_LETTER_QUEUE)
-
     time.sleep(2)
     print(f"SQS service created!")
 
