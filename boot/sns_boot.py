@@ -31,6 +31,12 @@ def sns_boostrap():
     sns_manager.create_topic(name=constants.INSTANCE_SLEEP_BLOCK_SNS_NAME)
     sns_manager.set_dead_letter_queue(queue_name=constants.BLOCK_CAPTURED_DEAD_LETTER_QUEUE,
                                       topic_name=constants.INSTANCE_SLEEP_BLOCK_SNS_NAME)
+
+    # Create sns to send a message when a instance have to sleep for 30 minutes
+    sns_manager.create_topic(name=constants.INSTANCE_WAKEUP_BLOCK_SNS_NAME)
+    sns_manager.set_dead_letter_queue(queue_name=constants.INSTANCE_AWAKE_DEAD_LETTER_QUEUE,
+                                      topic_name=constants.INSTANCE_WAKEUP_BLOCK_SNS_NAME)
+
     time.sleep(2)
     print(f"SNS topics created!")
 
