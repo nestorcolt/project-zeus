@@ -18,9 +18,9 @@ def sns_boostrap():
                                       topic_name=constants.STOP_SE_SNS_NAME)
 
     # Create sns to pause the user search engine instance
-    sns_manager.create_topic(name=constants.PAUSE_SE_SNS_NAME)
-    sns_manager.set_dead_letter_queue(queue_name=constants.SE_PAUSE_DEAD_LETTER_QUEUE,
-                                      topic_name=constants.PAUSE_SE_SNS_NAME)
+    sns_manager.create_topic(name=constants.MODIFY_SE_SNS_NAME)
+    sns_manager.set_dead_letter_queue(queue_name=constants.SE_MODIFY_DEAD_LETTER_QUEUE,
+                                      topic_name=constants.MODIFY_SE_SNS_NAME)
 
     # Create sns to send a message when a block has been accepted
     sns_manager.create_topic(name=constants.ACCEPTED_BLOCK_SNS_NAME)

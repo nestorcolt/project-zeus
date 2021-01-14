@@ -1,7 +1,6 @@
 from string import ascii_lowercase
 from Cloud.packages import logger
 import boto3
-import json
 
 LOGGER = logger.Logger("DynamoDB")
 log = LOGGER.logger
@@ -80,8 +79,4 @@ def delete_item(table_name, primary_key, value):
     except Exception as e:
         log.error(e)
 
-
 ##############################################################################################
-if __name__ == '__main__':
-    data = {"search_blocks": False}
-    update_item("Users", "user_id", 55, data)

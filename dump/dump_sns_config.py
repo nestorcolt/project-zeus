@@ -7,11 +7,11 @@ from Cloud.packages.sns import sns_manager
 def dump_sns_config():
     topic_names = [constants.STOP_SE_SNS_NAME,
                    constants.START_SE_SNS_NAME,
-                   constants.PAUSE_SE_SNS_NAME,
+                   constants.MODIFY_SE_SNS_NAME,
                    constants.ACCEPTED_BLOCK_SNS_NAME]
 
     queues_names = [constants.SE_START_DEAD_LETTER_QUEUE,
-                    constants.SE_PAUSE_DEAD_LETTER_QUEUE,
+                    constants.SE_MODIFY_DEAD_LETTER_QUEUE,
                     constants.SE_STOP_DEAD_LETTER_QUEUE,
                     constants.BLOCK_CAPTURED_DEAD_LETTER_QUEUE]
 
