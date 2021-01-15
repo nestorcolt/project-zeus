@@ -5,7 +5,7 @@ import base64
 import boto3
 import os
 
-LOGGER = logger.Logger("Launch Template Configuration")
+LOGGER = logger.Logger(__name__)
 log = LOGGER.logger
 
 

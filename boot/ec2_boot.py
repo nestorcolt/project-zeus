@@ -5,7 +5,7 @@ from Cloud.packages import logger
 import boto3
 import time
 
-LOGGER = logger.Logger("Ec2 Boot")
+LOGGER = logger.Logger(__name__)
 log = LOGGER.logger
 
 

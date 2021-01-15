@@ -1,7 +1,7 @@
 from Cloud.packages import logger
 import boto3
 
-LOGGER = logger.Logger("Virtual Private Cloud")
+LOGGER = logger.Logger(__name__)
 log = LOGGER.logger
 
 ##############################################################################################

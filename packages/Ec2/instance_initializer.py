@@ -7,7 +7,7 @@ from Cloud.packages import logger
 import boto3
 import re
 
-LOGGER = logger.Logger("Instance Creation")
+LOGGER = logger.Logger(__name__)
 log = LOGGER.logger
 
 

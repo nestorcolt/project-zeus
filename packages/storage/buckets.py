@@ -2,7 +2,7 @@ from Cloud.packages.constants import constants
 from Cloud.packages import logger
 import boto3
 
-LOGGER = logger.Logger("S3")
+LOGGER = logger.Logger(__name__)
 log = LOGGER.logger
 
 

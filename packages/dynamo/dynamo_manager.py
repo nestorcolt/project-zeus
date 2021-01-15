@@ -2,7 +2,7 @@ from string import ascii_lowercase
 from Cloud.packages import logger
 import boto3
 
-LOGGER = logger.Logger("DynamoDB")
+LOGGER = logger.Logger(__name__)
 log = LOGGER.logger
 
 

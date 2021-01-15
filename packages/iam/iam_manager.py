@@ -2,7 +2,7 @@ from Cloud.packages import logger
 import boto3
 import json
 
-LOGGER = logger.Logger("IAM")
+LOGGER = logger.Logger(__name__)
 log = LOGGER.logger
 
 

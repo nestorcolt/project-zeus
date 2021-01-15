@@ -5,7 +5,7 @@ from Cloud.packages import logger
 from time import sleep
 import boto3
 
-LOGGER = logger.Logger("Network Boot")
+LOGGER = logger.Logger(__name__)
 log = LOGGER.logger
 
 

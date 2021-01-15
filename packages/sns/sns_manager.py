@@ -3,7 +3,7 @@ from Cloud.packages import logger
 import boto3
 import json
 
-LOGGER = logger.Logger("SNS")
+LOGGER = logger.Logger(__name__)
 log = LOGGER.logger
 
 
