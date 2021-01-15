@@ -74,7 +74,10 @@ USERS_TABLE_NAME = "Users"
 BLOCKS_TABLE_NAME = "Blocks"
 
 TABLE_PK = "user_id"
+BLOCK_SORT_KEY = "block_id"
+BLOCK_DATA_KEY = "data"
 USER_LAST_ACTIVE_PROPERTY = "last_active"
 
 # 28 minutes because the instance takes 3:52 minutes to start so will pass 31 minutes to send request again to FLEX
 EC2_SLEEP_TIME_THRESHOLD = 28
+CLEANUP_BLOCKS_TIME_THRESHOLD = 48  # Hours
