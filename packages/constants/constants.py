@@ -46,7 +46,6 @@ INTERNET_GATEWAY_NAME = "BIS-Int-Gateway"
 ROUTE_TABLE_NAME = "BIS-Route-Table"
 
 # Buckets
-SEARCH_ENGINE_BUCKET_NAME = "bis-se-s3"
 LAMBDA_BUCKET_NAME = "bis-serverless-s3"
 
 # SNS
