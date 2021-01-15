@@ -5,6 +5,7 @@ from Cloud.packages.constants import constants
 from botocore.exceptions import ClientError
 from Cloud.packages import logger
 import boto3
+import re
 
 LOGGER = logger.Logger("Instance Creation")
 log = LOGGER.logger
@@ -51,11 +52,20 @@ def create_instance_handle_from_template(user_id, template_name, security_group_
         return
 
     # get the worker image
-    worker_image_id = None
+    images = {}
 
     for image in image_iterator:
         if image.name.startswith(constants.AMI_NAME):
-            worker_image_id = image.image_id
+            images[image.name.split("-")[-1]] = image
+
+    latest_index = max(images.keys())
+    image_result = images.get(latest_index)
+
+    if image_result is None:
+        log.warning("No AMI found to launch new instance")
+
+    # set the ID for the latest version found
+    worker_image_id = image_result.id
 
     if instance is None:
         try:
@@ -107,7 +117,7 @@ def create_instance_handle_from_template(user_id, template_name, security_group_
 ##############################################################################################
 # For test
 if __name__ == '__main__':
-    create_instance_handle_from_template("0001",
+    create_instance_handle_from_template("0003",
                                          constants.WORKER_LAUNCH_TEMPLATE_NAME,
                                          constants.WORKER_SECURITY_GROUP_NAME,
                                          constants.SUBNET_NAME)

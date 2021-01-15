@@ -26,7 +26,7 @@ ZONE_US_EAST1 = "us-east-1b"
 
 # Launch Template Ec2
 AMI_ID = "ami-06d46e936b077fb88"
-AMI_NAME = "My-Root-Ubuntu"
+AMI_NAME = "ami-worker-ubuntu"
 WORKER_LAUNCH_TEMPLATE_NAME = "Worker-Template"
 KEY_PAIR_NAME = "worker-pem-file"
 INSTANCE_TYPE = "t3a.micro"
@@ -76,4 +76,5 @@ BLOCKS_TABLE_NAME = "Blocks"
 TABLE_PK = "user_id"
 USER_LAST_ACTIVE_PROPERTY = "last_active"
 
-EC2_SLEEP_TIME_THRESHOLD = 30
+# 28 minutes because the instance takes 3:52 minutes to start so will pass 31 minutes to send request again to FLEX
+EC2_SLEEP_TIME_THRESHOLD = 28
