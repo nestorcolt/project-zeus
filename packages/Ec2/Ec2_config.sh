@@ -7,7 +7,7 @@ echo "This is the boot script!"
 echo "ubuntu:3996931" | sudo chpasswd
 
 # Set the hostname as env var to query in code
-export MY_ADDRESS="hostname -I"
+export MY_IP="hostname -I"
 
 #make updates
 sudo apt-get update
