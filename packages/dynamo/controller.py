@@ -38,12 +38,29 @@ def to_decimal(value):
     return value
 
 
+def to_float(value):
+    if isinstance(value, Decimal):
+        return float(value)
+
+    return value
+
+
 def map_request_body(new_dict, old_dict):
     for key, value in old_dict.items():
         if isinstance(value, collections.abc.Mapping):
             new_dict[key] = map_request_body(new_dict.get(key, {}), to_decimal(value))
         else:
             new_dict[key] = to_decimal(value)
+
+    return new_dict
+
+
+def map_response_body(new_dict, old_dict):
+    for key, value in old_dict.items():
+        if isinstance(value, collections.abc.Mapping):
+            new_dict[key] = map_response_body(new_dict.get(key, {}), to_float(value))
+        else:
+            new_dict[key] = to_float(value)
 
     return new_dict
 
@@ -61,11 +78,15 @@ def get_last_active_users():
 ##############################################################################################
 # Blocks Table
 
-def get_user_blocks(user_id):
+def get_blocks(user_id=None):
     table = dynamo_manager.get_table_by_name(constants.BLOCKS_TABLE_NAME)
-    response = table.scan(FilterExpression=Key(constants.TABLE_PK).eq(user_id))
+
+    if user_id is None:
+        response = table.scan()
+    else:
+        response = table.scan(FilterExpression=Key(constants.TABLE_PK).eq(user_id))
+
     items = response.get("Items")
-    pprint.pprint(items)
 
     if items:
         return items
