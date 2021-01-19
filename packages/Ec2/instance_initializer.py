@@ -117,7 +117,7 @@ def create_instance_handle_from_template(user_id, template_name, security_group_
 ##############################################################################################
 # For test
 if __name__ == '__main__':
-    create_instance_handle_from_template("0004",
+    create_instance_handle_from_template("0001",
                                          constants.WORKER_LAUNCH_TEMPLATE_NAME,
                                          constants.WORKER_SECURITY_GROUP_NAME,
                                          constants.SUBNET_NAME)

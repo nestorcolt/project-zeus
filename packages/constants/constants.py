@@ -75,6 +75,8 @@ BLOCKS_TABLE_NAME = "Blocks"
 
 TABLE_PK = "user_id"
 BLOCK_SORT_KEY = "block_id"
+BLOCK_STATION_KEY = "station_id"
+BLOCK_TIME_KEY = "block_time"
 BLOCK_DATA_KEY = "data"
 USER_LAST_ACTIVE_PROPERTY = "last_active"
 
