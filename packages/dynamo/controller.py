@@ -1,11 +1,15 @@
 from Cloud.packages.dynamo import dynamo_manager
 from Cloud.packages.constants import constants
 from boto3.dynamodb.conditions import Key, Attr
+from Cloud.packages import logger
 from decimal import Decimal
 from time import mktime
 import collections.abc
 import datetime
 import pprint
+
+LOGGER = logger.Logger(__name__)
+log = LOGGER.logger
 
 
 ##############################################################################################
@@ -58,21 +62,24 @@ def get_last_active_users():
 # Blocks Table
 
 def get_user_blocks(user_id):
-    #  todo modify to get blocks per time filter
     table = dynamo_manager.get_table_by_name(constants.BLOCKS_TABLE_NAME)
     response = table.scan(FilterExpression=Key(constants.TABLE_PK).eq(user_id))
     items = response.get("Items")
+    pprint.pprint(items)
 
     if items:
         return items
 
 
 def put_new_block(user_id, block_data):
-    # todo modify this data to adapt new dynamo format
-
     captured_time = get_unix_time()
-    block_start_time = block_data["startTime"]
-    block_area_id = block_data["serviceAreaId"]
+
+    try:
+        block_start_time = block_data["startTime"]
+        block_area_id = block_data["serviceAreaId"]
+    except Exception as e:
+        log.error(f"Error: {e} not found in block data")
+        return e
 
     new_item = {constants.TABLE_PK: user_id,
                 constants.BLOCK_SORT_KEY: Decimal(block_start_time),
@@ -81,7 +88,7 @@ def put_new_block(user_id, block_data):
                 constants.BLOCK_DATA_KEY: block_data}
 
     # creates the new entry on dynamo block table
-    dynamo_manager.create_item(constants.BLOCKS_TABLE_NAME, new_item)
+    dynamo_manager.create_item(constants.BLOCKS_TABLE_NAME, map_request_body({}, new_item))
 
 
 def delete_block(user_id, block_id):
@@ -113,56 +120,4 @@ def cleanup_blocks_table():
         block_id = item[constants.BLOCK_SORT_KEY]
         delete_block(user_id, block_id)
 
-
 ##############################################################################################
-offer = \
-    {
-        'creationDate': None,
-        'endTime': 1611067500.0,
-        'expirationDate': 1611054900.0,
-        'hidden': False,
-        'isPriorityOffer': False,
-        'offerId': '',
-        'offerMetadata': None,
-        'offerType': 'NON_EXCLUSIVE',
-        'rateInfo': {
-            'PriceDetails': None,
-            'currency': 'USD',
-            'isSurge': True,
-            'priceAmount': 68.5,
-            'pricingUXVersion': 'V2',
-            'projectedTips': 0.0,
-            'surgeMultiplier': '⇧ 9%'
-        },
-        'schedulingType': 'BLOCK',
-        'serviceAreaId': '479968bb-e253-4c6e-a78a-1629507a8c63',
-        'serviceTypeId': 'amzn1.flex.st.v1.PuyOplzlR1idvfPkv5138g',
-        'serviceTypeMetadata': {
-            'nameClassification': 'STANDARD'
-        },
-        'startTime': 1611054900.0,
-        'startingLocation': {
-            'address': {
-                'address1': '',
-                'address2': None,
-                'address3': None,
-                'addressId': None,
-                'city': None,
-                'countryCode': None,
-                'name': None,
-                'phone': None,
-                'postalCode': None,
-                'state': None
-            },
-            'geocode': {
-                'latitude': 0.0,
-                'longitude': 0.0
-            },
-            'locationType': None,
-            'startingLocationName': ''
-        },
-        'status': 'OFFERED',
-        'trIds': None
-    }
-
-put_new_block("1", offer)
