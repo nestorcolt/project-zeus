@@ -76,6 +76,17 @@ def get_last_active_users():
     return response
 
 
+def set_last_active_user_time(user_id):
+    unix_seconds = get_unix_time()
+
+    item = {constants.USER_LAST_ACTIVE_PROPERTY: Decimal(unix_seconds)}
+
+    dynamo_manager.update_item(constants.USERS_TABLE_NAME,
+                               constants.TABLE_PK,
+                               user_id,
+                               item)
+
+
 ##############################################################################################
 # Blocks Table
 
