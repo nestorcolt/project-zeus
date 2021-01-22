@@ -5,6 +5,7 @@ from Cloud.packages import logger
 from decimal import Decimal
 from time import mktime
 import collections.abc
+import requests
 import datetime
 import pprint
 
@@ -141,4 +142,25 @@ def cleanup_blocks_table():
         block_id = item[constants.BLOCK_SORT_KEY]
         delete_block(user_id, block_id)
 
+
 ##############################################################################################
+
+def send_block_to_web(user_id, block_data):
+    captured_time = get_unix_time()
+
+    try:
+        block_start_time = block_data["startTime"]
+        block_area_id = block_data["serviceAreaId"]
+    except Exception as e:
+        log.error(f"Error: {e} not found in block data")
+        return e
+
+    new_item = {constants.TABLE_PK: user_id,
+                constants.BLOCK_SORT_KEY: Decimal(block_start_time),
+                constants.BLOCK_STATION_KEY: block_area_id,
+                constants.BLOCK_TIME_KEY: Decimal(captured_time),
+                constants.BLOCK_DATA_KEY: block_data}
+
+    # creates the new entry on dynamo block table
+    response = requests.post(constants.WEB_BACKEND_ENDPOINT_URL, data=new_item)
+    return response
