@@ -84,6 +84,8 @@ USER_LAST_ACTIVE_PROPERTY = "last_active"
 EC2_SLEEP_TIME_THRESHOLD = 28
 CLEANUP_BLOCKS_TIME_THRESHOLD = 48  # Hours
 
+# cloudwatch
+SEARCH_ENGINE_LOG_GROUP = "Search-Engine-Logs"
 
 # Web endpoints
 WEB_BACKEND_ENDPOINT_URL = "XXXXX/api/blockNotification/sendAsync"
