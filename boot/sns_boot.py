@@ -8,6 +8,10 @@ import time
 def sns_boostrap():
     print("************************\nSNS\n************************")
     # Create sns to start the user search engine instance
+    sns_manager.create_topic(name=constants.START_SE_SNS_NAME)
+    sns_manager.set_dead_letter_queue(queue_name=constants.SE_START_SEARCH_DEAD_LETTER_QUEUE,
+                                      topic_name=constants.START_SE_SNS_NAME)
+
     sns_manager.create_topic(name=constants.AUTHENTICATE_SE_SNS_NAME)
     sns_manager.set_dead_letter_queue(queue_name=constants.SE_AUTHENTICATE_DEAD_LETTER_QUEUE,
                                       topic_name=constants.AUTHENTICATE_SE_SNS_NAME)
