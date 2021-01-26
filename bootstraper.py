@@ -5,22 +5,6 @@ from Cloud.packages.storage import buckets
 ##############################################################################################
 
 def bootstrap():
-    # Init network configuration
-    iam_boot.iam_boostrap()
-    print("##############################################################################################")
-
-    # Init network configuration
-    vpc_id = network_boot.network_bootstrap()
-    print("##############################################################################################")
-
-    # Init Ec2 configuration
-    ec2_boot.ec2_bootstrap(network_id=vpc_id)
-    print("##############################################################################################")
-
-    # Create S3 search engine bucket
-    buckets.configure_software_bucket()
-    print("##############################################################################################")
-
     # Create SQS DEAD LETTERS
     sqs_boot.sqs_boostrap()
     print("##############################################################################################")
