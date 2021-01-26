@@ -78,8 +78,8 @@ BLOCK_TIME_KEY = "block_time"
 BLOCK_DATA_KEY = "data"
 USER_LAST_ACTIVE_PROPERTY = "last_active"
 
-# 28 minutes because the instance takes 3:52 minutes to start so will pass 31 minutes to send request again to FLEX
-EC2_SLEEP_TIME_THRESHOLD = 28
+# 30 minutes
+EC2_SLEEP_TIME_THRESHOLD = 30
 CLEANUP_BLOCKS_TIME_THRESHOLD = 48  # Hours
 
 # cloudwatch
