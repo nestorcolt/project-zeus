@@ -15,6 +15,7 @@ def sqs_boostrap():
     # Create sqs to work as a dead letter queue for the captured blocks processing
     sqs_manager.create_queue(name=constants.SE_ACCEPTED_DLQ)
     sqs_manager.create_queue(name=constants.SE_SLEEP_DLQ)
+    sqs_manager.create_queue(name=constants.SE_ERROR_DLQ)
     sqs_manager.create_queue(name=constants.SE_LOGS_DLQ)
 
     time.sleep(2)

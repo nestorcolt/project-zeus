@@ -31,6 +31,11 @@ def sns_boostrap():
     sns_manager.set_dead_letter_queue(queue_name=constants.SE_LOGS_DLQ,
                                       topic_name=constants.SE_LOGS_TOPIC)
 
+    # Create sns to send LOGS
+    sns_manager.create_topic(name=constants.SE_ERROR_TOPIC)
+    sns_manager.set_dead_letter_queue(queue_name=constants.SE_ERROR_DLQ,
+                                      topic_name=constants.SE_ERROR_TOPIC)
+
     time.sleep(2)
     print(f"SNS topics created!")
 
