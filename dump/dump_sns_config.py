@@ -5,13 +5,13 @@ from Cloud.packages.sns import sns_manager
 ##############################################################################################
 
 def dump_sns_config():
-    topic_names = [constants.AUTHENTICATE_SE_SNS_NAME,
-                   constants.ACCEPTED_BLOCK_SNS_NAME,
-                   constants.INSTANCE_SLEEP_BLOCK_SNS_NAME]
+    topic_names = [constants.SE_AUTHENTICATE_TOPIC,
+                   constants.SE_ACCEPTED_TOPIC,
+                   constants.SE_SLEEP_TOPIC]
 
-    queues_names = [constants.SE_AUTHENTICATE_DEAD_LETTER_QUEUE,
-                    constants.BLOCK_CAPTURED_DEAD_LETTER_QUEUE,
-                    constants.INSTANCE_SLEEP_DEAD_LETTER_QUEUE]
+    queues_names = [constants.SE_AUTHENTICATE_DLQ,
+                    constants.SE_ACCEPTED_DLQ,
+                    constants.SE_SLEEP_DLQ]
 
     # Delete all subscriptions
     sns_manager.delete_subscriptions(queues_names)

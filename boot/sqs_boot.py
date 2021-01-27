@@ -9,13 +9,13 @@ def sqs_boostrap():
     print("************************\nSQS\n************************")
 
     # Create sqs to work as a dead letter queue for the topic of instance initializing
-    sqs_manager.create_queue(name=constants.SE_START_SEARCH_DEAD_LETTER_QUEUE)
-    sqs_manager.create_queue(name=constants.SE_AUTHENTICATE_DEAD_LETTER_QUEUE)
+    sqs_manager.create_queue(name=constants.SE_START_DLQ)
+    sqs_manager.create_queue(name=constants.SE_AUTHENTICATE_DLQ)
 
     # Create sqs to work as a dead letter queue for the captured blocks processing
-    sqs_manager.create_queue(name=constants.BLOCK_CAPTURED_DEAD_LETTER_QUEUE)
-    sqs_manager.create_queue(name=constants.INSTANCE_SLEEP_DEAD_LETTER_QUEUE)
-    sqs_manager.create_queue(name=constants.LOGS_DEAD_LETTER_QUEUE)
+    sqs_manager.create_queue(name=constants.SE_ACCEPTED_DLQ)
+    sqs_manager.create_queue(name=constants.SE_SLEEP_DLQ)
+    sqs_manager.create_queue(name=constants.SE_LOGS_DLQ)
 
     time.sleep(2)
     print(f"SQS service created!")
