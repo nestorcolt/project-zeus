@@ -178,6 +178,36 @@ def put_new_offer(user_id, validated, offer_data):
     dynamo_manager.create_item(constants.OFFERS_TABLE_NAME, map_request_body({}, new_item))
 
 
+def delete_offer(user_id, offer_id):
+    # creates the new entry on dynamo block table
+    table = dynamo_manager.get_table_by_name(constants.OFFERS_TABLE_NAME)
+
+    try:
+        table.delete_item(
+            Key={
+                constants.TABLE_PK: user_id,
+                constants.OFFER_SORT_KEY: offer_id,
+            },
+        )
+    except Exception as e:
+        dynamo_manager.log.error(e)
+
+
+def cleanup_offers_table():
+    """
+    Clean up the table blocks from blocks older than 48 hours from the time the function is called
+    """
+    table = dynamo_manager.get_table_by_name(constants.OFFERS_TABLE_NAME)
+    hours_to_minutes = constants.CLEANUP_OFFERS_TIME_THRESHOLD * 60
+    wait_time_span = get_past_time_span(hours_to_minutes)
+    response = table.scan(FilterExpression=Attr(constants.OFFER_TIME_KEY).lt(Decimal(wait_time_span)))
+
+    for item in response["Items"]:
+        user_id = item[constants.TABLE_PK]
+        offer_id = item[constants.OFFER_SORT_KEY]
+        delete_offer(user_id, offer_id)
+
+
 ##############################################################################################
 
 def send_block_to_web(user_id, block_data):
