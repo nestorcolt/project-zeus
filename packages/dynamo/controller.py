@@ -124,21 +124,6 @@ def put_new_block(user_id, block_data):
     dynamo_manager.create_item(constants.BLOCKS_TABLE_NAME, map_request_body({}, new_item))
 
 
-def delete_block(user_id, block_id):
-    # creates the new entry on dynamo block table
-    table = dynamo_manager.get_table_by_name(constants.BLOCKS_TABLE_NAME)
-
-    try:
-        table.delete_item(
-            Key={
-                constants.TABLE_PK: user_id,
-                constants.BLOCK_SORT_KEY: block_id,
-            },
-        )
-    except Exception as e:
-        dynamo_manager.log.error(e)
-
-
 def cleanup_blocks_table():
     """
     Clean up the table blocks from blocks older than 48 hours from the time the function is called
@@ -151,7 +136,16 @@ def cleanup_blocks_table():
     for item in response["Items"]:
         user_id = item[constants.TABLE_PK]
         block_id = item[constants.BLOCK_SORT_KEY]
-        delete_block(user_id, block_id)
+
+        try:
+            table.delete_item(
+                Key={
+                    constants.TABLE_PK: user_id,
+                    constants.BLOCK_SORT_KEY: block_id,
+                },
+            )
+        except Exception as e:
+            dynamo_manager.log.error(e)
 
 
 ##############################################################################################
@@ -178,21 +172,6 @@ def put_new_offer(user_id, validated, offer_data):
     dynamo_manager.create_item(constants.OFFERS_TABLE_NAME, map_request_body({}, new_item))
 
 
-def delete_offer(user_id, offer_id):
-    # creates the new entry on dynamo block table
-    table = dynamo_manager.get_table_by_name(constants.OFFERS_TABLE_NAME)
-
-    try:
-        table.delete_item(
-            Key={
-                constants.TABLE_PK: user_id,
-                constants.OFFER_SORT_KEY: offer_id,
-            },
-        )
-    except Exception as e:
-        dynamo_manager.log.error(e)
-
-
 def cleanup_offers_table():
     """
     Clean up the table blocks from blocks older than 48 hours from the time the function is called
@@ -205,7 +184,16 @@ def cleanup_offers_table():
     for item in response["Items"]:
         user_id = item[constants.TABLE_PK]
         offer_id = item[constants.OFFER_SORT_KEY]
-        delete_offer(user_id, offer_id)
+
+        try:
+            table.delete_item(
+                Key={
+                    constants.TABLE_PK: user_id,
+                    constants.OFFER_SORT_KEY: offer_id,
+                },
+            )
+        except Exception as e:
+            dynamo_manager.log.error(e)
 
 
 ##############################################################################################
