@@ -8,6 +8,7 @@ import collections.abc
 import requests
 import datetime
 import pprint
+import sys
 
 LOGGER = logger.Logger(__name__)
 log = LOGGER.logger
@@ -103,6 +104,8 @@ def get_blocks(user_id=None):
     if items:
         return items
 
+    return []
+
 
 def put_new_block(user_id, block_data):
     captured_time = get_unix_time()
@@ -194,6 +197,17 @@ def cleanup_offers_table():
             )
         except Exception as e:
             dynamo_manager.log.error(e)
+
+
+def get_offers(user_id=None):
+    table = dynamo_manager.get_table_by_name(constants.OFFERS_TABLE_NAME)
+
+    if user_id is None:
+        response = table.scan()
+    else:
+        response = table.query(KeyConditionExpression=Key(constants.TABLE_PK).eq(user_id))
+
+    return response["Items"]
 
 
 ##############################################################################################
