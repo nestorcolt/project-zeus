@@ -155,6 +155,29 @@ def cleanup_blocks_table():
 
 
 ##############################################################################################
+# Offers to create analytics
+
+def put_new_offer(user_id, offer_data):
+    captured_time = get_unix_time()
+
+    try:
+        offer_id = offer_data["offerId"]
+        offer_area_id = offer_data["serviceAreaId"]
+    except Exception as e:
+        log.error(f"Error: {e} not found in block data")
+        return e
+
+    new_item = {constants.TABLE_PK: user_id,
+                constants.OFFER_SORT_KEY: offer_id,
+                constants.OFFER_STATION_ID: offer_area_id,
+                constants.OFFER_TIME_KEY: Decimal(captured_time),
+                constants.OFFER_DATA_KEY: offer_data}
+
+    # creates the new entry on dynamo block table
+    dynamo_manager.create_item(constants.OFFERS_TABLE_NAME, map_request_body({}, new_item))
+
+
+##############################################################################################
 
 def send_block_to_web(user_id, block_data):
     captured_time = get_unix_time()

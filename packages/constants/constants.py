@@ -74,6 +74,7 @@ EC2_WORKER_IAM_ROLE = "ec2-worker-iam-role"
 
 # dynamo DB
 BLOCKS_TABLE_NAME = "Blocks"
+OFFERS_TABLE_NAME = "Offers"
 USERS_TABLE_NAME = "Users"
 
 USER_LAST_ACTIVE_PROPERTY = "last_active"
@@ -82,6 +83,11 @@ BLOCK_TIME_KEY = "block_time"
 BLOCK_SORT_KEY = "block_id"
 BLOCK_DATA_KEY = "data"
 TABLE_PK = "user_id"
+
+OFFER_STATION_ID = BLOCK_STATION_KEY
+OFFER_DATA_KEY = BLOCK_DATA_KEY
+OFFER_TIME_KEY = "offer_time"
+OFFER_SORT_KEY = "offer_id"
 
 # 30 minutes
 CLEANUP_BLOCKS_TIME_THRESHOLD = 48  # Hours
