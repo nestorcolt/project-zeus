@@ -157,7 +157,7 @@ def cleanup_blocks_table():
 ##############################################################################################
 # Offers to create analytics
 
-def put_new_offer(user_id, offer_data):
+def put_new_offer(user_id, validated, offer_data):
     captured_time = get_unix_time()
 
     try:
@@ -169,6 +169,7 @@ def put_new_offer(user_id, offer_data):
 
     new_item = {constants.TABLE_PK: user_id,
                 constants.OFFER_SORT_KEY: offer_id,
+                constants.OFFER_VALIDATED_KEY: validated,
                 constants.OFFER_STATION_ID: offer_area_id,
                 constants.OFFER_TIME_KEY: Decimal(captured_time),
                 constants.OFFER_DATA_KEY: offer_data}
