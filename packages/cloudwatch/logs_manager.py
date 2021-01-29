@@ -118,7 +118,7 @@ def log_all_users():
     for user_data in last_active["Items"]:
         search_blocks = user_data.get("search_blocks")
 
-        if not search_blocks:
+        if search_blocks:
             user = user_data[constants.TABLE_PK]
             thread_process = threading.Thread(target=log_user_stats, args=[user])
             thread_process.start()
