@@ -72,7 +72,7 @@ def map_response_body(new_dict, old_dict):
 
 def get_last_active_users():
     table = dynamo_manager.get_table_by_name(constants.USERS_TABLE_NAME)
-    wait_time_span = get_past_time_span(constants.EC2_SLEEP_TIME_THRESHOLD)
+    wait_time_span = get_past_time_span(constants.SEARCH_SLEEP_TIME_THRESHOLD)
     response = table.scan(FilterExpression=Attr(constants.USER_LAST_ACTIVE_PROPERTY).lt(Decimal(wait_time_span)))
     return response
 

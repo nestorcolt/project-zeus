@@ -17,6 +17,7 @@ ROOT_DIRECTORY = os.path.dirname(
     os.path.dirname(os.path.dirname(os.path.dirname(CURRENT_FRAME)))
 )
 VERSION = "1.0.2"
+USER_PLACEHOLDER = "User-{}"
 
 # Logs
 LOG_FILE_NAME = "bis_logs.txt"
@@ -93,7 +94,7 @@ OFFER_SORT_KEY = "offer_id"
 # 30 minutes
 CLEANUP_BLOCKS_TIME_THRESHOLD = 48  # Hours
 CLEANUP_OFFERS_TIME_THRESHOLD = CLEANUP_BLOCKS_TIME_THRESHOLD  # Hours
-EC2_SLEEP_TIME_THRESHOLD = 30
+SEARCH_SLEEP_TIME_THRESHOLD = 30
 
 # cloudwatch
 SEARCH_ENGINE_LOG_GROUP = "Search-Engine-Logs"
