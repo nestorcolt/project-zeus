@@ -1,6 +1,7 @@
 from Cloud.packages.dynamo import controller, dynamo_manager
 from Cloud.packages.constants import constants
 from Cloud.packages.sns import sns_manager
+from Cloud.packages.utilities import utils
 from collections import OrderedDict
 import threading
 import boto3
@@ -74,7 +75,7 @@ def get_user_stats(user_id):
     last_active = user_data["last_active"]
 
     # the user state on the search engine
-    sleep_time = controller.get_past_time_span(constants.SEARCH_SLEEP_TIME_THRESHOLD)
+    sleep_time = utils.get_past_time_span(constants.SEARCH_SLEEP_TIME_THRESHOLD)
     user_state = "Active"
 
     if search_state and last_active > sleep_time:
