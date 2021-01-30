@@ -3,7 +3,6 @@ from Cloud.packages.constants import constants
 from Cloud.packages.sns import sns_manager
 from collections import OrderedDict
 import threading
-import timeit
 import boto3
 import time
 
@@ -80,7 +79,7 @@ def get_user_stats(user_id):
 
     if search_state and last_active > sleep_time:
         user_state = "Stopped"
-    if last_active < sleep_time:
+    if last_active != 0 and last_active < sleep_time:
         user_state = "Paused"
     if not search_state:
         user_state = "Inactive"
@@ -118,9 +117,12 @@ def log_all_users():
     for user_data in last_active["Items"]:
         search_blocks = user_data.get("search_blocks")
 
-        if search_blocks:
+        if search_blocks is True:
             user = user_data[constants.TABLE_PK]
             thread_process = threading.Thread(target=log_user_stats, args=[user])
             thread_process.start()
 
+
 ##############################################################################################
+if __name__ == '__main__':
+    print(get_user_stats("17"))
