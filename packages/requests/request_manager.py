@@ -32,5 +32,5 @@ def send_block_to_web(user_id, block_data):
 
 
 def send_error_to_web(user_id):
-    response = requests.post(constants.WEB_BACKEND_ERROR_ENDPOINT_URL, data={"user_id": user_id})
+    response = requests.post(constants.WEB_BACKEND_ERROR_ENDPOINT_URL, data={constants.TABLE_PK: user_id})
     return response
