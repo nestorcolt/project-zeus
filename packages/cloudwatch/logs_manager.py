@@ -4,6 +4,7 @@ from Cloud.packages.sns import sns_manager
 from Cloud.packages.utilities import utils
 from collections import OrderedDict
 import threading
+import datetime
 import boto3
 import time
 
@@ -49,20 +50,6 @@ def create_or_update_log(log_group, log_stream, message):
 ##############################################################################################
 # STATS
 
-def create_thread_process(function=None, arguments=()):
-    """
-    A helper function to run process on different threads in the CPU to avoid the machine being freeze during a main
-    thread logic execution
-    :param function: (func) function to call inside of fetched module
-    :param arguments: list of arguments that will be set into the function call
-    :return:
-    """
-    # Make the thread
-    thread_process = threading.Thread(target=function, args=arguments)
-    # Start the thread
-    thread_process.start()
-
-
 def get_user_stats(user_id):
     user_data = dynamo_manager.read_item(constants.USERS_TABLE_NAME, constants.TABLE_PK, user_id)
     offer_list = controller.get_offers(user_id)
@@ -73,14 +60,12 @@ def get_user_stats(user_id):
 
     search_state = user_data["search_blocks"]
     last_active = user_data["last_active"]
+    asleep_time = utils.get_time_difference(last_active, utils.get_unix_time())
 
     # the user state on the search engine
-    sleep_time = utils.get_past_time_span(constants.SEARCH_SLEEP_TIME_THRESHOLD)
     user_state = "Active"
 
-    if search_state and last_active > sleep_time:
-        user_state = "Stopped"
-    if last_active != 0 and last_active < sleep_time:
+    if last_active != 0 and asleep_time < constants.SEARCH_SLEEP_TIME_THRESHOLD:
         user_state = "Paused"
     if not search_state:
         user_state = "Inactive"
@@ -90,7 +75,6 @@ def get_user_stats(user_id):
     output["total_offers"] = user_offer_count
     output["validated_offers"] = validated_count
     output["accepted_offers"] = user_block_count
-
     return output
 
 
@@ -119,7 +103,10 @@ def log_all_users():
         search_blocks = user_data.get("search_blocks")
         if search_blocks is True:
             user = user_data[constants.TABLE_PK]
-            thread_process = threading.Thread(target=log_user_stats, args=[user])
-            thread_process.start()
+            log_user_stats(user)
+            print(user_data)
+
 
 ##############################################################################################
+if __name__ == '__main__':
+    log_user_stats("17")

@@ -16,6 +16,15 @@ def get_unix_time():
     return unix_secs
 
 
+def convert_unix_time_to_human(seconds):
+    return datetime.datetime.fromtimestamp(int(seconds)).strftime('%H:%M:%S')
+
+
+def get_time_difference(first, second):
+    result = abs(int(first) - int(second)) / 60
+    return result
+
+
 def get_future_time_span(minutes):
     unix_timestamp_future = get_unix_time() + (minutes * 60)  # N min * 60 seconds
     return unix_timestamp_future
