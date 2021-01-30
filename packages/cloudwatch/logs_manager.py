@@ -52,8 +52,12 @@ def create_or_update_log(log_group, log_stream, message):
 
 def get_user_stats(user_id):
     user_data = dynamo_manager.read_item(constants.USERS_TABLE_NAME, constants.TABLE_PK, user_id)
-    offer_list = controller.get_offers(user_id)
 
+    # No user found
+    if user_data is None:
+        return
+
+    offer_list = controller.get_offers(user_id)
     validated_count = len([itm for itm in offer_list if itm["validated"] is True])
     user_block_count = len(controller.get_blocks(user_id))
     user_offer_count = len(offer_list)
@@ -91,9 +95,11 @@ def stats_to_string(stats_dict):
 
 def log_user_stats(user_id):
     stats = get_user_stats(user_id)
-    stats_message = stats_to_string(stats)
-    topic_arn = sns_manager.get_topic_by_name(constants.SE_LOGS_TOPIC)[0]["TopicArn"]
-    sns_manager.sns_publish_to_topic(topic_arn, stats_message, constants.USER_PLACEHOLDER.format(user_id))
+
+    if stats:
+        stats_message = stats_to_string(stats)
+        topic_arn = sns_manager.get_topic_by_name(constants.SE_LOGS_TOPIC)[0]["TopicArn"]
+        sns_manager.sns_publish_to_topic(topic_arn, stats_message, constants.USER_PLACEHOLDER.format(user_id))
 
 
 def log_all_users():
@@ -104,9 +110,8 @@ def log_all_users():
         if search_blocks is True:
             user = user_data[constants.TABLE_PK]
             log_user_stats(user)
-            print(user_data)
 
 
 ##############################################################################################
 if __name__ == '__main__':
-    log_user_stats("17")
+    log_user_stats("10")
