@@ -1,3 +1,4 @@
+from Cloud.packages.security import secrets_manager
 from Cloud.packages.constants import constants
 from Cloud.packages.utilities import utils
 from Cloud.packages import logger
@@ -9,8 +10,18 @@ log = LOGGER.logger
 
 
 ##############################################################################################
+def web_app_auth():
+    secrets = secrets_manager.get_secret(constants.WEB_AUTH_SECRETS)
+    response = requests.post(constants.WEB_BACKEND_AUTHENTICATION_URL, body=secrets)
 
-def send_block_to_web(user_id, block_data):
+    if response.status_code == 200:
+        data = response.json()
+        return data["data"][constants.WEB_API_TOKEN_KEY]
+    else:
+        return False
+
+
+def send_block_to_web(user_id, block_data, **kwargs):
     captured_time = utils.get_unix_time()
 
     try:
@@ -27,10 +38,16 @@ def send_block_to_web(user_id, block_data):
                 constants.BLOCK_DATA_KEY: block_data}
 
     # creates the new entry on dynamo block table
-    response = requests.post(constants.WEB_BACKEND_ENDPOINT_URL, data=new_item)
+    response = requests.post(constants.WEB_BACKEND_ENDPOINT_URL,
+                             body=new_item,
+                             headers=kwargs["access_token"])
     return response
 
 
-def send_error_to_web(user_id):
-    response = requests.post(constants.WEB_BACKEND_ERROR_ENDPOINT_URL, data={constants.TABLE_PK: user_id})
+def send_error_to_web(user_id, **kwargs):
+    response = requests.post(constants.WEB_BACKEND_ERROR_ENDPOINT_URL,
+                             body=user_id,
+                             headers=kwargs["access_token"])
     return response
+
+##############################################################################################

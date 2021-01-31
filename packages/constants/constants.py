@@ -101,5 +101,11 @@ SEARCH_SLEEP_TIME_THRESHOLD = 30
 SEARCH_ENGINE_LOG_GROUP = "Search-Engine-Logs"
 
 # Web endpoints
-WEB_BACKEND_ERROR_ENDPOINT_URL = "XXXXX/api/errorNotification/sendAsync"
-WEB_BACKEND_ENDPOINT_URL = "XXXXX/api/blockNotification/sendAsync"
+BASE_ADDRESS = "dev.blockinservice.com"
+WEB_BACKEND_ERROR_ENDPOINT_URL = f"{BASE_ADDRESS}/api/errorNotification/sendAsync"
+WEB_BACKEND_ENDPOINT_URL = f"{BASE_ADDRESS}/api/blockNotification/sendAsync"
+WEB_BACKEND_AUTHENTICATION_URL = f"{BASE_ADDRESS}/api/externalSync/login"
+
+# Secrets
+WEB_AUTH_SECRETS = "bis-web-app-api"
+WEB_API_TOKEN_KEY = "jwToken"
