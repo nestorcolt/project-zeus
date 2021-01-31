@@ -1,5 +1,7 @@
+from Cloud.packages.constants import constants
 from Cloud.packages import logger
 import boto3
+import json
 
 LOGGER = logger.Logger(__name__)
 log = LOGGER.logger
@@ -85,5 +87,15 @@ def get_messages_from_queue(queue_name):
         return response["Messages"]
 
     return []
+
+
+def get_user_in_queue_body(user_id):
+    messages = get_messages_from_queue("SeOnProcessQueue")
+    result = list(map(lambda itm: json.loads(itm["Body"]).get(constants.TABLE_PK) == user_id, messages))
+
+    if result:
+        return result[0]
+
+    return False
 
 ##############################################################################################
