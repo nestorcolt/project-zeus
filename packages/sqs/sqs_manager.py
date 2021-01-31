@@ -60,4 +60,30 @@ def remove_queue(name):
     except Exception as e:
         log.exception(e)
 
+
+def send_message_to_queue(queue_name, message):
+    # Get the service resource
+    sqs = boto3.resource('sqs')
+
+    # Get the queue
+    queue = sqs.get_queue_by_name(QueueName=queue_name)
+
+    # Create a new message
+    queue.send_message(MessageBody=message)
+
+
+def get_messages_from_queue(queue_name):
+    # Get the service resource
+    sqs = boto3.resource('sqs')
+
+    # Get the queue
+    queue = sqs.get_queue_by_name(QueueName=queue_name)
+    response = boto3.client("sqs").receive_message(QueueUrl=queue.url)
+    messages = response.get("Messages")
+
+    if messages:
+        return response["Messages"]
+
+    return []
+
 ##############################################################################################
