@@ -89,8 +89,8 @@ def get_messages_from_queue(queue_name):
     return []
 
 
-def get_user_in_queue_body(user_id):
-    messages = get_messages_from_queue("SeOnProcessQueue")
+def get_user_in_queue_body(user_id, queue_name):
+    messages = get_messages_from_queue(queue_name)
     result = list(map(lambda itm: json.loads(itm["Body"]).get(constants.TABLE_PK) == user_id, messages))
 
     if result:
