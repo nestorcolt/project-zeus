@@ -39,11 +39,13 @@ def network_bootstrap():
 
     for index, (zone, cird) in enumerate(zip(zones, cird_blocks)):
         # subnet validator
-        subnet_exist = network_manager.subnet_exist_check(constants.SUBNET_NAME + str(index))
+        subnet_name = constants.SUBNET_NAME + str(index)
+        print(zone, cird, index)
+        subnet_exist = network_manager.subnet_exist_check(subnet_name)
         subnet_waiter = client.get_waiter('subnet_available')
 
         if not subnet_exist:
-            subnet_exist = network_manager.create_subnet(name=constants.SUBNET_NAME + str(index),
+            subnet_exist = network_manager.create_subnet(name=subnet_name,
                                                          vpc_id=vpc_id,
                                                          cidr_block=cird,
                                                          zone=zone)["Subnet"]

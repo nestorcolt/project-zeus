@@ -48,12 +48,12 @@ VPC_CIDR_BLOCK = "10.0.0.0/16"
 # Subnet 001
 INTERNET_GATEWAY_NAME = "BIS-Int-Gateway-00"
 ROUTE_TABLE_NAME = "BIS-Route-Table-00"
-SUBNET_CIDR_BLOCK = "10.0.0.0/20"
+SUBNET_CIDR_BLOCK = "10.0.1.0/24"
 SUBNET_NAME = "BIS-Subnet-00"
 ZONE_US_EAST1A = "us-east-1a"
 
 # Subnet 002
-SUBNET_CIDR_BLOCK_2 = "10.0.10.0/24"
+SUBNET_CIDR_BLOCK_2 = "10.0.2.0/24"
 ZONE_US_EAST1B = "us-east-1b"
 
 ##############################################################################################
