@@ -23,7 +23,7 @@ def ec2_bootstrap(network_id=None):
 
     # Security group validator
     security_groups = client.describe_security_groups()["SecurityGroups"]
-    sg_exist = [group for group in security_groups if group["GroupName"] == constants.WORKER_SECURITY_GROUP_NAME]
+    db_sg_exist = [group for group in security_groups if group["GroupName"] == constants.DB_SECURITY_GROUP_NAME]
     web_sg_exist = [group for group in security_groups if group["GroupName"] == constants.WEB_SECURITY_GROUP_NAME]
 
     # Template validator
@@ -31,9 +31,9 @@ def ec2_bootstrap(network_id=None):
     launch_config_exist = [tmp for tmp in launch_templates if
                     tmp["LaunchTemplateName"] == constants.WORKER_LAUNCH_TEMPLATE_NAME]
 
-    if not sg_exist:
+    if not db_sg_exist:
         # init security group
-        ec2_security_group.create_security_group(group_name=constants.WORKER_SECURITY_GROUP_NAME, vpc_id=network_id)
+        ec2_security_group.create_security_group(group_name=constants.DB_SECURITY_GROUP_NAME, vpc_id=network_id)
 
     if not web_sg_exist:
         # init security group
@@ -53,7 +53,7 @@ def ec2_bootstrap(network_id=None):
         waiter.wait(WaiterConfig={'Delay': 30, 'MaxAttempts': 10})
 
         # create launch template
-        launch_templates_manager.create_worker_launch_template()
+        # launch_templates_manager.create_worker_launch_template()
 
     except Exception as e:
         log.exception(e)

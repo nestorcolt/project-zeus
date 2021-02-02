@@ -33,19 +33,25 @@ def network_bootstrap():
 
     vpc_id = vpc_exist["VpcId"]
 
-    # subnet validator
-    subnet_exist = network_manager.subnet_exist_check(constants.SUBNET_NAME)
-    subnet_waiter = client.get_waiter('subnet_available')
+    zones = [constants.ZONE_US_EAST1A, constants.ZONE_US_EAST1B]
+    cird_blocks = [constants.SUBNET_CIDR_BLOCK, constants.SUBNET_CIDR_BLOCK_2]
+    subnets = []
 
-    if not subnet_exist:
-        subnet_exist = network_manager.create_subnet(name=constants.SUBNET_NAME,
-                                                     vpc_id=vpc_id,
-                                                     cidr_block=constants.SUBNET_CIDR_BLOCK,
-                                                     zone=constants.ZONE_US_EAST1)["Subnet"]
-        # wait until is created
-        subnet_waiter.wait(WaiterConfig={'Delay': 30, 'MaxAttempts': 10})
+    for index, (zone, cird) in enumerate(zip(zones, cird_blocks)):
+        # subnet validator
+        subnet_exist = network_manager.subnet_exist_check(constants.SUBNET_NAME + str(index))
+        subnet_waiter = client.get_waiter('subnet_available')
 
-    subnet_id = subnet_exist["SubnetId"]
+        if not subnet_exist:
+            subnet_exist = network_manager.create_subnet(name=constants.SUBNET_NAME + str(index),
+                                                         vpc_id=vpc_id,
+                                                         cidr_block=cird,
+                                                         zone=zone)["Subnet"]
+            # wait until is created
+            subnet_waiter.wait(WaiterConfig={'Delay': 30, 'MaxAttempts': 10})
+
+        subnet_id = subnet_exist["SubnetId"]
+        subnets.append(subnet_id)
 
     # Internet gateway validator
     gateway_exist = network_manager.gateway_exist_check(constants.INTERNET_GATEWAY_NAME)
@@ -71,13 +77,16 @@ def network_bootstrap():
     # Create Routes
     network_manager.rt_create_routes(rt_id=table_id,
                                      gateway_id=gateway_id)
-    # subnet association
-    network_manager.rt_associate_with_subnet(table_id, subnet_id)
+    for subnet_id in subnets:
+        # subnet association
+        network_manager.rt_associate_with_subnet(table_id, subnet_id)
 
     # wait a few seconds
     sleep(5)
-
     print("Network configuration created!")
     return vpc_id
 
+
 ##############################################################################################
+if __name__ == '__main__':
+    network_bootstrap()

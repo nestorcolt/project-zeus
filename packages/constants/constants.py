@@ -22,9 +22,6 @@ USER_PLACEHOLDER = "User-{}"
 # Logs
 LOG_FILE_NAME = "bis_logs.txt"
 
-# Zones
-ZONE_US_EAST1 = "us-east-1b"
-
 # Launch Template Ec2
 AMI_ID = "ami-06d46e936b077fb88"
 AMI_NAME = "ami-worker-ubuntu"
@@ -33,19 +30,33 @@ WORKER_LAUNCH_TEMPLATE_NAME = "Worker-Template"
 KEY_PAIR_NAME = "worker-pem-file"
 INSTANCE_TYPE = "t3a.micro"
 
+"""
+
+    Network configuration
+
+"""
+
 # Security Groups Ec2
 WORKER_SECURITY_GROUP_NAME = "Worker-SG"
 WEB_SECURITY_GROUP_NAME = "WEB-APP-SG"
+DB_SECURITY_GROUP_NAME = "WEB-DB-SG"
 
 # VPC
-VPC_CIDR_BLOCK = "172.31.0.0/16"
 VPC_NAME = "BIS-VPC"
+VPC_CIDR_BLOCK = "10.0.0.0/16"
 
-# Subnet
-INTERNET_GATEWAY_NAME = "BIS-Int-Gateway"
-ROUTE_TABLE_NAME = "BIS-Route-Table"
-SUBNET_CIDR_BLOCK = "172.31.0.0/20"
-SUBNET_NAME = "BIS-Subnet"
+# Subnet 001
+INTERNET_GATEWAY_NAME = "BIS-Int-Gateway-00"
+ROUTE_TABLE_NAME = "BIS-Route-Table-00"
+SUBNET_CIDR_BLOCK = "10.0.0.0/20"
+SUBNET_NAME = "BIS-Subnet-00"
+ZONE_US_EAST1A = "us-east-1a"
+
+# Subnet 002
+SUBNET_CIDR_BLOCK_2 = "10.0.10.0/24"
+ZONE_US_EAST1B = "us-east-1b"
+
+##############################################################################################
 
 # Buckets
 LAMBDA_BUCKET_NAME = "bis-serverless-s3"
