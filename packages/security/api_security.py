@@ -13,27 +13,15 @@ def authenticate_and_get_token(user_data):
 
     """
     body = user_data["body"]
-    status_code = 200
 
     refresh_token = json.loads(body).get("refreshToken", None)
     username = json.loads(body).get("username")
     password = json.loads(body).get("password")
 
-    try:
-        response = get_new_access_token(username, refresh_token) \
-            if refresh_token is not None \
-            else get_bearer_tokens(username, password)
+    response = get_new_access_token(username, refresh_token) if refresh_token is not None else get_bearer_tokens(
+        username, password)
 
-    except Exception as e:
-        status_code = 410
-        response = e.__str__()
-
-    return {
-        "statusCode": status_code,
-        "body": json.dumps({
-            "message": response,
-        }),
-    }
+    return response
 
 
 ##############################################################################################
