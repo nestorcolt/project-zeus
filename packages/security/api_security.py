@@ -14,14 +14,14 @@ def authenticate_and_get_token(user_data):
     """
     body = user_data["body"]
 
-    refresh_token = json.loads(body).get("refreshToken", None)
+    refresh_token = json.loads(body).get("RefreshToken", None)
     username = json.loads(body).get("username")
     password = json.loads(body).get("password")
 
     if refresh_token:
         return get_new_access_token(username, refresh_token)
-    else:
-        return get_bearer_tokens(username, password)
+
+    return get_bearer_tokens(username, password)
 
 
 ##############################################################################################
