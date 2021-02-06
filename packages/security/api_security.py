@@ -18,10 +18,10 @@ def authenticate_and_get_token(user_data):
     username = json.loads(body).get("username")
     password = json.loads(body).get("password")
 
-    response = get_new_access_token(username, refresh_token) if refresh_token is not None else get_bearer_tokens(
-        username, password)
-
-    return response
+    if refresh_token:
+        return get_new_access_token(username, refresh_token)
+    else:
+        return get_bearer_tokens(username, password)
 
 
 ##############################################################################################
