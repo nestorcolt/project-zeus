@@ -101,6 +101,7 @@ OFFER_STATION_ID = BLOCK_STATION_KEY
 OFFER_DATA_KEY = BLOCK_DATA_KEY
 OFFER_VALIDATED_KEY = "validated"
 OFFER_TIME_KEY = "offer_time"
+TTL_ATTR_KEY = "ttl_attr"
 OFFER_SORT_KEY = "offer_id"
 
 # 30 minutes

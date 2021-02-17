@@ -51,6 +51,8 @@ def get_blocks(user_id=None):
 
 def put_new_block(user_id, block_data):
     captured_time = utils.get_unix_time()
+    hours_to_minutes = constants.CLEANUP_OFFERS_TIME_THRESHOLD * 60
+    expiration_date = utils.get_future_time_span(hours_to_minutes)
 
     try:
         block_start_time = block_data["startTime"]
@@ -63,34 +65,11 @@ def put_new_block(user_id, block_data):
                 constants.BLOCK_SORT_KEY: Decimal(block_start_time),
                 constants.BLOCK_STATION_KEY: block_area_id,
                 constants.BLOCK_TIME_KEY: Decimal(captured_time),
+                constants.TTL_ATTR_KEY: Decimal(expiration_date),
                 constants.BLOCK_DATA_KEY: block_data}
 
     # creates the new entry on dynamo block table
     dynamo_manager.create_item(constants.BLOCKS_TABLE_NAME, utils.map_request_body({}, new_item))
-
-
-def cleanup_blocks_table():
-    """
-    Clean up the table blocks from blocks older than 48 hours from the time the function is called
-    """
-    table = dynamo_manager.get_table_by_name(constants.BLOCKS_TABLE_NAME)
-    hours_to_minutes = constants.CLEANUP_BLOCKS_TIME_THRESHOLD * 60
-    wait_time_span = utils.get_past_time_span(hours_to_minutes)
-    response = table.scan(FilterExpression=Attr(constants.BLOCK_SORT_KEY).lt(Decimal(wait_time_span)))
-
-    for item in response["Items"]:
-        user_id = item[constants.TABLE_PK]
-        block_id = item[constants.BLOCK_SORT_KEY]
-
-        try:
-            table.delete_item(
-                Key={
-                    constants.TABLE_PK: user_id,
-                    constants.BLOCK_SORT_KEY: block_id,
-                },
-            )
-        except Exception as e:
-            dynamo_manager.log.error(e)
 
 
 ##############################################################################################
@@ -98,6 +77,8 @@ def cleanup_blocks_table():
 
 def put_new_offer(user_id, validated, offer_data):
     captured_time = utils.get_unix_time()
+    hours_to_minutes = constants.CLEANUP_OFFERS_TIME_THRESHOLD * 60
+    expiration_date = utils.get_future_time_span(hours_to_minutes)
 
     try:
         offer_id = offer_data["offerId"]
@@ -111,34 +92,11 @@ def put_new_offer(user_id, validated, offer_data):
                 constants.OFFER_VALIDATED_KEY: validated,
                 constants.OFFER_STATION_ID: offer_area_id,
                 constants.OFFER_TIME_KEY: Decimal(captured_time),
+                constants.TTL_ATTR_KEY: Decimal(expiration_date),
                 constants.OFFER_DATA_KEY: offer_data}
 
     # creates the new entry on dynamo block table
     dynamo_manager.create_item(constants.OFFERS_TABLE_NAME, utils.map_request_body({}, new_item))
-
-
-def cleanup_offers_table():
-    """
-    Clean up the table blocks from blocks older than 48 hours from the time the function is called
-    """
-    table = dynamo_manager.get_table_by_name(constants.OFFERS_TABLE_NAME)
-    hours_to_minutes = constants.CLEANUP_OFFERS_TIME_THRESHOLD * 60
-    wait_time_span = utils.get_past_time_span(hours_to_minutes)
-    response = table.scan(FilterExpression=Attr(constants.OFFER_TIME_KEY).lt(Decimal(wait_time_span)))
-
-    for item in response["Items"]:
-        user_id = item[constants.TABLE_PK]
-        offer_id = item[constants.OFFER_SORT_KEY]
-
-        try:
-            table.delete_item(
-                Key={
-                    constants.TABLE_PK: user_id,
-                    constants.OFFER_SORT_KEY: offer_id,
-                },
-            )
-        except Exception as e:
-            dynamo_manager.log.error(e)
 
 
 def get_offers(user_id=None):
