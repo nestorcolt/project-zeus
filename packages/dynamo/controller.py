@@ -39,7 +39,7 @@ def get_blocks(user_id=None):
     if user_id is None:
         response = table.scan()
     else:
-        response = table.scan(FilterExpression=Key(constants.TABLE_PK).eq(user_id))
+        response = table.query(KeyConditionExpression=Key(constants.TABLE_PK).eq(user_id))
 
     items = response.get("Items")
 
@@ -103,7 +103,7 @@ def get_offers(user_id=None):
     table = dynamo_manager.get_table_by_name(constants.OFFERS_TABLE_NAME)
 
     if user_id is None:
-        response = table.scan()
+        return ["Need to specify an user to query"]
     else:
         response = table.query(KeyConditionExpression=Key(constants.TABLE_PK).eq(user_id))
 
