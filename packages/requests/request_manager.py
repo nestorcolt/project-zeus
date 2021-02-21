@@ -2,7 +2,6 @@ from Cloud.packages.security import secrets_manager
 from Cloud.packages.constants import constants
 from Cloud.packages.utilities import utils
 from Cloud.packages import logger
-from decimal import Decimal
 import requests
 import json
 
@@ -17,17 +16,17 @@ def web_app_auth():
     secrets = secrets_manager.get_secret(constants.WEB_AUTH_SECRETS)
 
     try:
-        response = requests.post(constants.WEB_BACKEND_AUTHENTICATION_URL, data=secrets)
+        response = requests.post(constants.WEB_BACKEND_AUTHENTICATION_URL, json=json.loads(secrets))
 
         if response.status_code == 200:
             data = response.json()
-            token_data = data["data"]
-            secrets_manager.update_secret(constants.WEB_AUTH_TOKEN_SECRET, token_data)
-            return token_data
+            token = data["data"]["jwToken"].strip('"')
+            secrets_manager.update_secret(constants.WEB_AUTH_TOKEN_SECRET, token)
+            return token
 
     except Exception as e:
         log.debug(e)
-        return False
+        return None
 
 
 def authorize_request(function):
@@ -37,14 +36,14 @@ def authorize_request(function):
 
     def func_wrapper(*args, **kwargs):
         token = secrets_manager.get_secret(constants.WEB_AUTH_TOKEN_SECRET)
-        kwargs["access_token"] = {"Authorization": "Bearer " + list(json.loads(token).values())[0]}
+        kwargs["access_token"] = {"Authorization": "Bearer " + token.strip('"')}
         status_code = function(*args, **kwargs)
 
-        if status_code == 410:
+        if status_code != 200:
             response = web_app_auth()
 
             if response:
-                kwargs["access_token"] = {"Authorization": "Bearer " + response[constants.WEB_API_TOKEN_KEY]}
+                kwargs["access_token"] = {"Authorization": "Bearer " + response.strip('"')}
                 status_code = function(*args, **kwargs)
 
         return status_code
@@ -71,7 +70,7 @@ def send_block_to_web(user_id, block_data, **kwargs):
 
     # creates the new entry on dynamo block table
     response = requests.post(constants.WEB_BACKEND_ENDPOINT_URL,
-                             data=new_item,
+                             json=new_item,
                              headers=kwargs["access_token"])
 
     return response.status_code
@@ -80,7 +79,7 @@ def send_block_to_web(user_id, block_data, **kwargs):
 @authorize_request
 def send_error_to_web(user_id, **kwargs):
     response = requests.post(constants.WEB_BACKEND_ERROR_ENDPOINT_URL,
-                             data=user_id,
+                             json=user_id,
                              headers=kwargs["access_token"])
 
     return response.status_code

@@ -107,7 +107,7 @@ TTL_ATTR_KEY = "ttl_attr"
 OFFER_SORT_KEY = "offer_id"
 
 # 30 minutes
-CLEANUP_BLOCKS_TIME_THRESHOLD = 48  # Hours
+CLEANUP_BLOCKS_TIME_THRESHOLD = 24  # Hours
 CLEANUP_OFFERS_TIME_THRESHOLD = CLEANUP_BLOCKS_TIME_THRESHOLD  # Hours
 SEARCH_SLEEP_TIME_THRESHOLD = 30
 
@@ -115,7 +115,7 @@ SEARCH_SLEEP_TIME_THRESHOLD = 30
 SEARCH_ENGINE_LOG_GROUP = "Search-Engine-Logs"
 
 # Web endpoints
-BASE_ADDRESS = "http://dev.blockinservice.com/"
+BASE_ADDRESS = "https://dev.blockinservice.com"
 WEB_BACKEND_ERROR_ENDPOINT_URL = f"{BASE_ADDRESS}/api/errorNotification/sendAsync"
 WEB_BACKEND_ENDPOINT_URL = f"{BASE_ADDRESS}/api/blockNotification/sendAsync"
 WEB_BACKEND_AUTHENTICATION_URL = f"{BASE_ADDRESS}/api/externalSync/login"
