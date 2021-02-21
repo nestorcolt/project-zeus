@@ -64,9 +64,9 @@ def send_block_to_web(user_id, block_data, **kwargs):
         return e
 
     new_item = {constants.TABLE_PK: user_id,
-                constants.BLOCK_SORT_KEY: Decimal(block_start_time),
+                constants.BLOCK_SORT_KEY: block_start_time,
                 constants.BLOCK_STATION_KEY: block_area_id,
-                constants.BLOCK_TIME_KEY: Decimal(captured_time),
+                constants.BLOCK_TIME_KEY: captured_time,
                 constants.BLOCK_DATA_KEY: block_data}
 
     # creates the new entry on dynamo block table
