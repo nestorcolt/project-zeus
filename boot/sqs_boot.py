@@ -10,6 +10,7 @@ def sqs_boostrap():
 
     # Create sqs to work as a dead letter queue for the topic of instance initializing
     sqs_manager.create_queue(name=constants.SE_START_DLQ)
+    sqs_manager.create_queue(name=constants.SE_STOP_DLQ)
     sqs_manager.create_queue(name=constants.SE_AUTHENTICATE_DLQ)
 
     # Create sqs to work as a dead letter queue for the captured blocks processing

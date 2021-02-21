@@ -12,6 +12,10 @@ def sns_boostrap():
     sns_manager.set_dead_letter_queue(queue_name=constants.SE_START_DLQ,
                                       topic_name=constants.SE_START_TOPIC)
 
+    sns_manager.create_topic(name=constants.SE_STOP_TOPIC)
+    sns_manager.set_dead_letter_queue(queue_name=constants.SE_STOP_DLQ,
+                                      topic_name=constants.SE_STOP_TOPIC)
+
     sns_manager.create_topic(name=constants.SE_AUTHENTICATE_TOPIC)
     sns_manager.set_dead_letter_queue(queue_name=constants.SE_AUTHENTICATE_DLQ,
                                       topic_name=constants.SE_AUTHENTICATE_TOPIC)
