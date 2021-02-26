@@ -62,9 +62,9 @@ def put_new_block(user_id, block_data):
         return e
 
     new_item = {constants.TABLE_PK: user_id,
-                constants.BLOCK_SORT_KEY: Decimal(block_start_time),
+                constants.BLOCK_SORT_KEY: Decimal(captured_time),
                 constants.BLOCK_STATION_KEY: block_area_id,
-                constants.BLOCK_TIME_KEY: Decimal(captured_time),
+                constants.BLOCK_TIME_KEY: Decimal(block_start_time),
                 constants.TTL_ATTR_KEY: Decimal(expiration_date),
                 constants.BLOCK_DATA_KEY: block_data}
 
