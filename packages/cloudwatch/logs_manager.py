@@ -101,17 +101,4 @@ def log_user_stats(user_id):
         topic_arn = sns_manager.get_topic_by_name(constants.SE_LOGS_TOPIC)[0]["TopicArn"]
         sns_manager.sns_publish_to_topic(topic_arn, stats_message, constants.USER_PLACEHOLDER.format(user_id))
 
-
-def log_all_users():
-    last_active = controller.get_last_active_users()
-
-    for user_data in last_active["Items"]:
-        search_blocks = user_data.get("search_blocks")
-        if search_blocks is True:
-            user = user_data[constants.TABLE_PK]
-            log_user_stats(user)
-
-
 ##############################################################################################
-if __name__ == '__main__':
-    log_user_stats("10")
