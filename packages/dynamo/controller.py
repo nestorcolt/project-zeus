@@ -188,9 +188,13 @@ def get_user_stats(user_id):
         response = table.query(KeyConditionExpression=Key(constants.TABLE_PK).eq(user_id))
         user_data = response["Items"]
 
-        if user_data:
-            user_data = user_data[0]
-            return [user_data[cst.STS_OFFER_KEY], user_data[cst.STS_ACCEPTED_KEY], user_data[cst.STS_VALIDATED_KEY]]
+        if not user_data:
+            create_user_stats(user_id)
+
+        response = table.query(KeyConditionExpression=Key(constants.TABLE_PK).eq(user_id))
+        user_data = response["Items"]
+        user_data = user_data[0]
+        return [user_data[cst.STS_OFFER_KEY], user_data[cst.STS_ACCEPTED_KEY], user_data[cst.STS_VALIDATED_KEY]]
 
     except Exception as e:
         log.error(e)
