@@ -8,6 +8,8 @@ from decimal import Decimal
 LOGGER = logger.Logger(__name__)
 log = LOGGER.logger
 
+cst = constants
+
 
 ##############################################################################################
 # Users Table
@@ -139,9 +141,9 @@ def create_user_stats(user_id=None):
     """
     Create the entry with the stats at zero value
     """
-    item = {"offers": 0,
-            "accepted": 0,
-            "validated": 0}
+    item = {cst.STS_OFFER_KEY: 0,
+            cst.STS_ACCEPTED_KEY: 0,
+            cst.STS_VALIDATED_KEY: 0}
 
     # Create the item if doesnt exist yet
     dynamo_manager.update_item(table_name=constants.STATISTICS_TABLE_NAME,
@@ -177,5 +179,21 @@ def reset_user_stats(user_id):
     Set back to zero the stats for this user
     """
     create_user_stats(user_id)
+
+
+def get_user_stats(user_id):
+    table = dynamo_manager.get_table_by_name(constants.STATISTICS_TABLE_NAME)
+
+    try:
+        response = table.query(KeyConditionExpression=Key(constants.TABLE_PK).eq(user_id))
+        user_data = response["Items"]
+
+        if user_data:
+            user_data = user_data[0]
+            return [user_data[cst.STS_OFFER_KEY], user_data[cst.STS_ACCEPTED_KEY], user_data[cst.STS_VALIDATED_KEY]]
+
+    except Exception as e:
+        log.error(e)
+        return False
 
 ##############################################################################################

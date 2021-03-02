@@ -50,6 +50,7 @@ def create_or_update_log(log_group, log_stream, message):
 ##############################################################################################
 # STATS
 
+
 def get_user_stats(user_id):
     user_data = dynamo_manager.read_item(constants.USERS_TABLE_NAME, constants.TABLE_PK, user_id)
 
@@ -57,10 +58,14 @@ def get_user_stats(user_id):
     if user_data is None:
         return
 
-    offer_list = controller.get_offers(user_id)
-    validated_count = len([itm for itm in offer_list if itm["validated"] is True])
-    user_block_count = len(controller.get_blocks(user_id))
-    user_offer_count = len(offer_list)
+    stats = controller.get_user_stats(user_id)
+
+    if stats is None:
+        return
+
+    user_offer_count = stats[0]
+    user_block_count = stats[1]
+    validated_count = stats[2]
 
     search_state = user_data["search_blocks"]
     last_active = user_data["last_active"]

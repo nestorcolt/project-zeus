@@ -106,6 +106,9 @@ OFFER_VALIDATED_KEY = "validated"
 OFFER_TIME_KEY = "offer_time"
 TTL_ATTR_KEY = "ttl_attr"
 OFFER_SORT_KEY = "offer_id"
+STS_OFFER_KEY = "offers"
+STS_ACCEPTED_KEY = "accepted"
+STS_VALIDATED_KEY = "validated"
 
 # 30 minutes
 CLEANUP_BLOCKS_TIME_THRESHOLD = 24  # Hours
