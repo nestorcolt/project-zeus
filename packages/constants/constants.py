@@ -88,6 +88,7 @@ EC2_TO_SNS_AND_S3_POLICY = "S3AndSnsEc2Policy"
 EC2_WORKER_IAM_ROLE = "ec2-worker-iam-role"
 
 # dynamo DB
+STATISTICS_TABLE_NAME = "Statistics"
 BLOCKS_TABLE_NAME = "Blocks"
 OFFERS_TABLE_NAME = "Offers"
 USERS_TABLE_NAME = "Users"

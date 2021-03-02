@@ -115,4 +115,66 @@ def get_offers(user_id=None):
 
     return response["Items"]
 
+
+def offer_exists(user_id=None, offer_id=None):
+    table = dynamo_manager.get_table_by_name(constants.OFFERS_TABLE_NAME)
+
+    if user_id is None and offer_id is None:
+        return ["Need to specify an user to query"]
+    else:
+        response = table.query(
+            KeyConditionExpression=Key(constants.TABLE_PK).eq(user_id) & Key(constants.OFFER_SORT_KEY).eq(offer_id)
+        )
+
+    if response["Items"]:
+        return True
+
+    return False
+
+
+##############################################################################################
+# Statistics Table
+
+def create_user_stats(user_id=None):
+    """
+    Create the entry with the stats at zero value
+    """
+    item = {"offers": 0,
+            "accepted": 0,
+            "validated": 0}
+
+    # Create the item if doesnt exist yet
+    dynamo_manager.update_item(table_name=constants.STATISTICS_TABLE_NAME,
+                               primary_key=constants.TABLE_PK,
+                               value=user_id,
+                               items=item)
+
+
+def update_user_stats(user_id=None, offer=0, validated=0, accepted=0):
+    """
+    Works with Atomic counter feature from dynamo db to increment the counter properties from this table
+    """
+    table = dynamo_manager.get_table_by_name(constants.STATISTICS_TABLE_NAME)
+
+    # Check for item exists first
+    response = table.query(KeyConditionExpression=Key(constants.TABLE_PK).eq(user_id))
+
+    if not response["Items"]:
+        create_user_stats(user_id)
+
+    # Increment the atomic counters
+    table.update_item(Key={constants.TABLE_PK: user_id},
+                      UpdateExpression="set offers = offers + :offer, validated = validated + :valid, accepted = accepted + :accept",
+                      ExpressionAttributeValues={
+                          ':offer': offer,
+                          ':valid': validated,
+                          ':accept': accepted})
+
+
+def reset_user_stats(user_id):
+    """
+    Set back to zero the stats for this user
+    """
+    create_user_stats(user_id)
+
 ##############################################################################################
