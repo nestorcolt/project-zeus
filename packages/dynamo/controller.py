@@ -163,8 +163,9 @@ def update_user_stats(user_id=None, offer=0, validated=0, accepted=0):
         create_user_stats(user_id)
 
     # Increment the atomic counters
+    exp = "set offers = offers + :offer, validated = validated + :valid, accepted = accepted + :accept"
     table.update_item(Key={constants.TABLE_PK: user_id},
-                      UpdateExpression="set offers = offers + :offer, validated = validated + :valid, accepted = accepted + :accept",
+                      UpdateExpression=exp,
                       ExpressionAttributeValues={
                           ':offer': offer,
                           ':valid': validated,
