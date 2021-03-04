@@ -15,12 +15,14 @@ def get_table_by_name(table_name):
 
 def create_item(table_name, dictionary_item):
     table = get_table_by_name(table_name)
+    response = None
 
     try:
-        table.put_item(Item=dictionary_item)
+        response = table.put_item(Item=dictionary_item)
     except Exception as e:
         log.error(e)
 
+    return response
 
 def read_item(table_name, field, value):
     table = get_table_by_name(table_name)
@@ -57,7 +59,7 @@ def update_item(table_name, primary_key, value, items):
     expression_key, expression_values = map_expression_attributes_values(items)
     table = get_table_by_name(table_name)
 
-    table.update_item(
+    response = table.update_item(
         Key={
             primary_key: value,
         },
@@ -65,6 +67,7 @@ def update_item(table_name, primary_key, value, items):
         ExpressionAttributeValues=expression_values,
         ReturnValues="UPDATED_NEW"
     )
+    return response
 
 
 def delete_item(table_name, primary_key, value):
