@@ -81,6 +81,7 @@ SE_ERROR_DLQ = "SE-ERROR-DLQ"
 SE_SLEEP_DLQ = "SE-SLEEP-DLQ"
 SE_LOGS_DLQ = "SE-LOGS-DLQ"
 SE_ON_PROCESS = "SeOnProcessQueue"
+SE_START_QUEUE = "GetUserBlocksQueue"
 
 # IAM
 EC2_WORKER_IAM_INSTANCE_PROFILE = "ec2-worker-instance-profile"
