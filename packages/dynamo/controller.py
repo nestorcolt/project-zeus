@@ -104,7 +104,8 @@ def put_new_offer(user_id, validated, offer_data):
                 constants.OFFER_DATA_KEY: offer_data}
 
     # creates the new entry on dynamo block table
-    dynamo_manager.create_item(constants.OFFERS_TABLE_NAME, utils.map_request_body({}, new_item))
+    response = dynamo_manager.create_item(constants.OFFERS_TABLE_NAME, utils.map_request_body({}, new_item))
+    return response
 
 
 def get_offers(user_id=None):
