@@ -4,6 +4,7 @@ from boto3.dynamodb.conditions import Key, Attr
 from Cloud.packages.utilities import utils
 from Cloud.packages import logger
 from decimal import Decimal
+import random
 
 LOGGER = logger.Logger(__name__)
 log = LOGGER.logger
@@ -41,6 +42,12 @@ def set_last_active_user_time(user_id):
 ##############################################################################################
 # Blocks Table
 
+def get_block_id(block_time):
+    captured_time = utils.get_unix_time()
+    random_int = int(random.randint(0, int(block_time)))
+    return int(captured_time + random_int + int(block_time))
+
+
 def get_blocks(user_id=None):
     table = dynamo_manager.get_table_by_name(constants.BLOCKS_TABLE_NAME)
 
@@ -58,7 +65,6 @@ def get_blocks(user_id=None):
 
 
 def put_new_block(user_id, block_data):
-    captured_time = utils.get_unix_time()
     hours_to_minutes = constants.CLEANUP_OFFERS_TIME_THRESHOLD * 60
     expiration_date = utils.get_future_time_span(hours_to_minutes)
 
@@ -70,7 +76,7 @@ def put_new_block(user_id, block_data):
         return e
 
     new_item = {constants.TABLE_PK: user_id,
-                constants.BLOCK_SORT_KEY: Decimal(captured_time),
+                constants.BLOCK_SORT_KEY: Decimal(get_block_id(block_start_time)),
                 constants.BLOCK_STATION_KEY: block_area_id,
                 constants.BLOCK_TIME_KEY: Decimal(block_start_time),
                 constants.TTL_ATTR_KEY: Decimal(expiration_date),
