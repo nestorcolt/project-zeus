@@ -59,19 +59,19 @@ ZONE_US_EAST1B = "us-east-1b"
 
 # Subnet 003
 SUBNET_CIDR_BLOCK_3 = "10.0.3.0/24"
-ZONE_US_EAST1C = "us-east-1c"
+ZONE_US_EAST1A2 = "us-east-1a"
 
 # Subnet 004
 SUBNET_CIDR_BLOCK_4 = "10.0.4.0/24"
-ZONE_US_EAST1D = "us-east-1d"
+ZONE_US_EAST1B2 = "us-east-1b"
 
 # Subnet 005
 SUBNET_CIDR_BLOCK_5 = "10.0.5.0/24"
-ZONE_US_EAST1E = "us-east-1e"
+ZONE_US_EAST1A3 = "us-east-1a"
 
 # Subnet 006
 SUBNET_CIDR_BLOCK_6 = "10.0.6.0/24"
-ZONE_US_EAST1F = "us-east-1f"
+ZONE_US_EAST1B3 = "us-east-1b"
 
 ##############################################################################################
 

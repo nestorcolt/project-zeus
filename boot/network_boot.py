@@ -35,10 +35,10 @@ def network_bootstrap():
 
     zones = [cns.ZONE_US_EAST1A,
              cns.ZONE_US_EAST1B,
-             cns.ZONE_US_EAST1C,
-             cns.ZONE_US_EAST1D,
-             cns.ZONE_US_EAST1E,
-             cns.ZONE_US_EAST1F]
+             cns.ZONE_US_EAST1A2,
+             cns.ZONE_US_EAST1B2,
+             cns.ZONE_US_EAST1A3,
+             cns.ZONE_US_EAST1B3]
 
     cird_blocks = [cns.SUBNET_CIDR_BLOCK,
                    cns.SUBNET_CIDR_BLOCK_2,
