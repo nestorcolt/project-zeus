@@ -45,16 +45,33 @@ DB_SECURITY_GROUP_NAME = "WEB-DB-SG"
 VPC_NAME = "BIS-VPC"
 VPC_CIDR_BLOCK = "10.0.0.0/16"
 
-# Subnet 001
 INTERNET_GATEWAY_NAME = "BIS-Int-Gateway-00"
 ROUTE_TABLE_NAME = "BIS-Route-Table-00"
-SUBNET_CIDR_BLOCK = "10.0.1.0/24"
 SUBNET_NAME = "BIS-Subnet-00"
+
+# Subnet 001
+SUBNET_CIDR_BLOCK = "10.0.1.0/24"
 ZONE_US_EAST1A = "us-east-1a"
 
 # Subnet 002
 SUBNET_CIDR_BLOCK_2 = "10.0.2.0/24"
 ZONE_US_EAST1B = "us-east-1b"
+
+# Subnet 003
+SUBNET_CIDR_BLOCK_3 = "10.0.3.0/24"
+ZONE_US_EAST1C = "us-east-1c"
+
+# Subnet 004
+SUBNET_CIDR_BLOCK_4 = "10.0.4.0/24"
+ZONE_US_EAST1D = "us-east-1d"
+
+# Subnet 005
+SUBNET_CIDR_BLOCK_5 = "10.0.5.0/24"
+ZONE_US_EAST1E = "us-east-1e"
+
+# Subnet 006
+SUBNET_CIDR_BLOCK_6 = "10.0.6.0/24"
+ZONE_US_EAST1F = "us-east-1f"
 
 ##############################################################################################
 
