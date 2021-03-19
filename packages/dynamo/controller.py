@@ -86,6 +86,21 @@ def put_new_block(user_id, block_data):
     dynamo_manager.create_item(constants.BLOCKS_TABLE_NAME, utils.map_request_body({}, new_item))
 
 
+def delete_blocks(blocks):
+    if not blocks:
+        return
+
+    # otherwise continue
+    table = dynamo_manager.get_table_by_name(constants.BLOCKS_TABLE_NAME)
+
+    with table.batch_writer() as batch:
+        for block in blocks:
+            user_id = block[constants.TABLE_PK]
+            sort_property = block[constants.BLOCK_SORT_KEY]
+            item = {constants.TABLE_PK: user_id, constants.BLOCK_SORT_KEY: sort_property}
+            batch.delete_item(Key=item)
+
+
 ##############################################################################################
 # Offers to create analytics
 
