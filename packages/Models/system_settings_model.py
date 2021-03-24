@@ -11,5 +11,6 @@ class SystemSettingsModel:
         self.version = 1
         self.search_engine = False
         self.search_speed = 1
+        self.search_timeout = 30
 
 ##############################################################################################
