@@ -67,8 +67,8 @@ def get_user_stats(user_id):
     user_block_count = stats[1]
     validated_count = stats[2]
 
-    search_state = user_data["search_blocks"]
-    last_active = user_data["last_active"]
+    search_state = user_data.get("search_blocks", False)
+    last_active = user_data.get("last_active", 0)
     asleep_time = utils.get_time_difference(last_active, utils.get_unix_time())
 
     # the user state on the search engine
