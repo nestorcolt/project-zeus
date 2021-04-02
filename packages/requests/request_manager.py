@@ -79,7 +79,7 @@ def send_block_to_web(user_id, block_data, **kwargs):
 @authorize_request
 def send_error_to_web(user_id, **kwargs):
     response = requests.post(constants.WEB_BACKEND_ERROR_ENDPOINT_URL,
-                             json=user_id,
+                             json=json.dumps({"user_id": user_id}),
                              headers=kwargs["access_token"])
 
     return response.status_code
