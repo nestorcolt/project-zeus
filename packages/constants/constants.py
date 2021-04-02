@@ -138,7 +138,7 @@ SEARCH_ENGINE_LOG_GROUP = "Search-Engine-Logs"
 
 # Web endpoints
 BASE_ADDRESS = "https://dev.blockinservice.com"
-WEB_BACKEND_ERROR_ENDPOINT_URL = f"{BASE_ADDRESS}/api/errorNotification/sendAsync"
+WEB_BACKEND_ERROR_ENDPOINT_URL = f"{BASE_ADDRESS}/api/user/notifyVerification"
 WEB_BACKEND_ENDPOINT_URL = f"{BASE_ADDRESS}/api/blockNotification/sendAsync"
 WEB_BACKEND_AUTHENTICATION_URL = f"{BASE_ADDRESS}/api/externalSync/login"
 
