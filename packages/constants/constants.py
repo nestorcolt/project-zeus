@@ -11,6 +11,11 @@ import os
 # Account
 ACCOUNT_ID = boto3.client('sts').get_caller_identity().get('Account')
 
+# amazon flex urls
+CHECK_IN_URL = "https://rabbit.amazon.com/RefreshItinerary"
+SCHEDULE_URL = "https://flex-capacity-na.amazon.com/scheduledAssignments"
+AMAZON_API_AUTHENTICATION_URL = "https://api.amazon.com/auth/token"
+
 # Global vars
 CURRENT_FRAME = inspect.getfile(inspect.currentframe())
 ROOT_DIRECTORY = os.path.dirname(

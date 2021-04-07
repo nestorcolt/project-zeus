@@ -1,17 +1,16 @@
-from Cloud.packages.dynamo import dynamo_manager
+from packages.controller.user_controller import get_authorization_header, get_user_data, get_access_token
 from Cloud.packages.constants import constants
 import requests
 import time
 import json
 
-##############################################################################################
-# END POINT TO REGISTER THE BLOCK CHECK IN
-URL = "https://rabbit.amazon.com/RefreshItinerary"
-
 
 ##############################################################################################
 
 def get_check_in_data(refresh_token, longitude, latitude):
+    """
+    Makes the header with the check in data and return this to parse the the api call
+    """
     check_in_data = json.dumps({
         "refreshToken": refresh_token,
         "startTransporterSession": False,
@@ -34,22 +33,11 @@ def get_check_in_data(refresh_token, longitude, latitude):
 
 ##############################################################################################
 
-def get_user_data(user_request):
-    user_id = user_request.get("user_id")
-
-    if user_id is None:
-        return
-
-    user_data = dynamo_manager.read_item(constants.USERS_TABLE_NAME, constants.TABLE_PK, user_id)
-
-    if user_data is None:
-        print(f"Not user found with ID: {user_id}")
-        return
-
-    return user_data
-
 
 def check_in_block(block_data):
+    """
+    The check in block logic to pass to call inside lambda function
+    """
     user_data = get_user_data(block_data)
 
     if user_data is None:
@@ -61,8 +49,8 @@ def check_in_block(block_data):
                                       block_data.get("latitude"))
 
     # Create post request
-    authorization_header = {"x-amz-access-token": user_data.get("access_token", "")}
-    response = requests.post(URL, json=check_in_data, headers=authorization_header, timeout=5)
+    authorization_header = get_authorization_header(user_data.get("access_token", ""))
+    response = requests.post(constants.CHECK_IN_URL, json=check_in_data, headers=authorization_header, timeout=5)
 
     if response.status_code == 200:
         message = "Block checked in successfully!"
@@ -71,10 +59,8 @@ def check_in_block(block_data):
     else:
         message = "Something happened in the request. Operation failed."
 
-    # Continue logic to handle more cases
     print(message, response)
     return {"response": response, "message": message}
 
-
 ##############################################################################################
-check_in_block({"user_id": "5", "longitude": "", "latitude": ""})
+# check_in_block({"user_id": "5", "longitude": "", "latitude": ""})
