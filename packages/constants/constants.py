@@ -5,11 +5,10 @@
 """
 
 import inspect
-import boto3
 import os
 
 # Account
-ACCOUNT_ID = boto3.client('sts').get_caller_identity().get('Account')
+ACCOUNT_ID = 320132171574
 
 # amazon flex urls
 CHECK_IN_URL = "https://rabbit.amazon.com/RefreshItinerary"

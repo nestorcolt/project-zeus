@@ -34,7 +34,7 @@ def get_user_data(user_request):
 
 
 def get_access_token(refresh_token):
-    headers = ACCESS_HEADERS
+    headers = ACCESS_HEADERS.copy()
     headers["source_token"] = refresh_token
     response = requests.post(constants.AMAZON_API_AUTHENTICATION_URL, data=headers)
     json_response = response.json()
