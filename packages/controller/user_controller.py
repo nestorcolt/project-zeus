@@ -17,7 +17,7 @@ ACCESS_HEADERS = {"app_name": "com.amazon.rabbit",
 
 API_DEFAULT_HEADERS = {
     "x-flex-instance-id": str(uuid4()),
-    "X-Flex-Client-Time": int(time.time()),
+    "X-Flex-Client-Time": str(int(time.time())),
     "Content-Type": "application/json",
     "User-Agent": f"Dalvik/2.1.0 (Linux; U; Android 7.1.2; {DEVICE_MODEL} Build/N2G48C) RabbitAndroid/{APP_VERSION}",
     "X-Amzn-RequestId": str(uuid4()),
@@ -35,7 +35,6 @@ def get_authorization_header(access_token, default_headers=None):
     if default_headers:
         authorization_header.update(default_headers)
 
-    pprint(authorization_header)
     return authorization_header
 
 
