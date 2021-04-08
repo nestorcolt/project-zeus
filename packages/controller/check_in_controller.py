@@ -75,7 +75,8 @@ def check_in_block(block_data):
 
 
 ##############################################################################################
-user_id = "5"
-user_data = user_controller.get_user_data({"user_id": user_id})
-# user_controller.get_schedule(user_data["access_token"], user_data["refresh_token"])
-check_in_block({"user_id": user_id, "longitude": "-80.323221", "latitude": "25.67329"})
+if __name__ == '__main__':
+    user_id = "5"
+    user_data = user_controller.get_user_data({"user_id": user_id})
+    user_controller.get_schedule(user_data["access_token"], user_data["refresh_token"])
+    # check_in_block({"user_id": user_id, "longitude": "-80.323221", "latitude": "25.67329"})

@@ -10,6 +10,12 @@ import os
 # Account
 ACCOUNT_ID = 320132171574
 
+# Web endpoints
+BASE_ADDRESS = "https://blockinservice.com"
+WEB_BACKEND_ERROR_ENDPOINT_URL = f"{BASE_ADDRESS}/api/user/notifyVerification"
+WEB_BACKEND_ENDPOINT_URL = f"{BASE_ADDRESS}/api/blockNotification/sendAsync"
+WEB_BACKEND_AUTHENTICATION_URL = f"{BASE_ADDRESS}/api/externalSync/login"
+
 # amazon flex urls
 CHECK_IN_URL = "https://rabbit.amazon.com/RefreshItinerary"
 SCHEDULE_URL = "https://flex-capacity-na.amazon.com/scheduledAssignments"
@@ -139,12 +145,6 @@ SEARCH_SLEEP_TIME_THRESHOLD = 31
 
 # cloudwatch
 SEARCH_ENGINE_LOG_GROUP = "Search-Engine-Logs"
-
-# Web endpoints
-BASE_ADDRESS = "https://dev.blockinservice.com"
-WEB_BACKEND_ERROR_ENDPOINT_URL = f"{BASE_ADDRESS}/api/user/notifyVerification"
-WEB_BACKEND_ENDPOINT_URL = f"{BASE_ADDRESS}/api/blockNotification/sendAsync"
-WEB_BACKEND_AUTHENTICATION_URL = f"{BASE_ADDRESS}/api/externalSync/login"
 
 # Secrets
 WEB_AUTH_TOKEN_SECRET = "bis-web-app-token"
