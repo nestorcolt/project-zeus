@@ -8,12 +8,12 @@ import json
 
 ##############################################################################################
 
-def get_check_in_data(refresh_token, longitude, latitude):
+def get_check_in_data(longitude, latitude):
     """
     Makes the header with the check in data and return this to parse the the api call
     """
     check_in_data = json.dumps({
-        "refreshToken": refresh_token,
+        "refreshToken": "placeholder",
         "startTransporterSession": False,
         "transporterContext": {
             "marketplaceId": "ATVPDKIKX0DER",
@@ -50,13 +50,11 @@ def check_in_block(block_data):
         return
 
     # create the body to send as json in the POST request
-    check_in_data = get_check_in_data(refresh_token,
-                                      block_data.get("longitude"),
+    check_in_data = get_check_in_data(block_data.get("longitude"),
                                       block_data.get("latitude"))
 
     # Create post request
-    authorization_header = user_controller.get_authorization_header(user_controller.get_access_token(refresh_token),
-                                                                    user_controller.API_DEFAULT_HEADERS)
+    authorization_header = user_controller.get_authorization_header(user_controller.get_access_token(refresh_token))
     response = requests.post(constants.CHECK_IN_URL,
                              data=check_in_data,
                              headers=authorization_header,
@@ -71,6 +69,7 @@ def check_in_block(block_data):
     else:
         message = "Something happened in the request. Operation failed."
 
+    print()
     print(message, response)
     return {"response": response, "message": message}
 
@@ -78,5 +77,5 @@ def check_in_block(block_data):
 ##############################################################################################
 user_id = "5"
 user_data = user_controller.get_user_data({"user_id": user_id})
-user_controller.get_schedule(user_data["access_token"], user_data["refresh_token"])
+# user_controller.get_schedule(user_data["access_token"], user_data["refresh_token"])
 check_in_block({"user_id": user_id, "longitude": "-80.323221", "latitude": "25.67329"})
