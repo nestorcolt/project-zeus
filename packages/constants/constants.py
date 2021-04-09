@@ -11,7 +11,7 @@ import os
 ACCOUNT_ID = 320132171574
 
 # Web endpoints
-BASE_ADDRESS = "https://blockinservice.com"
+BASE_ADDRESS = "https://www.blockinservice.com"
 WEB_BACKEND_ERROR_ENDPOINT_URL = f"{BASE_ADDRESS}/api/user/notifyVerification"
 WEB_BACKEND_ENDPOINT_URL = f"{BASE_ADDRESS}/api/blockNotification/sendAsync"
 WEB_BACKEND_AUTHENTICATION_URL = f"{BASE_ADDRESS}/api/externalSync/login"
