@@ -1,9 +1,12 @@
 from Cloud.packages.controller import user_controller
 from Cloud.packages.constants import constants
 from pprint import pprint
+import importlib
 import requests
 import time
 import json
+
+importlib.reload(user_controller)
 
 
 ##############################################################################################
@@ -24,7 +27,7 @@ def get_check_in_data(longitude, latitude):
                 "latitude": latitude,
                 "longitude": longitude,
                 "provider": "gps",
-                "time": str(int(time.time()))
+                "time": int(time.time())
             }
         }
     })
@@ -54,11 +57,12 @@ def check_in_block(block_data):
                                       block_data.get("latitude"))
 
     # Create post request
-    authorization_header = user_controller.get_authorization_header(user_controller.get_access_token(refresh_token))
+    authorization_header = user_controller.get_authorization_header(user_controller.get_access_token(refresh_token),
+                                                                    user_controller.API_DEFAULT_HEADERS)
     response = requests.post(constants.CHECK_IN_URL,
                              data=check_in_data,
                              headers=authorization_header,
-                             timeout=5)
+                             timeout=7)
 
     pprint(response.json())
 
@@ -73,10 +77,4 @@ def check_in_block(block_data):
     print(message, response)
     return {"response": response, "message": message}
 
-
 ##############################################################################################
-if __name__ == '__main__':
-    user_id = "31"
-    user_data = user_controller.get_user_data({"user_id": user_id})
-    user_controller.get_schedule(user_data["access_token"], user_data["refresh_token"])
-    # check_in_block({"user_id": user_id, "longitude": "-80.323221", "latitude": "25.67329"})

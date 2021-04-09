@@ -1,5 +1,5 @@
-from packages.dynamo import dynamo_manager
-from packages.constants import constants
+from Cloud.packages.dynamo import dynamo_manager
+from Cloud.packages.constants import constants
 from pprint import pprint
 from uuid import uuid4
 import requests
@@ -7,8 +7,8 @@ import time
 
 ##############################################################################################
 # GLOBALS
-DEVICE_MODEL = "SM-G977N"
-APP_VERSION = "3.51.3.3.0"
+DEVICE_MODEL = "SM-G973N"
+APP_VERSION = "3.52.2.35.0"
 
 ACCESS_HEADERS = {"app_name": "com.amazon.rabbit",
                   "source_token_type": "refresh_token",
@@ -19,7 +19,7 @@ API_DEFAULT_HEADERS = {
     "x-flex-instance-id": str(uuid4()),
     "X-Flex-Client-Time": str(int(time.time())),
     "Content-Type": "application/json",
-    "User-Agent": f"Dalvik/2.1.0 (Linux; U; Android 7.1.2; {DEVICE_MODEL} Build/N2G48C) RabbitAndroid/{APP_VERSION}",
+    "User-Agent": f'Dalvik/2.1.0 (Linux; U; Android 7.1.2; {DEVICE_MODEL} Build/N2G48C) RabbitAndroid/{APP_VERSION}',
     "X-Amzn-RequestId": str(uuid4()),
     "Connection": "Keep-Alive",
     "Accept-Encoding": "gzip",
