@@ -8,7 +8,7 @@ import time
 ##############################################################################################
 # GLOBALS
 DEVICE_MODEL = "SM-G973N"
-APP_VERSION = "3.52.2.35.0"
+APP_VERSION = "3.52.3.20.0"
 
 ACCESS_HEADERS = {"app_name": "com.amazon.rabbit",
                   "source_token_type": "refresh_token",
