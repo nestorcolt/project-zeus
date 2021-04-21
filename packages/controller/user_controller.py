@@ -7,10 +7,13 @@ import time
 import json
 
 ##############################################################################################
-ACCESS_HEADERS = {"app_name": "com.amazon.rabbit",
-                  "source_token_type": "refresh_token",
-                  "source_token": "refresh_token",
-                  "requested_token_type": "access_token"}
+
+"""
+
+Side note: the API_DEFAULT_HEADERS are used in amazon request to their api's, however I've tested this and they are not
+necessary to make them work. I will keep them here in case in some future I know where they are.
+
+"""
 
 API_DEFAULT_HEADERS = {
     "x-flex-instance-id": str(uuid4()),
@@ -27,6 +30,11 @@ API_DEFAULT_HEADERS = {
 # Controller functions:
 
 def get_authorization_header(access_token, default_headers=None):
+    """
+    Gets a new authorization dictionary ready with the headers to send to amazon request.
+    Will accept an extra dictionary with other headers that amazon uses, although they are not necessary
+    to make request to the api. This has been proved
+    """
     authorization_header = {"x-amz-access-token": access_token}
 
     if default_headers:
@@ -54,9 +62,14 @@ def get_user_data(user_request):
 
 
 def get_access_token(refresh_token):
-    headers = ACCESS_HEADERS.copy()
-    headers["source_token"] = refresh_token
-    response = requests.post(constants.AMAZON_API_AUTHENTICATION_URL, data=headers)
+    """
+    Makes a request to the authentication api of amazon and get a new access token
+    refresh_token: string - the refresh token of the user necessary to request an access token
+    """
+    access_headers = {"app_name": "com.amazon.rabbit", "source_token_type": "refresh_token",
+                      "source_token": refresh_token, "requested_token_type": "access_token"}
+
+    response = requests.post(constants.AMAZON_API_AUTHENTICATION_URL, data=access_headers)
     json_response = response.json()
     return json_response.get("access_token", None)
 
