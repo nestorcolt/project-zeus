@@ -4,12 +4,9 @@ from pprint import pprint
 from uuid import uuid4
 import requests
 import time
+import json
 
 ##############################################################################################
-# GLOBALS
-DEVICE_MODEL = "SM-G973N"
-APP_VERSION = "3.52.3.20.0"
-
 ACCESS_HEADERS = {"app_name": "com.amazon.rabbit",
                   "source_token_type": "refresh_token",
                   "source_token": "refresh_token",
@@ -19,7 +16,7 @@ API_DEFAULT_HEADERS = {
     "x-flex-instance-id": str(uuid4()),
     "X-Flex-Client-Time": str(int(time.time())),
     "Content-Type": "application/json",
-    "User-Agent": f'Dalvik/2.1.0 (Linux; U; Android 7.1.2; {DEVICE_MODEL} Build/N2G48C) RabbitAndroid/{APP_VERSION}',
+    "User-Agent": f'Dalvik/2.1.0 (Linux; U; Android 7.1.2; {constants.DEVICE_MODEL} Build/N2G48C) RabbitAndroid/{constants.APP_VERSION}',
     "X-Amzn-RequestId": str(uuid4()),
     "Connection": "Keep-Alive",
     "Accept-Encoding": "gzip",
@@ -39,6 +36,9 @@ def get_authorization_header(access_token, default_headers=None):
 
 
 def get_user_data(user_request):
+    """
+    Read the users table in dynamo DB and fetch the data of the given user in the request
+    """
     user_id = user_request.get("user_id")
 
     if user_id is None:
@@ -61,7 +61,41 @@ def get_access_token(refresh_token):
     return json_response.get("access_token", None)
 
 
+def get_service_area_id(access_token):
+    """
+    Get the flex client service area id code
+    """
+    response = requests.get(url=constants.SERVICE_AREA_URL, headers=get_authorization_header(access_token), timeout=5)
+    json_obj = response.json()
+    _id = json_obj.get("serviceAreaIds", [])
+
+    if _id:
+        return _id[0]
+
+
+def authenticate_user_session(access_token, service_area_id):
+    """
+    Authenticate the session of the flex user as it was doing it with the app taking a picture to validate
+    is the same owner of the account
+    """
+    if not service_area_id or not access_token:
+        return
+
+    post_data = {"TransportationMode": "DRIVING",
+                 "serviceAreaId": service_area_id}
+
+    response = requests.post(url=constants.AUTH_SESSIONS_URL,
+                             json=post_data,
+                             headers=get_authorization_header(access_token),
+                             timeout=5)
+
+    pprint(response.json())
+
+
 def get_schedule(access_token, refresh_token):
+    """
+    Get the schedule (blocks) that a user has on the calendar to deliver
+    """
     response = requests.get(url=constants.SCHEDULE_URL, headers=get_authorization_header(access_token), timeout=5)
 
     if response.status_code in [401, 403]:

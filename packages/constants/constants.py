@@ -9,6 +9,8 @@ import os
 
 # Account
 ACCOUNT_ID = 320132171574
+DEVICE_MODEL = "SM-G973N"
+APP_VERSION = "3.53.1.45.0"
 
 # Web endpoints
 BASE_ADDRESS = "https://www.blockinservice.com"
@@ -20,6 +22,8 @@ WEB_BACKEND_AUTHENTICATION_URL = f"{BASE_ADDRESS}/api/externalSync/login"
 CHECK_IN_URL = "https://rabbit.amazon.com/RefreshItinerary"
 SCHEDULE_URL = "https://flex-capacity-na.amazon.com/scheduledAssignments"
 AMAZON_API_AUTHENTICATION_URL = "https://api.amazon.com/auth/token"
+AUTH_SESSIONS_URL = "https://otsms-na-extern.amazon.com/authenticated/session"
+SERVICE_AREA_URL = "https://flex-capacity-na.amazon.com/eligibleServiceAreas"
 
 # Global vars
 CURRENT_FRAME = inspect.getfile(inspect.currentframe())

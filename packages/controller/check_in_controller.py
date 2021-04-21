@@ -11,17 +11,17 @@ importlib.reload(user_controller)
 
 ##############################################################################################
 
+
 def get_check_in_data(longitude, latitude):
     """
     Makes the header with the check in data and return this to parse the the api call
     """
-    check_in_data = json.dumps({
+    check_in_data = {
         "refreshToken": "placeholder",
         "startTransporterSession": False,
         "transporterContext": {
             "marketplaceId": "ATVPDKIKX0DER",
             "transporterLocation": {
-                "marketplaceId": "ATVPDKIKX0DER",
                 "accuracy": 6.067999839782715,
                 "altitude": -22.0,
                 "latitude": latitude,
@@ -30,7 +30,7 @@ def get_check_in_data(longitude, latitude):
                 "time": int(time.time())
             }
         }
-    })
+    }
 
     return check_in_data
 
@@ -57,14 +57,14 @@ def check_in_block(block_data):
                                       block_data.get("latitude"))
 
     # Create post request
-    authorization_header = user_controller.get_authorization_header(user_controller.get_access_token(refresh_token),
-                                                                    user_controller.API_DEFAULT_HEADERS)
-    response = requests.post(constants.CHECK_IN_URL,
-                             data=check_in_data,
-                             headers=authorization_header,
-                             timeout=7)
+    access_token = user_controller.get_access_token(refresh_token)
+    service_area_id = user_controller.get_service_area_id(access_token)
+    user_controller.authenticate_user_session(access_token, service_area_id)
 
-    pprint(response.json())
+    response = requests.post(constants.CHECK_IN_URL,
+                             json=check_in_data,
+                             headers=user_controller.get_authorization_header(access_token),
+                             timeout=7)
 
     if response.status_code == 200:
         message = "Block checked in successfully!"
@@ -77,4 +77,17 @@ def check_in_block(block_data):
     print(message, response)
     return {"response": response, "message": message}
 
+
 ##############################################################################################
+if __name__ == '__main__':
+    user_id = "5"
+    user_data = user_controller.get_user_data({"user_id": user_id})
+    refresh_token = user_data["refresh_token"]
+    access_token = user_controller.get_access_token(refresh_token)
+    # user_controller.get_schedule(access_token, refresh_token)
+
+    ##############################################################################################
+
+    longitude = -80.251856
+    latitude = 26.09688
+    # check_in_block({"user_id": user_id, "longitude": longitude, "latitude": latitude})
