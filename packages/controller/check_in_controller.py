@@ -76,24 +76,23 @@ def check_in_block(block_data):
     else:
         message = "Something happened in the request. Operation failed."
 
-    print()
     print(message, response.json())
     return {"response": response, "message": message}
 
 
 ##############################################################################################
 if __name__ == '__main__':
-    user_id = "5"
-    user_data = user_controller.get_user_data({"user_id": user_id})
-    refresh_token = user_data["refresh_token"]
-    access_token = user_controller.get_access_token(refresh_token)
+    user_id = "7"
+    # user_data = user_controller.get_user_data({"user_id": user_id})
+    # refresh_token = user_data["refresh_token"]
+    # access_token = user_controller.get_access_token(refresh_token)
     # user_controller.get_schedule(access_token, refresh_token)
 
-    said = user_controller.get_service_area_id(access_token)
-    code = user_controller.authenticate_user_session(access_token, said)
+    # said = user_controller.get_service_area_id(access_token)
+    # code = user_controller.authenticate_user_session(access_token, said)
 
     ##############################################################################################
 
-    longitude = -80.251856
-    latitude = 26.09688
+    # latitude = 26.00673
+    # longitude = -80.349652
     # check_in_block({"user_id": user_id, "longitude": longitude, "latitude": latitude})
