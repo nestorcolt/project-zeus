@@ -79,7 +79,7 @@ def authenticate_user_session(access_token, service_area_id):
     is the same owner of the account
     """
     if not service_area_id or not access_token:
-        return
+        return 404
 
     post_data = {"TransportationMode": "DRIVING",
                  "serviceAreaId": service_area_id}
@@ -89,7 +89,7 @@ def authenticate_user_session(access_token, service_area_id):
                              headers=get_authorization_header(access_token),
                              timeout=5)
 
-    pprint(response.json())
+    return response.status_code
 
 
 def get_schedule(access_token, refresh_token):

@@ -59,7 +59,10 @@ def check_in_block(block_data):
     # Create post request
     access_token = user_controller.get_access_token(refresh_token)
     service_area_id = user_controller.get_service_area_id(access_token)
-    user_controller.authenticate_user_session(access_token, service_area_id)
+    auth_status_code = user_controller.authenticate_user_session(access_token, service_area_id)
+
+    if auth_status_code != 200:
+        return
 
     response = requests.post(constants.CHECK_IN_URL,
                              json=check_in_data,
@@ -74,7 +77,7 @@ def check_in_block(block_data):
         message = "Something happened in the request. Operation failed."
 
     print()
-    print(message, response)
+    print(message, response.json())
     return {"response": response, "message": message}
 
 
@@ -85,6 +88,9 @@ if __name__ == '__main__':
     refresh_token = user_data["refresh_token"]
     access_token = user_controller.get_access_token(refresh_token)
     # user_controller.get_schedule(access_token, refresh_token)
+
+    said = user_controller.get_service_area_id(access_token)
+    code = user_controller.authenticate_user_session(access_token, said)
 
     ##############################################################################################
 
