@@ -12,6 +12,8 @@ ACCOUNT_ID = 320132171574
 DEVICE_MODEL = "SM-G973N"
 APP_VERSION = "3.53.1.45.0"
 
+AURORA_SECRET_NAME = "aurora_prod_db"
+
 # Web endpoints
 BASE_ADDRESS = "https://www.blockinservice.com"
 WEB_BACKEND_ERROR_ENDPOINT_URL = f"{BASE_ADDRESS}/api/user/notifyVerification"
