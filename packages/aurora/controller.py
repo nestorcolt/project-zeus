@@ -14,7 +14,8 @@ def connection_handler():
         conn = psycopg2.connect(dbname=secret["dbname"],
                                 user=secret["username"],
                                 password=secret["password"],
-                                host=secret["host"])
+                                host=secret["host"],
+                                port="5432")
 
         return conn
 
@@ -24,14 +25,11 @@ def connection_handler():
     return
 
 
-def get_bis_users():
-    conn = connection_handler()
+def get_bis_users(conn=None):
     cur = conn.cursor()
-
     cur.execute('SELECT * FROM public."Users"')
     result = cur.fetchall()
     conn.commit()
-    conn.close()
 
     # a tuple is returned, this will get the item in index 1 which is the user email
     user_list = [itm[1] for itm in result]
