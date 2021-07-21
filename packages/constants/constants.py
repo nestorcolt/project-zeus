@@ -156,3 +156,7 @@ SEARCH_ENGINE_LOG_GROUP = "Search-Engine-Logs"
 WEB_AUTH_TOKEN_SECRET = "bis-web-app-token"
 WEB_AUTH_SECRETS = "bis-web-app-api"
 WEB_API_TOKEN_KEY = "jwToken"
+
+# s3
+OFFERS_BUCKET_NAME = "bis-offers-track"
+OFFERS_BUCKET_KEY = "offers.json"
