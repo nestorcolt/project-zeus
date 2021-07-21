@@ -28,6 +28,15 @@ def read_object(bucket_name, bucket_key):
     return string_content
 
 
+def delete_object_from_bucket(bucket_name, bucket_key):
+    s3 = boto3.resource('s3')
+
+    try:
+        s3.Object(bucket_name, bucket_key).delete()
+    except:
+        pass
+
+
 ##############################################################################################
 # offers handlers
 
@@ -55,5 +64,25 @@ def put_new_offer(offer_dictionary, user_id, validated, offer_data):
     return offer_dictionary
 
 
-def read_user_offer():
-    pass
+def read_users_offers_stats():
+    offer_dictionary = read_object(constants.OFFERS_BUCKET_NAME, constants.OFFERS_BUCKET_KEY) or "{}"
+    offer_dictionary = json.loads(offer_dictionary)
+
+    if offer_dictionary == {}:
+        return {}
+
+        # this dict will contain all the absolute values to dump in the table
+    handler_dict = {}
+
+    for user, offers in offer_dictionary.items():
+        validated_count = 0
+        for offer in offers.values():
+            validated = offer["validated"]
+            validated_count += int(validated)
+
+        # update dict with absolute data
+        handler_dict[user] = {"offers": len(offers), "valid": validated_count}
+
+    return handler_dict
+
+##############################################################################################
