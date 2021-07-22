@@ -28,6 +28,12 @@ def get_all_users():
     return response
 
 
+def get_all_users_in_stats_table():
+    table = dynamo_manager.get_table_by_name(constants.STATISTICS_TABLE_NAME)
+    response = table.scan()
+    return response
+
+
 def set_last_active_user_time(user_id):
     unix_seconds = utils.get_unix_time()
 
