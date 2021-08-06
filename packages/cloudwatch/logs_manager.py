@@ -106,4 +106,31 @@ def log_user_stats(user_id):
         topic_arn = sns_manager.get_topic_by_name(constants.SE_LOGS_TOPIC)[0]["TopicArn"]
         sns_manager.sns_publish_to_topic(topic_arn, stats_message, constants.USER_PLACEHOLDER.format(user_id))
 
+
+def describe_search_engine_logs():
+    """
+    Describe all the logs from the search engine in the last 24 hours
+    """
+    client = boto3.client('logs')
+    minutes_in_day = 1440
+
+    # this will be returned with "key:user log name, value: list of logged messages in the last 24 hours"
+    output_data_dict = {}
+
+    # For the latest log stream order
+    stream_response = client.describe_log_streams(logGroupName=constants.SEARCH_ENGINE_LOG_GROUP,
+                                                  orderBy='LastEventTime')
+
+    for log_stream in stream_response["logStreams"]:
+        log_stream_name = log_stream["logStreamName"]
+        response = client.get_log_events(
+            logGroupName=constants.SEARCH_ENGINE_LOG_GROUP,
+            logStreamName=log_stream_name,
+            endTime=int(utils.get_unix_time()) * 1000,
+            startTime=int(utils.get_past_time_span(minutes_in_day)) * 1000,
+        )
+        output_data_dict[log_stream_name.split("-")[-1]] = response["events"]
+
+    return output_data_dict
+
 ##############################################################################################
