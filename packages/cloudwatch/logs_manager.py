@@ -123,13 +123,21 @@ def describe_search_engine_logs():
 
     for log_stream in stream_response["logStreams"]:
         log_stream_name = log_stream["logStreamName"]
+
         response = client.get_log_events(
             logGroupName=constants.SEARCH_ENGINE_LOG_GROUP,
             logStreamName=log_stream_name,
             endTime=int(utils.get_unix_time()) * 1000,
             startTime=int(utils.get_past_time_span(minutes_in_day)) * 1000,
         )
-        output_data_dict[log_stream_name.split("-")[-1]] = response["events"]
+
+        events = response["events"]
+
+        # this means the event came empty because there are no messages in the last 24 hours
+        if not events:
+            continue
+
+        output_data_dict[log_stream_name.split("-")[-1]] = events
 
     return output_data_dict
 
