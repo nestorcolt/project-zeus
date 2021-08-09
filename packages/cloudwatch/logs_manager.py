@@ -3,8 +3,7 @@ from Cloud.packages.constants import constants
 from Cloud.packages.sns import sns_manager
 from Cloud.packages.utilities import utils
 from collections import OrderedDict
-import threading
-import datetime
+from pprint import pprint
 import boto3
 import time
 
@@ -107,7 +106,7 @@ def log_user_stats(user_id):
         sns_manager.sns_publish_to_topic(topic_arn, stats_message, constants.USER_PLACEHOLDER.format(user_id))
 
 
-def describe_search_engine_logs():
+def describe_search_engine_logs(user_id=None):
     """
     Describe all the logs from the search engine in the last 24 hours
     """
@@ -117,27 +116,18 @@ def describe_search_engine_logs():
     # this will be returned with "key:user log name, value: list of logged messages in the last 24 hours"
     output_data_dict = {}
 
-    # For the latest log stream order
-    stream_response = client.describe_log_streams(logGroupName=constants.SEARCH_ENGINE_LOG_GROUP,
-                                                  orderBy='LastEventTime')
+    log_stream_name = "User-{}".format(user_id)
 
-    for log_stream in stream_response["logStreams"]:
-        log_stream_name = log_stream["logStreamName"]
+    response = client.get_log_events(
+        logGroupName=constants.SEARCH_ENGINE_LOG_GROUP,
+        logStreamName=log_stream_name,
+        endTime=int(utils.get_unix_time()) * 1000,
+        startTime=int(utils.get_past_time_span(minutes_in_day)) * 1000,
+    )
 
-        response = client.get_log_events(
-            logGroupName=constants.SEARCH_ENGINE_LOG_GROUP,
-            logStreamName=log_stream_name,
-            endTime=int(utils.get_unix_time()) * 1000,
-            startTime=int(utils.get_past_time_span(minutes_in_day)) * 1000,
-        )
+    events = response["events"]
 
-        events = response["events"]
-
-        # this means the event came empty because there are no messages in the last 24 hours
-        if not events:
-            continue
-
-        output_data_dict[log_stream_name.split("-")[-1]] = events
+    output_data_dict["log_data"] = {"user_id": user_id, "events": events}
 
     return output_data_dict
 
