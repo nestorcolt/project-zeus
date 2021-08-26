@@ -157,8 +157,4 @@ def get_log_events(log_group, start_time=None, end_time=None):
         except KeyError:
             break
 
-
 ##############################################################################################
-if __name__ == '__main__':
-    logs = describe_search_engine_logs("27")
-    pprint(logs)
