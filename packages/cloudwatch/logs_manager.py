@@ -110,25 +110,55 @@ def describe_search_engine_logs(user_id=None):
     """
     Describe all the logs from the search engine in the last 24 hours
     """
-    client = boto3.client('logs')
     minutes_in_day = 1440
 
     # this will be returned with "key:user log name, value: list of logged messages in the last 24 hours"
     output_data_dict = {}
 
-    log_stream_name = "User-{}".format(user_id)
-
-    response = client.get_log_events(
-        logGroupName=constants.SEARCH_ENGINE_LOG_GROUP,
-        logStreamName=log_stream_name,
-        endTime=int(utils.get_unix_time()) * 1000,
-        startTime=int(utils.get_past_time_span(minutes_in_day)) * 1000,
+    logs = get_log_events(
+        log_group=constants.SEARCH_ENGINE_LOG_GROUP,
+        start_time=int(utils.get_past_time_span(minutes_in_day)) * 1000,
+        end_time=int(utils.get_unix_time()) * 1000
     )
 
-    events = response["events"]
-
-    output_data_dict["log_data"] = {"user_id": user_id, "events": events}
-
+    events = filter(lambda event: event["logStreamName"].split("-")[-1] == user_id, logs)
+    output_data_dict["log_data"] = {"user_id": user_id, "events": list(events)}
     return output_data_dict
 
+
+def get_log_events(log_group, start_time=None, end_time=None):
+    """Generate all the log events from a CloudWatch group.
+
+    :param log_group: Name of the CloudWatch log group.
+    :param start_time: Only fetch events with a timestamp after this time.
+        Expressed as the number of milliseconds after midnight Jan 1 1970.
+    :param end_time: Only fetch events with a timestamp before this time.
+        Expressed as the number of milliseconds after midnight Jan 1 1970.
+
+    """
+    client = boto3.client('logs')
+    kwargs = {
+        'logGroupName': log_group,
+        'limit': 10000,
+    }
+
+    if start_time is not None:
+        kwargs['startTime'] = start_time
+    if end_time is not None:
+        kwargs['endTime'] = end_time
+
+    while True:
+        resp = client.filter_log_events(**kwargs)
+
+        yield from resp['events']
+
+        try:
+            kwargs['nextToken'] = resp['nextToken']
+        except KeyError:
+            break
+
+
 ##############################################################################################
+if __name__ == '__main__':
+    logs = describe_search_engine_logs("27")
+    pprint(logs)
