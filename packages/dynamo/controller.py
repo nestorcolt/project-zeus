@@ -16,6 +16,11 @@ cst = constants
 # Users Table
 
 def get_last_active_users():
+    """
+    Get and return all the users non paused. Means with the "last_active" table item property (timespam) greater
+    than 31 minutes from "current_time"
+    :return:
+    """
     table = dynamo_manager.get_table_by_name(constants.USERS_TABLE_NAME)
     wait_time_span = utils.get_past_time_span(constants.SEARCH_SLEEP_TIME_THRESHOLD)
     response = table.scan(FilterExpression=Attr(constants.USER_LAST_ACTIVE_PROPERTY).lt(Decimal(wait_time_span)))
