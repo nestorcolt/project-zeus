@@ -1,6 +1,9 @@
 from Cloud.packages.security import secrets_manager
 from Cloud.packages.constants import constants
 import psycopg2
+import datetime
+import dateutil
+import calendar
 import json
 
 
@@ -35,4 +38,44 @@ def get_bis_users(conn=None):
     user_list = [itm[1] for itm in result]
     return user_list
 
+
+def get_all_payments(conn=None):
+    # get past month date and days range
+    now = datetime.datetime.now()
+    month = now + dateutil.relativedelta.relativedelta(months=-1)
+    num_days = calendar.monthrange(month.year, month.month)[1]  # num_days = 28
+    month_format = str(month.month).zfill(2)
+
+    # query parameters
+    start_date = f"{month.year}{month_format}01"
+    end_date = f"{month.year}{month_format}{num_days}"
+    min_price = 10  # dollars
+
+    command = \
+        """
+        SELECT * FROM public."Subscriptions"
+        WHERE CAST("Created" as date) BETWEEN '{}' and '{}'
+        AND "Amount" > {}
+        ORDER by "Id"
+    
+        """.format(start_date, end_date, min_price)
+
+    # query table
+    cur = conn.cursor()
+    cur.execute(command)
+    result = cur.fetchall()
+    conn.commit()
+
+    total_entries = len(result)
+    commission = total_entries * 5  # 5 dollars per user
+    total_income = sum([itm[5] for itm in result])
+    output = {"total_payments": total_entries, "total_income": total_income, "commission": commission}
+    return output
+
+
 ##############################################################################################
+
+if __name__ == '__main__':
+    conn = connection_handler()
+    data = get_all_payments(conn)
+    print(data)
