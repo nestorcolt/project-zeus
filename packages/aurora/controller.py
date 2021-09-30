@@ -39,24 +39,30 @@ def get_bis_users(conn=None):
     return user_list
 
 
-def get_all_payments(conn=None):
-    # get past month date and days range
+def get_date_values(get_current=False):
     now = datetime.datetime.now()
-    month = now + dateutil.relativedelta.relativedelta(months=-1)
+    month = now + dateutil.relativedelta.relativedelta(months=0 if get_current else -1)
     num_days = calendar.monthrange(month.year, month.month)[1]  # num_days = 28
     month_format = str(month.month).zfill(2)
 
     # query parameters
     start_date = f"{month.year}{month_format}01"
     end_date = f"{month.year}{month_format}{num_days}"
+    return start_date, end_date
+
+
+def get_all_payments(conn=None, get_current=False):
+    # query parameters
+    start_date, end_date = get_date_values(get_current)
     min_price = 10  # dollars
 
     command = \
         """
-        SELECT * FROM public."Subscriptions"
-        WHERE CAST("Created" as date) BETWEEN '{}' and '{}'
-        AND "Amount" > {}
-        ORDER by "Id"
+        
+            SELECT * FROM public."Subscriptions"
+            WHERE CAST("Created" as date) BETWEEN '{}' and '{}'
+            AND "Amount" > {} AND "Reference" IS NOT NULL AND TRIM("Reference") <> ''
+            ORDER by "Id"
     
         """.format(start_date, end_date, min_price)
 
@@ -77,5 +83,5 @@ def get_all_payments(conn=None):
 
 if __name__ == '__main__':
     conn = connection_handler()
-    data = get_all_payments(conn)
+    data = get_all_payments(conn, get_current=True)
     print(data)
