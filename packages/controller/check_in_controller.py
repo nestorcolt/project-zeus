@@ -17,6 +17,25 @@ def get_check_in_data(longitude, latitude):
     Makes the header with the check in data and return this to parse the the api call
     """
     check_in_data = {
+        "__type": "RefreshItineraryExternalV2Request:http://internal.amazon.com/coral/com.amazon.fips/",
+        "deviceMetadata": {},
+        "featureFlags": {
+            "amazonLockerEnabled": False,
+            "checkInOperationEnabled": False,
+            "commingledFulfillmentStopEnabled": False,
+            "counterHelixEnabled": True,
+            "enrichAddressWithPhotoAttributes": True,
+            "enrichTrWithEligibleReasonCodes": True,
+            "fetchDivertOperations": True,
+            "fetchPackageNoteDetailsEnabled": True,
+            "kycWorkflowEnabled": False,
+            "secureDeliveryE2EEnabled": True,
+            "vendAdditionalGeocodes": False
+        },
+        "itineraryType": "ON_DUTY_ITINERARY",
+        "refreshItineraryMetadata": {
+            "pvdHashVersion": "1.0"
+        },
         "refreshToken": "placeholder",
         "startTransporterSession": False,
         "transporterContext": {

@@ -158,3 +158,7 @@ def get_log_events(log_group, start_time=None, end_time=None):
             break
 
 ##############################################################################################
+if __name__ == '__main__':
+    start_time = time.time()
+    describe_search_engine_logs(user_id=245)
+    print("--- %s seconds ---" % (time.time() - start_time))

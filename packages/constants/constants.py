@@ -21,7 +21,7 @@ WEB_BACKEND_ENDPOINT_URL = f"{BASE_ADDRESS}/api/blockNotification/sendAsync"
 WEB_BACKEND_AUTHENTICATION_URL = f"{BASE_ADDRESS}/api/externalSync/login"
 
 # amazon flex urls
-CHECK_IN_URL = "https://rabbit.amazon.com/RefreshItinerary"
+CHECK_IN_URL = "https://rabbit.amazon.com/RefreshItineraryExternalV2"
 SCHEDULE_URL = "https://flex-capacity-na.amazon.com/scheduledAssignments"
 AMAZON_API_AUTHENTICATION_URL = "https://api.amazon.com/auth/token"
 AUTH_SESSIONS_URL = "https://otsms-na-extern.amazon.com/authenticated/session"

@@ -95,7 +95,9 @@ def authenticate_user_session(access_token, service_area_id):
         return 404
 
     post_data = {"TransportationMode": "DRIVING",
-                 "serviceAreaId": service_area_id}
+                 "serviceAreaId": service_area_id,
+                 "isLinkedSessionsActive": True,
+                 "isPairingActive": True}
 
     response = requests.post(url=constants.AUTH_SESSIONS_URL,
                              json=post_data,

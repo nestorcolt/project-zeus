@@ -4,8 +4,8 @@ import psycopg2
 import datetime
 import dateutil
 import calendar
+import pprint
 import json
-
 
 ##############################################################################################
 
@@ -83,5 +83,5 @@ def get_all_payments(conn=None, get_current=False):
 
 if __name__ == '__main__':
     conn = connection_handler()
-    data = get_all_payments(conn, get_current=True)
-    print(data)
+    data = get_all_payments(conn, get_current=False)
+    pprint.pprint(data)
